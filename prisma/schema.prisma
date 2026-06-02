@@ -16,3 +16,11 @@ model User {
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
 }
+
+model Course {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  createdBy   String
+  createdAt   DateTime @default(now())
+}

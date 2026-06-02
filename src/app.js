@@ -1,7 +1,9 @@
+console.log("THIS IS THE APP FILE I AM RUNNING");
 const express = require("express");
 
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
+const courseRoutes = require("./routes/courseRoutes");
 const authMiddleware = require("./middlewares/authMiddleware");
 
 
@@ -25,6 +27,10 @@ app.get("/api/protected", authMiddleware, (req, res) => {
 
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/courses", courseRoutes);
+app.get("/test", (req, res) => {
+  res.send("Test route works");
+});
 app.listen(5000, () => {
   console.log("Server running on port 5000");
 });
