@@ -85,6 +85,25 @@ async function getModulesByCourse(courseId) {
     },
   });
 }
+
+async function createLesson(moduleId, data) {
+  return await prisma.lesson.create({
+    data: {
+      title: data.title,
+      content: data.content,
+      moduleId: Number(moduleId),
+    },
+  });
+}
+
+async function getLessonsByModule(moduleId) {
+  return await prisma.lesson.findMany({
+    where: {
+      moduleId: Number(moduleId),
+    },
+  });
+}
+
 module.exports = {
   createCourse,
   getAllCourses,
@@ -95,4 +114,6 @@ module.exports = {
   enrollInCourse,
   getMyCourses,
   getCourseStudents,
+  createLesson,
+  getLessonsByModule,
 };

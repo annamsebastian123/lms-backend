@@ -6,6 +6,16 @@ const authMiddleware = require("../middlewares/authMiddleware");
 
 router.post("/:id/modules", authMiddleware, courseController.createModule);
 router.get("/:id/modules", authMiddleware, courseController.getModulesByCourse);
+router.post(
+  "/modules/:id/lessons",
+  authMiddleware,
+  courseController.createLesson
+);
+router.get(
+  "/modules/:id/lessons",
+  authMiddleware,
+  courseController.getLessonsByModule
+);
 router.post("/", authMiddleware, courseController.createCourse);
 router.get("/:id/students",authMiddleware,courseController.getCourseStudents);
 router.get("/my-courses",authMiddleware,courseController.getMyCourses);

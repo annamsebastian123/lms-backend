@@ -54,5 +54,18 @@ model Module {
   courseId  Int
   course    Course   @relation(fields: [courseId], references: [id])
 
+  lessons   Lesson[]
+
+  createdAt DateTime @default(now())
+}
+
+model Lesson {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String?
+
+  moduleId  Int
+  module    Module   @relation(fields: [moduleId], references: [id])
+
   createdAt DateTime @default(now())
 }

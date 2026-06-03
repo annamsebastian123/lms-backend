@@ -103,6 +103,36 @@ async function getModulesByCourse(req, res) {
     res.status(500).json({ error: err.message });
   }
 }
+
+async function createLesson(req, res) {
+  try {
+    const lesson = await courseService.createLesson(
+      req.params.id,
+      req.body
+    );
+
+    res.json(lesson);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
+
+async function getLessonsByModule(req, res) {
+  try {
+    const lessons = await courseService.getLessonsByModule(
+      req.params.id
+    );
+
+    res.json(lessons);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
+
 module.exports = {
   createCourse,
   getAllCourses,
@@ -113,4 +143,6 @@ module.exports = {
   getCourseStudents,
   enrollInCourse,
   getMyCourses,
+  createLesson,
+  getLessonsByModule,
 };
