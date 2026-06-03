@@ -2,80 +2,115 @@ const courseService = require("../services/courseService");
 
 async function createCourse(req, res) {
   try {
-    const userId = req.user?.id;
-    const course = await courseService.createCourse(req.body, userId);
+    if (req.user.role !== "ADMIN") {
+      return res.status(403).json({ message: "Access denied. Admin only." });
+    }
 
-    res.status(201).json({
-      message: "Course created successfully",
-      course,
-    });
+    const course = await courseService.createCourse(req.body, req.user.id);
+    res.json(course);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 }
 
 async function getAllCourses(req, res) {
   try {
     const courses = await courseService.getAllCourses();
-
-    res.json({
-      message: "Courses retrieved successfully",
-      courses,
-    });
+    res.json(courses);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 }
 
 async function getCourseById(req, res) {
   try {
-    const { id } = req.params;
-    const course = await courseService.getCourseById(id);
-
-    if (!course) {
-      return res.status(404).json({ message: "Course not found" });
-    }
-
-    res.json({
-      message: "Course retrieved successfully",
-      course,
-    });
+    const course = await courseService.getCourseById(req.params.id);
+    res.json(course);
   } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-}
-
-async function updateCourse(req, res) {
-  try {
-    const { id } = req.params;
-    const course = await courseService.updateCourse(id, req.body);
-
-    res.json({
-      message: "Course updated successfully",
-      course,
-    });
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(500).json({ error: err.message });
   }
 }
 
 async function deleteCourse(req, res) {
   try {
-    const { id } = req.params;
-    await courseService.deleteCourse(id);
+    await courseService.deleteCourse(req.params.id);
+    res.json({ message: "Course deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+async function enrollInCourse(req, res) {
+  try {
+    const enrollment = await courseService.enrollInCourse(
+      req.user.id,
+      req.params.id
+    );
 
     res.json({
-      message: "Course deleted successfully",
+      message: "Enrolled successfully",
+      enrollment,
     });
+  }   catch (err) {
+    if (err.code === "P2002") {
+      return res.status(400).json({
+        message: "You are already enrolled in this course",
+      });
+    }
+
+    res.status(400).json({
+      error: err.message,
+    });
+  }
+}
+async function getMyCourses(req, res) {
+  try {
+    const courses = await courseService.getMyCourses(req.user.id);
+
+    res.json(courses);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
+async function getCourseStudents(req, res) {
+  try {
+    const students = await courseService.getCourseStudents(
+      req.params.id
+    );
+
+    res.json(students);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
+async function createModule(req, res) {
+  try {
+    const module = await courseService.createModule(req.params.id, req.body);
+    res.json(module);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
 }
 
+async function getModulesByCourse(req, res) {
+  try {
+    const modules = await courseService.getModulesByCourse(req.params.id);
+    res.json(modules);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
 module.exports = {
   createCourse,
   getAllCourses,
   getCourseById,
-  updateCourse,
   deleteCourse,
+  createModule,
+  getModulesByCourse,
+  getCourseStudents,
+  enrollInCourse,
+  getMyCourses,
 };

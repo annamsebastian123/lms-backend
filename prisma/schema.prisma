@@ -1,26 +1,58 @@
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
 model User {
-  id           String   @id @default(uuid())
-  email        String   @unique
-  name         String
+  id           Int          @id @default(autoincrement())
+  email        String       @unique
+  name         String?
   passwordHash String
-  role         String   @default("LEARNER")
-  isActive     Boolean  @default(true)
-  createdAt    DateTime @default(now())
+  role         String       @default("LEARNER")
+
+  courses      Course[]
+  enrollments  Enrollment[]
 }
 
 model Course {
-  id          String   @id @default(uuid())
+  id          Int          @id @default(autoincrement())
   title       String
-  description String
-  createdBy   String
-  createdAt   DateTime @default(now())
+  description String?
+
+  userId      Int
+  user        User         @relation(fields: [userId], references: [id])
+
+  enrollments Enrollment[]
+
+  modules     Module[]
+
+  createdAt   DateTime     @default(now())
+}
+
+model Enrollment {
+  id         Int      @id @default(autoincrement())
+
+  userId     Int
+  courseId   Int
+
+  user       User     @relation(fields: [userId], references: [id])
+  course     Course   @relation(fields: [courseId], references: [id])
+
+  enrolledAt DateTime @default(now())
+
+  @@unique([userId, courseId])
+}
+
+model Module {
+  id        Int      @id @default(autoincrement())
+  title     String
+
+  courseId  Int
+  course    Course   @relation(fields: [courseId], references: [id])
+
+  createdAt DateTime @default(now())
 }

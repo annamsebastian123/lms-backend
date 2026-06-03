@@ -1,12 +1,15 @@
+require("dotenv").config();
+
 console.log("THIS IS THE APP FILE I AM RUNNING");
+console.log("DB URL:", process.env.DATABASE_URL);
+console.log("JWT:", process.env.JWT_SECRET);
+
 const express = require("express");
 
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const courseRoutes = require("./routes/courseRoutes");
 const authMiddleware = require("./middlewares/authMiddleware");
-
-
 
 
 const app = express();
@@ -31,6 +34,6 @@ app.use("/api/courses", courseRoutes);
 app.get("/test", (req, res) => {
   res.send("Test route works");
 });
-app.listen(5000, () => {
+app.listen(5000, "0.0.0.0", () => {
   console.log("Server running on port 5000");
 });

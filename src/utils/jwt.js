@@ -1,7 +1,5 @@
 const jwt = require("jsonwebtoken");
 
-const JWT_SECRET = "supersecretkey"; // later move to .env
-
 function generateToken(user) {
   return jwt.sign(
     {
@@ -9,13 +7,9 @@ function generateToken(user) {
       email: user.email,
       role: user.role,
     },
-    JWT_SECRET,
-    { expiresIn: "1h" }
+    process.env.JWT_SECRET,
+    { expiresIn: "1d" }
   );
 }
 
-function verifyToken(token) {
-  return jwt.verify(token, JWT_SECRET);
-}
-
-module.exports = { generateToken, verifyToken };
+module.exports = { generateToken };
