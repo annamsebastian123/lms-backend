@@ -1227,3 +1227,18 @@ textarea{
 .quick-card h3{
     margin-bottom:8px;
 }
+/* USERS PAGE UPGRADE */
+
+.user-tools{
+    display:flex;
+    gap:15px;
+    margin-bottom:25px;
+}
+
+.user-tools input{
+    flex:2;
+}
+
+.user-tools select{
+    flex:1;
+}
