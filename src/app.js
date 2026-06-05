@@ -6,6 +6,8 @@ console.log("JWT:", process.env.JWT_SECRET);
 
 const express = require("express");
 
+const cors = require("cors");
+
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const courseRoutes = require("./routes/courseRoutes");
@@ -13,6 +15,7 @@ const authMiddleware = require("./middlewares/authMiddleware");
 
 
 const app = express();
+app.use(cors());
 
 app.use(express.json());
 
