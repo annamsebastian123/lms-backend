@@ -1242,3 +1242,26 @@ textarea{
 .user-tools select{
     flex:1;
 }
+/* COURSE CATALOG UPGRADE */
+
+.course-tools{
+    display:flex;
+    gap:15px;
+    margin:25px 0;
+}
+
+.course-tools input{
+    flex:2;
+}
+
+.course-tools select{
+    flex:1;
+}
+
+.course-card{
+    transition:0.3s;
+}
+
+.course-card:hover{
+    transform:translateY(-6px);
+}
