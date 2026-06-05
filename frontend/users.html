@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="sidebar">
+
+        <h2>HCK LMS</h2>
+
+        <ul>
+
+    <li>
+        <a href="admin-dashboard.html">
+            Dashboard
+        </a>
+    </li>
+
+    <li>
+        <a href="users.html" class="active">
+            Users
+        </a>
+    </li>
+
+    <li>
+        <a href="#">
+            Courses
+        </a>
+    </li>
+
+    <li>
+        <a href="reports.html">
+            Reports
+        </a>
+    </li>
+
+    <li>
+        <a href="#">
+            Certificates
+        </a>
+    </li>
+
+    <li>
+        <a href="#">
+            Settings
+        </a>
+    </li>
+
+    <li>
+        <a href="profile.html">
+            Profile
+        </a>
+    </li>
+
+    <li>
+        <a href="index.html">
+            Logout
+        </a>
+    </li>
+
+</ul>
+
+    </div>
+
+    <div class="main">
+
+        <div class="page-header">
+
+            <h1>User Management</h1>
+
+            <button class="btn add-user-btn">
+                + Add User
+            </button>
+
+        </div>
+
+        <div class="search-container">
+
+            <input type="text"
+                   placeholder="Search users by name or email">
+
+        </div>
+
+        <div class="dashboard-section">
+
+            <table>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+
+                <tr>
+                    <td>Fathimath Nafiya</td>
+                    <td>nafiya@hck.gov.in</td>
+                    <td>Learner</td>
+                    <td>
+                        <span class="status active">
+                            Active
+                        </span>
+                    </td>
+                    <td>
+                        <button class="action-btn">Edit</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Rahul Kumar</td>
+                    <td>rahul@hck.gov.in</td>
+                    <td>Tutor</td>
+                    <td>
+                        <span class="status active">
+                            Active
+                        </span>
+                    </td>
+                    <td>
+                        <button class="action-btn">Edit</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Anjali Nair</td>
+                    <td>anjali@hck.gov.in</td>
+                    <td>Admin</td>
+                    <td>
+                        <span class="status active">
+                            Active
+                        </span>
+                    </td>
+                    <td>
+                        <button class="action-btn">Edit</button>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>Arun Raj</td>
+                    <td>arun@hck.gov.in</td>
+                    <td>Learner</td>
+                    <td>
+                        <span class="status inactive">
+                            Inactive
+                        </span>
+                    </td>
+                    <td>
+                        <button class="action-btn">Edit</button>
+                    </td>
+                </tr>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
