@@ -83,7 +83,7 @@ if (courseGrid) {
       meta.textContent = parts.join(' • ');
 
       const link = document.createElement('a');
-      link.href = "course-details.html";
+      link.href = `course-details.html?id=${course.id}`;
       link.addEventListener("click", () => {
         localStorage.setItem("selectedCourseId", course.id);
       });
@@ -115,12 +115,17 @@ if (detailContainer) {
   const courseId =
     params.get('id') || localStorage.getItem("selectedCourseId");
 
+  console.log("Course details page:", window.location.href);
+  console.log("Course details search:", window.location.search);
+  console.log("Determined courseId:", courseId);
+
   if (!courseId) {
     detailContainer.innerHTML = '<p>Course not found.</p>';
   } else {
     async function loadAndRenderCourse() {
       try {
         const data = await apiRequest(`/courses/${courseId}`);
+        console.log("Course API response:", data);
         const course = data && data.course ? data.course : data;
         if (!course) {
           detailContainer.innerHTML = '<p>Course not found.</p>';
