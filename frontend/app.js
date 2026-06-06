@@ -128,6 +128,7 @@ if (detailContainer) {
         const description = course.description || '';
         const category = course.category || '';
         const level = course.level || '';
+        const modules = Array.isArray(course.modules) ? course.modules : [];
 
         let metaHtml = '';
         const metaParts = [];
@@ -160,7 +161,6 @@ if (detailContainer) {
 
         // Render modules and lessons
         if (modulesSection) {
-          const modules = course.modules || [];
           if (!modules.length) {
             modulesSection.innerHTML = '<h2>Course Modules</h2><p>No modules available.</p>';
           } else {
@@ -183,9 +183,9 @@ if (detailContainer) {
           }
         }
 
-      } catch (err) {
+      } catch (error) {
         detailContainer.innerHTML = '<p>Course not found.</p>';
-        console.error('Failed to load course details', err);
+        console.error('Failed to load course details', error);
       }
     }
 
