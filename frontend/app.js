@@ -184,8 +184,12 @@ if (detailContainer) {
         }
 
       } catch (error) {
-        detailContainer.innerHTML = '<p>Course not found.</p>';
-        console.error('Failed to load course details', error);
+        console.error("Course details error:", error);
+
+          detailContainer.innerHTML = `
+           <h2>Error Loading Course</h2>
+           <p>${error.message}</p>
+         `;
       }
     }
 
