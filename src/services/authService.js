@@ -5,9 +5,9 @@ const prisma = require("../prisma");
 async function login(email, password) {
   const user = await prisma.user.findUnique({ where: { email } });
 
-  if (!user || !user.isActive) {
-    throw new Error("Invalid credentials");
-  }
+  if (!user) {
+  throw new Error("Invalid credentials");
+   }
 
   const isMatch = await bcrypt.compare(password, user.passwordHash);
 
