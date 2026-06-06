@@ -117,7 +117,7 @@ if (detailContainer) {
     async function loadAndRenderCourse() {
       try {
         const data = await apiRequest(`/courses/${courseId}`);
-        const course = data && data.course;
+        const course = data && data.course ? data.course : data;
         if (!course) {
           detailContainer.innerHTML = '<p>Course not found.</p>';
           return;
