@@ -83,7 +83,10 @@ if (courseGrid) {
       meta.textContent = parts.join(' • ');
 
       const link = document.createElement('a');
-      link.href = `course-details.html?id=${course.id}`;
+      link.href = "course-details.html";
+      link.addEventListener("click", () => {
+        localStorage.setItem("selectedCourseId", course.id);
+      });
       const btn = document.createElement('button');
       btn.className = 'enroll-btn';
       btn.textContent = 'View Details';
@@ -109,7 +112,8 @@ const detailContainer = document.querySelector('.course-detail-container');
 const modulesSection = document.querySelector('.modules-section');
 if (detailContainer) {
   const params = new URLSearchParams(window.location.search);
-  const courseId = params.get('id');
+  const courseId =
+    params.get('id') || localStorage.getItem("selectedCourseId");
 
   if (!courseId) {
     detailContainer.innerHTML = '<p>Course not found.</p>';
@@ -184,12 +188,13 @@ if (detailContainer) {
         }
 
       } catch (error) {
-        console.error("Course details error:", error);
-
-          detailContainer.innerHTML = `
-           <h2>Error Loading Course</h2>
-           <p>${error.message}</p>
-         `;
+        detailContainer.innerHTML = `
+       <h2>Error Loading Course</h2>
+         <pre>${JSON.stringify({
+        message: error.message,
+       stack: error.stack
+         }, null, 2)}</pre>
+        `;
       }
     }
 
