@@ -1265,3 +1265,23 @@ textarea{
 .course-card:hover{
     transform:translateY(-6px);
 }
+/* QUIZ PAGE UPGRADE */
+
+.question-count{
+    background:white;
+    display:inline-block;
+    padding:10px 18px;
+    border-radius:20px;
+    margin-top:10px;
+    box-shadow:0 3px 10px rgba(0,0,0,0.08);
+}
+
+.option{
+    border:1px solid #e5e5e5;
+    transition:0.3s;
+}
+
+.option:hover{
+    border-color:black;
+    background:#f2f2f2;
+}
