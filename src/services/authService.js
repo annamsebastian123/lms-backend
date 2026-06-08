@@ -33,7 +33,6 @@ async function register(email, name, password) {
       email,
       name,
       passwordHash: hashedPassword,
-      role: "ADMIN",
     },
   });
 

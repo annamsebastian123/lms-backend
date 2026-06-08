@@ -25,12 +25,12 @@
 
                 <div class="form-group">
                     <label>Full Name</label>
-                    <input id="registerName" type="text" placeholder="Enter your full name">
+                    <input id="register-name" type="text" placeholder="Enter your full name">
                 </div>
 
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input id="registerEmail" type="email" placeholder="Enter your email">
+                    <input id="register-email" type="email" placeholder="Enter your email">
                 </div>
 
                 <div class="form-group">
@@ -47,17 +47,17 @@
 
                 <div class="form-group">
                     <label>Password</label>
-                    <input id="registerPassword" type="password" placeholder="Create password">
+                    <input id="register-password" type="password" placeholder="Create password">
                 </div>
 
                 <div class="form-group">
                     <label>Confirm Password</label>
-                    <input type="password" placeholder="Confirm password">
+                    <input id="register-confirm-password" type="password" placeholder="Confirm password">
                 </div>
 
-                <p id="registerMessage"></p>
+                <p id="register-message" aria-live="polite"></p>
 
-                <button type="button" id="registerBtn" class="register-submit-btn">
+                <button id="register-button" type="submit" class="register-submit-btn">
                     Register
                 </button>
 
@@ -74,10 +74,9 @@
         </div>
 
     </div>
-
-    <script src="js/api.js"></script>
-    <script src="app.js"></script>
-
+<script src="js/api.js"></script>
+<script src="js/register.js"></script>
+<script src="app.js"></script>
 </body>
 
 </html>

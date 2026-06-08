@@ -30,7 +30,13 @@ if (loginBtn) {
 
       message.textContent = "Login successful";
 
-      window.location.href = "dashboard.html";
+      // Redirect based on user role
+      const user = data.user;
+      if (user.role === "ADMIN") {
+        window.location.href = "admin-dashboard.html";
+      } else {
+        window.location.href = "dashboard.html";
+      }
     } catch (err) {
       message.textContent = "Something went wrong";
       console.error(err);
