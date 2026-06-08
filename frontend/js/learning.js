@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const courseDescription = document.querySelector(".top-header p");
   const lessonSection = document.querySelector(".lesson-section");
   const lessonCards = Array.from(document.querySelectorAll(".lesson-card"));
-  const continueButton = document.querySelector(".take-quiz-btn");
 
   function showNoCoursesMessage() {
     if (!lessonSection) return;
@@ -12,29 +11,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       <h2>Lessons</h2>
       <p>You have not enrolled in any courses yet.</p>
     `;
-
-    if (continueButton) {
-      continueButton.style.display = "none";
-    }
   }
 
-  function setCourseHeader(course) {
+  function updateCourseHeader(course) {
     if (courseTitle) {
-      courseTitle.textContent = course.title || "Registry Procedures";
+      courseTitle.textContent = course.title || courseTitle.textContent;
     }
 
     if (courseDescription) {
       courseDescription.textContent =
-        course.description ||
-        "Watch lessons, track progress and complete the final assessment";
-    }
-
-    if (continueButton) {
-      continueButton.textContent = "Continue Learning";
-      continueButton.href = `course-details.html?id=${course.id}`;
-      continueButton.addEventListener("click", () => {
-        localStorage.setItem("selectedCourseId", course.id);
-      });
+        course.description || courseDescription.textContent;
     }
   }
 
@@ -83,7 +69,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     const course = courses[0];
-    setCourseHeader(course);
+    updateCourseHeader(course);
 
     let modules = [];
     try {
