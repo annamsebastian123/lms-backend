@@ -27,6 +27,26 @@ document.addEventListener("DOMContentLoaded", async () => {
             return;
         }
 
+        const enrolledCoursesValue = document.getElementById("enrolledCoursesValue");
+        const completedCoursesValue = document.getElementById("completedCoursesValue");
+        const certificatesValue = document.getElementById("certificatesValue");
+
+        const enrolledCount = enrollments.length;
+        const completedCount = 0;
+        const certificatesCount = 0;
+
+        if (enrolledCoursesValue) {
+            enrolledCoursesValue.textContent = enrolledCount;
+        }
+
+        if (completedCoursesValue) {
+            completedCoursesValue.textContent = completedCount;
+        }
+
+        if (certificatesValue) {
+            certificatesValue.textContent = certificatesCount;
+        }
+
         dashboardCourses.innerHTML = "";
 
         enrollments.forEach((item) => {
@@ -38,7 +58,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <td>${course.title}</td>
                     <td>In Progress</td>
                     <td>
-                        <a href="learning.html" class="action-btn">
+                        <a href="course-details.html?id=${course.id}" class="action-btn">
                             Continue
                         </a>
                     </td>

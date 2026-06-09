@@ -2,9 +2,11 @@ const courseService = require("../services/courseService");
 
 async function createCourse(req, res) {
   try {
-    if (req.user.role !== "ADMIN") {
-      return res.status(403).json({ message: "Access denied. Admin only." });
-    }
+    if (!["ADMIN", "TUTOR"].includes(req.user.role)) {
+  return res.status(403).json({
+    message: "Access denied."
+  });
+}
 
     const course = await courseService.createCourse(req.body, req.user.id);
     res.json(course);
