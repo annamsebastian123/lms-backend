@@ -73,6 +73,16 @@ async function getMyCourses(req, res) {
     });
   }
 }
+async function getTutorStats(req, res) {
+  try {
+    const stats = await courseService.getTutorStats(req.user.id);
+    res.json(stats);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
 async function getCourseStudents(req, res) {
   try {
     const students = await courseService.getCourseStudents(
@@ -143,6 +153,7 @@ module.exports = {
   getCourseStudents,
   enrollInCourse,
   getMyCourses,
+  getTutorStats,
   createLesson,
   getLessonsByModule,
 };

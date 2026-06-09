@@ -19,6 +19,7 @@ router.get(
 router.post("/", authMiddleware, courseController.createCourse);
 router.get("/:id/students",authMiddleware,courseController.getCourseStudents);
 router.get("/my-courses",authMiddleware,courseController.getMyCourses);
+router.get("/tutor-stats", authMiddleware, courseController.getTutorStats);
 router.get("/", courseController.getAllCourses);
 router.get("/:id", courseController.getCourseById);
 router.delete("/:id", authMiddleware, courseController.deleteCourse);
