@@ -30,7 +30,7 @@
     </li>
 
     <li>
-        <a href="#">
+        <a href="admin-courses.html">
             Courses
         </a>
     </li>
@@ -82,19 +82,19 @@
 
             <div class="card admin-card">
     <h3>Total Learners</h3>
-    <h1>1,250</h1>
+    <h1 id="totalLearnersValue">0</h1>
     <p>Registered staff learners</p>
 </div>
 
             <div class="card admin-card">
     <h3>Course Completions</h3>
-    <h1>980</h1>
+    <h1 id="courseCompletionsValue">—</h1>
     <p>Total completed courses</p>
 </div>
 
 <div class="card admin-card">
     <h3>Certificates Issued</h3>
-    <h1>870</h1>
+    <h1 id="certificatesIssuedValue">—</h1>
     <p>Certificates generated</p>
 </div>
 
@@ -102,85 +102,27 @@
 
         <div class="analytics-section">
 
-            <h2>Course Completion Rate</h2>
+    <h2>Course Completion Rate</h2>
 
-            <div class="report-item">
+    <p>
+        Completion analytics will appear here after course progress tracking is connected.
+    </p>
 
-                <p>Registry Procedures</p>
+</div>
+        
 
-                <div class="report-bar">
-                    <div class="report-fill fill-90"></div>
-                </div>
+       <div class="dashboard-section">
 
-                <span>90%</span>
+    <h2>Monthly Activity Summary</h2>
 
-            </div>
+    <p>
+        Monthly activity reports will appear here after reporting APIs are added.
+    </p>
 
-            <div class="report-item">
-
-                <p>Civil Filing Process</p>
-
-                <div class="report-bar">
-                    <div class="report-fill fill-75"></div>
-                </div>
-
-                <span>75%</span>
-
-            </div>
-
-            <div class="report-item">
-
-                <p>Documentation Basics</p>
-
-                <div class="report-bar">
-                    <div class="report-fill fill-60"></div>
-                </div>
-
-                <span>60%</span>
-
-            </div>
-
-        </div>
-
-        <div class="dashboard-section">
-
-            <h2>Monthly Activity Summary</h2>
-
-            <table>
-
-                <tr>
-                    <th>Month</th>
-                    <th>New Users</th>
-                    <th>Enrollments</th>
-                    <th>Certificates</th>
-                </tr>
-
-                <tr>
-                    <td>January</td>
-                    <td>120</td>
-                    <td>350</td>
-                    <td>95</td>
-                </tr>
-
-                <tr>
-                    <td>February</td>
-                    <td>145</td>
-                    <td>410</td>
-                    <td>110</td>
-                </tr>
-
-                <tr>
-                    <td>March</td>
-                    <td>160</td>
-                    <td>480</td>
-                    <td>135</td>
-                </tr>
-
-            </table>
-
-        </div>
-
+</div>
     </div>
+<script src="js/api.js"></script>
+<script src="js/reports.js"></script>
 
 </body>
 

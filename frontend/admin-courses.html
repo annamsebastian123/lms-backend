@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Courses</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="sidebar">
+
+    <h2>HCK LMS</h2>
+
+    <ul>
+        <li><a href="admin-dashboard.html">Dashboard</a></li>
+        <li><a href="users.html">Users</a></li>
+        <li><a href="admin-courses.html" class="active">Courses</a></li>
+        <li><a href="reports.html">Reports</a></li>
+        <li><a href="#">Certificates</a></li>
+        <li><a href="#">Settings</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="index.html">Logout</a></li>
+    </ul>
+
+</div>
+
+<div class="main">
+
+    <div class="top-header">
+        <div>
+            <h1>Course Management</h1>
+            <p>Manage all courses in the LMS.</p>
+        </div>
+    </div>
+
+    <div class="dashboard-section">
+    <div class="section-header">
+        <h2>All Courses</h2>
+    </div>
+<div class="user-tools">
+    <input type="text" id="adminCourseSearch" placeholder="Search courses by title or tutor">
+</div>
+    <table>
+        <thead>
+            <tr>
+                <th>Course</th>
+                <th>Description</th>
+                <th>Tutor</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+
+        <tbody id="adminCoursesTableBody">
+            <tr>
+                <td colspan="4">Loading courses...</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+</div>
+<script src="js/api.js"></script>
+<script src="js/admin-courses.js"></script>
+</body>
+</html>

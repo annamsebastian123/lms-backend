@@ -1290,3 +1290,12 @@ textarea{
     margin-bottom:20px;
     font-size:16px;
 }
+.action-buttons {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.delete-btn {
+    background: #b91c1c;
+}

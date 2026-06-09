@@ -30,9 +30,9 @@
             </li>
 
             <li>
-                <a href="#">
-                    Courses
-                </a>
+                <a href="admin-courses.html">
+    Courses
+</a>
             </li>
 
             <li>
@@ -98,76 +98,28 @@
         <div class="dashboard-section">
 
             <table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
 
-                <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-
-                <tr>
-                    <td>Fathimath Nafiya</td>
-                    <td>nafiya@hck.gov.in</td>
-                    <td>Learner</td>
-                    <td>
-                        <span class="status status-active">
-                            Active
-                        </span>
-                    </td>
-                    <td>
-                        <button class="action-btn">Edit</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Rahul Kumar</td>
-                    <td>rahul@hck.gov.in</td>
-                    <td>Tutor</td>
-                    <td>
-                        <span class="status status-active">
-                            Active
-                        </span>
-                    </td>
-                    <td>
-                        <button class="action-btn">Edit</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Anjali Nair</td>
-                    <td>anjali@hck.gov.in</td>
-                    <td>Admin</td>
-                    <td>
-                        <span class="status status-active">
-                            Active
-                        </span>
-                    </td>
-                    <td>
-                        <button class="action-btn">Edit</button>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Arun Raj</td>
-                    <td>arun@hck.gov.in</td>
-                    <td>Learner</td>
-                    <td>
-                        <span class="status status-inactive">
-                            Inactive
-                        </span>
-                    </td>
-                    <td>
-                        <button class="action-btn">Edit</button>
-                    </td>
-                </tr>
-
-            </table>
+    <tbody id="usersTableBody">
+        <tr>
+            <td colspan="5">Loading users...</td>
+        </tr>
+    </tbody>
+</table>
 
         </div>
 
     </div>
+<script src="js/api.js"></script>
+<script src="js/users.js"></script>
 
 </body>
 

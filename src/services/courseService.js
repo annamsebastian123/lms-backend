@@ -31,8 +31,33 @@ async function getCourseById(id) {
 }
 
 async function deleteCourse(id) {
+  const courseId = Number(id);
+
+  const modules = await prisma.module.findMany({
+    where: { courseId },
+    select: { id: true },
+  });
+
+  const moduleIds = modules.map((module) => module.id);
+
+  await prisma.lesson.deleteMany({
+    where: {
+      moduleId: {
+        in: moduleIds,
+      },
+    },
+  });
+
+  await prisma.module.deleteMany({
+    where: { courseId },
+  });
+
+  await prisma.enrollment.deleteMany({
+    where: { courseId },
+  });
+
   return await prisma.course.delete({
-    where: { id: Number(id) },
+    where: { id: courseId },
   });
 }
 async function enrollInCourse(userId, courseId) {
