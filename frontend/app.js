@@ -32,11 +32,15 @@ if (loginBtn) {
 
       // Redirect based on user role
       const user = data.user;
-      if (user.role === "ADMIN") {
-        window.location.href = "admin-dashboard.html";
-      } else {
-        window.location.href = "dashboard.html";
-      }
+const role = user.role ? user.role.toUpperCase() : "LEARNER";
+
+if (role === "ADMIN") {
+  window.location.href = "admin-dashboard.html";
+} else if (role === "TUTOR") {
+  window.location.href = "tutor-dashboard.html";
+} else {
+  window.location.href = "dashboard.html";
+}
     } catch (err) {
       message.textContent = "Something went wrong";
       console.error(err);
