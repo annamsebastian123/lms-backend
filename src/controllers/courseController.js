@@ -24,10 +24,45 @@ async function getAllCourses(req, res) {
   }
 }
 
+const jwt = require('jsonwebtoken');
+
 async function getCourseById(req, res) {
   try {
     const course = await courseService.getCourseById(req.params.id);
-    res.json(course);
+    if (!course) return res.status(404).json({ message: 'Course not found' });
+
+    // If course is published, return it to anyone
+    if (course.status === 'PUBLISHED') return res.json(course);
+
+    // Course is DRAFT: allow owner or admins/tutors with valid token to view
+    const auth = req.headers.authorization;
+    if (!auth) return res.status(404).json({ message: 'Course not found' });
+
+    const token = auth.replace(/^Bearer\s+/i, '');
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (decoded && (decoded.role === 'ADMIN' || (decoded.id && Number(decoded.id) === Number(course.userId)))) {
+        return res.json(course);
+      }
+      return res.status(404).json({ message: 'Course not found' });
+    } catch (e) {
+      return res.status(404).json({ message: 'Course not found' });
+    }
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+async function publishCourse(req, res) {
+  try {
+    const courseId = req.params.id;
+    const course = await courseService.getCourseById(courseId);
+    if (!course) return res.status(404).json({ message: 'Course not found' });
+    if (Number(course.userId) !== Number(req.user.id)) {
+      return res.status(403).json({ message: 'Not authorized to publish' });
+    }
+    const updated = await courseService.publishCourse(courseId, req.user.id);
+    res.json(updated);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
@@ -68,6 +103,16 @@ async function getMyCourses(req, res) {
   try {
     const courses = await courseService.getMyCourses(req.user.id);
 
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
+async function getTutorCourses(req, res) {
+  try {
+    const courses = await courseService.getTutorCourses(req.user.id);
     res.json(courses);
   } catch (err) {
     res.status(500).json({
@@ -155,7 +200,9 @@ module.exports = {
   getCourseStudents,
   enrollInCourse,
   getMyCourses,
+  getTutorCourses,
   getTutorStats,
+  publishCourse,
   createLesson,
   getLessonsByModule,
 };

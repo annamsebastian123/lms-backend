@@ -147,6 +147,8 @@ input{
 
 .course-content{
     padding:20px;
+    display:flex;
+    flex-direction:column;
 }
 
 .course-content h3{
@@ -156,6 +158,27 @@ input{
 .course-content p{
     color:gray;
     margin-bottom:15px;
+}
+
+.badge{
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:8px;
+    font-weight:600;
+    font-size:12px;
+    margin-left:8px;
+}
+.badge-draft{
+    background:#fef3c7;
+    color:#92400e;
+}
+.badge-published{
+    background:#bbf7d0;
+    color:#065f46;
+}
+
+.course-actions{
+    margin-top:12px;
 }
 
 .enroll-btn{

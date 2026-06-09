@@ -3,6 +3,7 @@ const router = express.Router();
 
 const courseController = require("../controllers/courseController");
 const authMiddleware = require("../middlewares/authMiddleware");
+const authorizeRoles = require("../middlewares/roleMiddleware");
 
 router.post("/:id/modules", authMiddleware, courseController.createModule);
 router.get("/:id/modules", authMiddleware, courseController.getModulesByCourse);
@@ -19,7 +20,9 @@ router.get(
 router.post("/", authMiddleware, courseController.createCourse);
 router.get("/:id/students",authMiddleware,courseController.getCourseStudents);
 router.get("/my-courses",authMiddleware,courseController.getMyCourses);
+router.get("/tutor-courses", authMiddleware, courseController.getTutorCourses);
 router.get("/tutor-stats", authMiddleware, courseController.getTutorStats);
+router.post("/:id/publish", authMiddleware, authorizeRoles("TUTOR"), courseController.publishCourse);
 router.get("/", courseController.getAllCourses);
 router.get("/:id", courseController.getCourseById);
 router.delete("/:id", authMiddleware, courseController.deleteCourse);

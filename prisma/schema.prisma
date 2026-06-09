@@ -13,6 +13,11 @@ enum Role {
   LEARNER
 }
 
+enum CourseStatus {
+  DRAFT
+  PUBLISHED
+}
+
 model User {
   id           Int          @id @default(autoincrement())
   email        String       @unique
@@ -35,6 +40,8 @@ model Course {
   enrollments Enrollment[]
 
   modules     Module[]
+
+  status      CourseStatus @default(DRAFT)
 
   createdAt   DateTime     @default(now())
 }
