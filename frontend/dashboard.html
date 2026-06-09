@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard</title>
+    <title>Learner Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,40 +12,86 @@
     <h2>HCK LMS</h2>
 
     <ul>
-    <li><a href="dashboard.html" class="active">Dashboard</a></li>
-    <li><a href="courses.html">Courses</a></li>
-    <li><a href="learning.html">My Learning</a></li>
-    <li><a href="certificates.html">Certificates</a></li>
-    <li><a href="profile.html">Profile</a></li>
-    <li><a href="index.html">Logout</a></li>
-</ul>
+        <li><a href="dashboard.html" class="active">Dashboard</a></li>
+        <li><a href="courses.html">Courses</a></li>
+        <li><a href="learning.html">My Learning</a></li>
+        <li><a href="certificates.html">Certificates</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="index.html">Logout</a></li>
+    </ul>
 
 </div>
 
 <div class="main">
 
-    <h1>Learner Dashboard</h1>
+    <div class="top-header">
+        <div>
+            <h1>Learner Dashboard</h1>
+            <p>Track your learning progress, enrolled courses and certificates.</p>
+        </div>
+    </div>
 
     <div class="cards">
 
-        <div class="card">
+        <div class="card admin-card">
             <h3>Enrolled Courses</h3>
             <h1>12</h1>
+            <p>Courses currently assigned to you</p>
         </div>
 
-        <div class="card">
+        <div class="card admin-card">
             <h3>Completed</h3>
             <h1>5</h1>
+            <p>Courses successfully completed</p>
         </div>
 
-        <div class="card">
+        <div class="card admin-card">
             <h3>Certificates</h3>
             <h1>5</h1>
+            <p>Certificates earned from completed courses</p>
         </div>
 
     </div>
 
+    <div class="dashboard-section">
+
+        <div class="section-header">
+            <h2>Continue Learning</h2>
+        </div>
+
+        <table>
+    <tr>
+        <th>Course</th>
+        <th>Progress</th>
+        <th>Action</th>
+    </tr>
+
+    <tbody id="dashboardCourses">
+        <tr>
+            <td colspan="3">Loading your courses...</td>
+        </tr>
+    </tbody>
+<table>
+    <thead>
+        <tr>
+            <th>Course</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody id="dashboardCourses">
+        <tr>
+            <td colspan="3">Loading your courses...</td>
+        </tr>
+    </tbody>
+</table>
+
+    </div>
+
 </div>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
 
 </body>
 </html>
