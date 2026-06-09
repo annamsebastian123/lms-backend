@@ -15,94 +15,94 @@
 
         <h2>HCK LMS</h2>
 
-    <ul>
+        <ul>
 
-    <li>
-        <a href="admin-dashboard.html" class="active">
-            Dashboard
-        </a>
-    </li>
+            <li>
+                <a href="admin-dashboard.html" class="active">
+                    Dashboard
+                </a>
+            </li>
 
-    <li>
-        <a href="users.html">
-            Users
-        </a>
-    </li>
+            <li>
+                <a href="users.html">
+                    Users
+                </a>
+            </li>
 
-    <li>
-        <a href="courses.html">
-            Courses
-        </a>
-    </li>
+            <li>
+                <a href="courses.html">
+                    Courses
+                </a>
+            </li>
 
-    <li>
-        <a href="reports.html">
-            Reports
-        </a>
-    </li>
+            <li>
+                <a href="reports.html">
+                    Reports
+                </a>
+            </li>
 
-    <li>
-        <a href="#">
-            Certificates
-        </a>
-    </li>
+            <li>
+                <a href="#">
+                    Certificates
+                </a>
+            </li>
 
-    <li>
-        <a href="#">
-            Settings
-        </a>
-    </li>
+            <li>
+                <a href="#">
+                    Settings
+                </a>
+            </li>
 
-    <li>
-        <a href="profile.html">
-            Profile
-        </a>
-    </li>
+            <li>
+                <a href="profile.html">
+                    Profile
+                </a>
+            </li>
 
-    <li>
-        <a href="index.html">
-            Logout
-        </a>
-    </li>
+            <li>
+                <a href="index.html">
+                    Logout
+                </a>
+            </li>
 
-</ul>
+        </ul>
 
     </div>
 
     <div class="main">
 
         <div class="top-header">
-    <div>
-        <h1>Admin Dashboard</h1>
-        <p>Manage users, courses, reports and LMS activities</p>
-    </div>
-</div>
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p>Manage users, courses, reports and LMS activities</p>
+            </div>
+        </div>
 
         <div class="cards">
 
             <div class="card admin-card">
-    <h3>Total Users</h3>
-    <h1>1,250</h1>
-    <p>Registered staff members</p>
-</div>
+                <h3>Total Users</h3>
+                <h1 id="totalUsersValue">0</h1>
+                <p>Registered staff members</p>
+            </div>
 
             <div class="card admin-card">
-    <h3>Active Courses</h3>
-    <h1>150</h1>
-    <p>Published learning courses</p>
-</div>
+                <h3>Active Courses</h3>
+                <h1 id="activeCoursesValue">0</h1>
+                <p>Published learning courses</p>
+            </div>
 
-<div class="card admin-card">
-    <h3>Enrollments</h3>
-    <h1>4,580</h1>
-    <p>Total course enrollments</p>
-</div>
+            <div class="card admin-card">
+                <h3>Enrollments</h3>
+                <h1 id="enrollmentsValue">0</h1>
+                <p>Total course enrollments</p>
+            </div>
 
-<div class="card admin-card">
-    <h3>Certificates Issued</h3>
-    <h1>980</h1>
-    <p>Completed course certificates</p>
-</div>
+            <div class="card admin-card">
+                <h3>Certificates Issued</h3>
+                <h1 id="certificatesValue">0</h1>
+                <p>Completed course certificates</p>
+            </div>
 
         </div>
 
@@ -121,50 +121,19 @@
                 </tr>
 
                 <tr>
-                    <td>Rahul Kumar</td>
-                    <td>Completed Registry Procedures</td>
-                    <td>02 Jun 2026</td>
-                </tr>
-
-                <tr>
-                    <td>Fathima</td>
-                    <td>Downloaded Certificate</td>
-                    <td>02 Jun 2026</td>
-                </tr>
-
-                <tr>
-                    <td>Anjali</td>
-                    <td>Enrolled in Civil Filing</td>
-                    <td>01 Jun 2026</td>
+                    <td colspan="3">Recent activities will appear here.</td>
                 </tr>
 
             </table>
 
         </div>
 
-        <div class="quick-actions">
+        
 
-            <h2>Quick Actions</h2>
+        
 
-            <div class="action-cards">
-
-                <div class="quick-card">
-                    <h3>Manage Users</h3>
-                </div>
-
-                <div class="quick-card">
-                    <h3>Review Courses</h3>
-                </div>
-
-                <div class="quick-card">
-                    <h3>Generate Reports</h3>
-                </div>
-
-            </div>
-
-        </div>
-
-    </div>
+    <script src="js/api.js"></script>
+    <script src="js/admin-dashboard.js"></script>
 
 </body>
 
