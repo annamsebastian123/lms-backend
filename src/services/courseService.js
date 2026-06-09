@@ -6,6 +6,7 @@ async function createCourse(data, userId) {
     data: {
       title: data.title,
       description: data.description,
+      status: data.status || 'DRAFT',
       userId: userId,
     },
   });
@@ -13,6 +14,7 @@ async function createCourse(data, userId) {
 
 async function getAllCourses() {
   return await prisma.course.findMany({
+    where: { status: 'PUBLISHED' },
     include: {
       user: {
         select: { id: true, name: true, email: true },
@@ -78,6 +80,25 @@ async function getMyCourses(userId) {
     },
   });
 }
+async function getTutorCourses(userId) {
+  return await prisma.course.findMany({
+    where: {
+      userId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+  });
+}
+
+async function publishCourse(courseId, userId) {
+  const updated = await prisma.course.updateMany({
+    where: { id: Number(courseId), userId },
+    data: { status: 'PUBLISHED' },
+  });
+  if (updated.count === 0) throw new Error('Course not found or not authorized');
+  return await getCourseById(courseId);
+}
 async function getCourseStudents(courseId) {
   return await prisma.enrollment.findMany({
     where: {
@@ -95,10 +116,9 @@ async function getCourseStudents(courseId) {
   });
 }
 async function getTutorStats(userId) {
-  const totalCourses = await prisma.course.count({
-    where: { userId },
-  });
-
+  const totalCourses = await prisma.course.count({ where: { userId } });
+  const totalDrafts = await prisma.course.count({ where: { userId, status: 'DRAFT' } });
+  const totalPublished = await prisma.course.count({ where: { userId, status: 'PUBLISHED' } });
   const totalEnrollments = await prisma.enrollment.count({
     where: {
       course: {
@@ -107,7 +127,7 @@ async function getTutorStats(userId) {
     },
   });
 
-  return { totalCourses, totalEnrollments };
+  return { totalCourses, totalDrafts, totalPublished, totalEnrollments };
 }
 async function createModule(courseId, data) {
   return await prisma.module.create({
@@ -155,6 +175,7 @@ module.exports = {
   getMyCourses,
   getCourseStudents,
   getTutorStats,
+  getTutorCourses,
   createLesson,
   getLessonsByModule,
 };

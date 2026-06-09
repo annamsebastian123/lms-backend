@@ -167,8 +167,8 @@ if (detailContainer) {
         }
 
         const enrolled = await isCourseEnrolled(course.id);
-        const isTutorOwner =
-          user && user.role === "TUTOR" && Number(user.id) === Number(course.user?.id);
+        const shouldShowEnrollButton =
+          !enrolled && user.role !== "TUTOR";
 
         // Render main course details
         const title = course.title || 'Untitled Course';
@@ -187,7 +187,7 @@ if (detailContainer) {
           <h1>${escapeHtml(title)}</h1>
           ${metaHtml}
           <p class="course-description">${escapeHtml(description)}</p>
-          ${enrolled ? '' : '<button class="enroll-btn" id="enrollCourseBtn">Enroll Now</button>'}
+          ${shouldShowEnrollButton ? '<button class="enroll-btn" id="enrollCourseBtn">Enroll Now</button>' : ''}
         `;
 
         const enrollBtn = document.getElementById("enrollCourseBtn");
@@ -207,7 +207,7 @@ if (detailContainer) {
         }
 
         if (modulesSection) {
-          await renderModules(courseId, isTutorOwner);
+          await renderModules(courseId, false);
         }
 
       } catch (error) {
