@@ -69,6 +69,21 @@ async function getCourseStudents(courseId) {
     },
   });
 }
+async function getTutorStats(userId) {
+  const totalCourses = await prisma.course.count({
+    where: { userId },
+  });
+
+  const totalEnrollments = await prisma.enrollment.count({
+    where: {
+      course: {
+        userId,
+      },
+    },
+  });
+
+  return { totalCourses, totalEnrollments };
+}
 async function createModule(courseId, data) {
   return await prisma.module.create({
     data: {
@@ -114,6 +129,7 @@ module.exports = {
   enrollInCourse,
   getMyCourses,
   getCourseStudents,
+  getTutorStats,
   createLesson,
   getLessonsByModule,
 };
