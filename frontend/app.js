@@ -25,6 +25,8 @@ if (loginBtn) {
       const user = data.user;
       if (user.role === "ADMIN") {
         window.location.href = "admin-dashboard.html";
+      } else if (user.role === "TUTOR") {
+        window.location.href = "tutor-dashboard.html";
       } else {
         window.location.href = "dashboard.html";
       }
