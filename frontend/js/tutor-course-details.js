@@ -1,7 +1,12 @@
 const detailContainer = document.querySelector('.course-detail-container');
 const modulesSection = document.querySelector('.modules-section');
 const params = new URLSearchParams(window.location.search);
-const courseId = params.get('id');
+const courseId =
+  params.get('id') || localStorage.getItem("selectedCourseId");
+console.log("Tutor URL:", window.location.href);
+console.log("Tutor search:", window.location.search);
+console.log("Tutor courseId:", courseId);
+
 
 if (!detailContainer || !courseId) {
   if (detailContainer) {
@@ -11,12 +16,16 @@ if (!detailContainer || !courseId) {
   async function loadAndRenderCourse() {
     try {
       const data = await apiRequest(`/courses/${courseId}`);
+      console.log("Tutor API response:", data);
+
       const course = data && data.course ? data.course : data;
+      console.log("Tutor course object:", course);
       if (!course) {
         detailContainer.innerHTML = '<p>Course not found.</p>';
         return;
       }
 
+      console.log("Rendering course details...");
       const title = course.title || 'Untitled Course';
       const description = course.description || '';
       const category = course.category || '';
