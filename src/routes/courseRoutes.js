@@ -7,24 +7,41 @@ const authorizeRoles = require("../middlewares/roleMiddleware");
 
 router.post("/:id/modules", authMiddleware, courseController.createModule);
 router.get("/:id/modules", authMiddleware, courseController.getModulesByCourse);
+
 router.post(
   "/modules/:id/lessons",
   authMiddleware,
   courseController.createLesson
 );
+
 router.get(
   "/modules/:id/lessons",
   authMiddleware,
   courseController.getLessonsByModule
 );
+
+router.get(
+  "/lessons/:id",
+  authMiddleware,
+  courseController.getLessonById
+);
+
 router.post("/", authMiddleware, courseController.createCourse);
-router.get("/:id/students",authMiddleware,courseController.getCourseStudents);
-router.get("/my-courses",authMiddleware,courseController.getMyCourses);
+router.get("/:id/students", authMiddleware, courseController.getCourseStudents);
+router.get("/my-courses", authMiddleware, courseController.getMyCourses);
 router.get("/tutor-courses", authMiddleware, courseController.getTutorCourses);
 router.get("/tutor-stats", authMiddleware, courseController.getTutorStats);
-router.post("/:id/publish", authMiddleware, authorizeRoles("TUTOR"), courseController.publishCourse);
+
+router.post(
+  "/:id/publish",
+  authMiddleware,
+  authorizeRoles("TUTOR"),
+  courseController.publishCourse
+);
+
 router.get("/", courseController.getAllCourses);
 router.get("/:id", courseController.getCourseById);
 router.delete("/:id", authMiddleware, courseController.deleteCourse);
-router.post("/:id/enroll",authMiddleware,courseController.enrollInCourse);
+router.post("/:id/enroll", authMiddleware, courseController.enrollInCourse);
+
 module.exports = router;

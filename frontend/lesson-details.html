@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lesson Details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="main">
+        <div class="top-header">
+            <div>
+                <h1>Lesson Details</h1>
+                <p>View lesson content and continue learning.</p>
+            </div>
+        </div>
+
+        <div class="lesson-container">
+            <div class="course-banner"></div>
+
+            <h2 id="lessonTitle">Loading...</h2>
+
+            <div id="lessonContent" class="lesson-content">
+                Loading lesson content...
+            </div>
+
+            <div class="lesson-actions">
+                <button class="action-btn" onclick="history.back()">
+                    Back to Course
+                </button>
+
+                <button class="action-btn" id="markCompleteBtn">
+                    Mark Complete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/lesson-details.js"></script>
+
+</body>
+</html>

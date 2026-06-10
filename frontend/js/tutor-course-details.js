@@ -100,7 +100,14 @@ if (!detailContainer || !courseId) {
       modulesWithLessons.forEach((module) => {
         const lessonsHtml = Array.isArray(module.lessons) && module.lessons.length
           ? `<ul>${module.lessons
-              .map((lesson) => `<li>${escapeHtml(lesson.title || 'Lesson')}</li>`)
+              .map((lesson, index) => `
+  <div class="lesson-item">
+    <a class="lesson-link"
+       href="lesson-details.html?id=${lesson.id}">
+       Lesson ${index + 1}: ${escapeHtml(lesson.title || 'Lesson')}
+    </a>
+  </div>
+`)
               .join('')}</ul>`
           : '<p>No lessons available yet.</p>';
 
