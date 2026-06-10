@@ -27,6 +27,7 @@ model User {
 
   courses      Course[]
   enrollments  Enrollment[]
+  certificates Certificate[]
 }
 
 model Course {
@@ -38,8 +39,8 @@ model Course {
   user        User         @relation(fields: [userId], references: [id])
 
   enrollments Enrollment[]
-
   modules     Module[]
+  certificates Certificate[]
 
   status      CourseStatus @default(DRAFT)
 
@@ -81,4 +82,18 @@ model Lesson {
   module    Module   @relation(fields: [moduleId], references: [id])
 
   createdAt DateTime @default(now())
+}
+
+model Certificate {
+  id        Int      @id @default(autoincrement())
+
+  userId    Int
+  courseId  Int
+
+  user      User     @relation(fields: [userId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
+
+  issuedAt  DateTime @default(now())
+
+  @@unique([userId, courseId])
 }

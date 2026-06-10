@@ -11,11 +11,16 @@ const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const courseRoutes = require("./routes/courseRoutes");
+const profileRoutes = require("./routes/profileRoutes");
 const authMiddleware = require("./middlewares/authMiddleware");
 
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:3000",
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.use(express.json());
 
@@ -34,6 +39,7 @@ app.get("/api/protected", authMiddleware, (req, res) => {
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/api/profile", profileRoutes);
 app.get("/test", (req, res) => {
   res.send("Test route works");
 });

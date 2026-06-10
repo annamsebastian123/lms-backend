@@ -337,3 +337,4 @@ if (detailContainer) {
     loadAndRenderCourse();
   }
 }
+

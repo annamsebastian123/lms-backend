@@ -14,7 +14,6 @@ async function createCourse(data, userId) {
 
 async function getAllCourses() {
   return await prisma.course.findMany({
-    where: { status: 'PUBLISHED' },
     include: {
       user: {
         select: { id: true, name: true, email: true },
