@@ -41,12 +41,17 @@ document.addEventListener("DOMContentLoaded", async () => {
       const actions = document.createElement("div");
       actions.className = "course-actions";
 
-      const viewLink = document.createElement("a");
-      viewLink.href = `tutor-course-details.html?id=${course.id}`;
-      viewLink.className = "action-btn";
-      viewLink.textContent = "View Course";
+      const viewLink = document.createElement('a');
+viewLink.href = `tutor-course-details.html?id=${course.id}`;
 
-      actions.appendChild(viewLink);
+viewLink.addEventListener("click", () => {
+  localStorage.setItem("selectedCourseId", course.id);
+});
+
+viewLink.className = 'action-btn';
+viewLink.textContent = 'View Details';
+     
+actions.appendChild(viewLink);
 
       // Publish button for draft courses (only for tutors)
       const user = JSON.parse(localStorage.getItem('user') || '{}');
