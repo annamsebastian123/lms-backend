@@ -115,11 +115,34 @@ if (!detailContainer || !courseId) {
           <div class="module-card">
             <h3>${escapeHtml(module.displayTitle)}</h3>
             ${lessonsHtml}
-            <div class="form-group">
-              <input type="text" id="lessonTitle-${module.id}" placeholder="Lesson title">
-              <input type="text" id="lessonContent-${module.id}" placeholder="Lesson content">
-              <button class="action-btn addLessonBtn" data-module-id="${module.id}">Add Lesson</button>
-            </div>
+            <div>
+  <button
+    class="action-btn showLessonFormBtn"
+    data-module-id="${module.id}">
+    + Add Lesson
+  </button>
+
+  <div
+    id="lessonForm-${module.id}"
+    style="display:none; margin-top:10px;">
+
+    <input
+      type="text"
+      id="lessonTitle-${module.id}"
+      placeholder="Lesson title">
+
+    <input
+      type="text"
+      id="lessonContent-${module.id}"
+      placeholder="Lesson content">
+
+    <button
+      class="action-btn addLessonBtn"
+      data-module-id="${module.id}">
+      Save Lesson
+    </button>
+  </div>
+</div>
           </div>
         `;
       });
@@ -152,7 +175,17 @@ if (!detailContainer || !courseId) {
         }
       });
     }
+    document.querySelectorAll('.showLessonFormBtn').forEach((button) => {
+  button.addEventListener('click', () => {
+    const moduleId = button.dataset.moduleId;
 
+    document.getElementById(
+      `lessonForm-${moduleId}`
+    ).style.display = 'block';
+
+    button.style.display = 'none';
+  });
+});
     document.querySelectorAll('.addLessonBtn').forEach((button) => {
       button.addEventListener('click', async () => {
         const moduleId = button.dataset.moduleId;
