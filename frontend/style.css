@@ -1322,3 +1322,23 @@ textarea{
 .delete-btn {
     background: #b91c1c;
 }
+
+.lesson-list {
+  margin-top: 15px;
+}
+
+.lesson-link {
+  display: block;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  background: #f5f5f5;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: 0.2s ease;
+}
+
+.lesson-link:hover {
+  background: #e8e8e8;
+}

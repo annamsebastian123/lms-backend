@@ -162,7 +162,13 @@ async function getLessonsByModule(moduleId) {
     },
   });
 }
-
+async function getLessonById(lessonId) {
+  return await prisma.lesson.findUnique({
+    where: {
+      id: Number(lessonId),
+    },
+  });
+}
 module.exports = {
   createCourse,
   getAllCourses,
@@ -177,4 +183,5 @@ module.exports = {
   getTutorCourses,
   createLesson,
   getLessonsByModule,
+  getLessonById,
 };

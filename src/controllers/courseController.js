@@ -189,6 +189,23 @@ async function getLessonsByModule(req, res) {
     });
   }
 }
+async function getLessonById(req, res) {
+  try {
+    const lesson = await courseService.getLessonById(req.params.id);
+
+    if (!lesson) {
+      return res.status(404).json({
+        message: "Lesson not found",
+      });
+    }
+
+    res.json(lesson);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
 
 module.exports = {
   createCourse,
@@ -205,4 +222,5 @@ module.exports = {
   publishCourse,
   createLesson,
   getLessonsByModule,
+  getLessonById,
 };
