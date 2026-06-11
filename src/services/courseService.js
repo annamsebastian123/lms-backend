@@ -6,7 +6,7 @@ async function createCourse(data, userId) {
     data: {
       title: data.title,
       description: data.description,
-      status: data.status || 'DRAFT',
+      status: data.status || "DRAFT",
       userId: userId,
     },
   });
@@ -24,9 +24,25 @@ async function getAllCourses() {
 
 async function getCourseById(id) {
   return await prisma.course.findUnique({
-    where: { id: Number(id) },
+    where: {
+      id: Number(id),
+    },
     include: {
-      user: true,
+      user: {
+        select: { id: true, name: true, email: true },
+      },
+    },
+  });
+}
+
+async function updateCourse(id, data) {
+  return await prisma.course.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      title: data.title,
+      description: data.description,
     },
   });
 }
@@ -61,6 +77,7 @@ async function deleteCourse(id) {
     where: { id: courseId },
   });
 }
+
 async function enrollInCourse(userId, courseId) {
   return await prisma.enrollment.create({
     data: {
@@ -69,6 +86,7 @@ async function enrollInCourse(userId, courseId) {
     },
   });
 }
+
 async function getMyCourses(userId) {
   return await prisma.enrollment.findMany({
     where: {
@@ -79,25 +97,36 @@ async function getMyCourses(userId) {
     },
   });
 }
+
 async function getTutorCourses(userId) {
   return await prisma.course.findMany({
     where: {
       userId,
     },
     orderBy: {
-      createdAt: 'desc',
+      createdAt: "desc",
     },
   });
 }
 
 async function publishCourse(courseId, userId) {
   const updated = await prisma.course.updateMany({
-    where: { id: Number(courseId), userId },
-    data: { status: 'PUBLISHED' },
+    where: {
+      id: Number(courseId),
+      userId,
+    },
+    data: {
+      status: "PUBLISHED",
+    },
   });
-  if (updated.count === 0) throw new Error('Course not found or not authorized');
+
+  if (updated.count === 0) {
+    throw new Error("Course not found or not authorized");
+  }
+
   return await getCourseById(courseId);
 }
+
 async function getCourseStudents(courseId) {
   return await prisma.enrollment.findMany({
     where: {
@@ -114,10 +143,26 @@ async function getCourseStudents(courseId) {
     },
   });
 }
+
 async function getTutorStats(userId) {
-  const totalCourses = await prisma.course.count({ where: { userId } });
-  const totalDrafts = await prisma.course.count({ where: { userId, status: 'DRAFT' } });
-  const totalPublished = await prisma.course.count({ where: { userId, status: 'PUBLISHED' } });
+  const totalCourses = await prisma.course.count({
+    where: { userId },
+  });
+
+  const totalDrafts = await prisma.course.count({
+    where: {
+      userId,
+      status: "DRAFT",
+    },
+  });
+
+  const totalPublished = await prisma.course.count({
+    where: {
+      userId,
+      status: "PUBLISHED",
+    },
+  });
+
   const totalEnrollments = await prisma.enrollment.count({
     where: {
       course: {
@@ -126,8 +171,14 @@ async function getTutorStats(userId) {
     },
   });
 
-  return { totalCourses, totalDrafts, totalPublished, totalEnrollments };
+  return {
+    totalCourses,
+    totalDrafts,
+    totalPublished,
+    totalEnrollments,
+  };
 }
+
 async function createModule(courseId, data) {
   return await prisma.module.create({
     data: {
@@ -162,8 +213,55 @@ async function getLessonsByModule(moduleId) {
     },
   });
 }
+
 async function getLessonById(lessonId) {
   return await prisma.lesson.findUnique({
+    where: {
+      id: Number(lessonId),
+    },
+  });
+}
+async function updateModule(moduleId, data) {
+  return await prisma.module.update({
+    where: {
+      id: Number(moduleId),
+    },
+    data: {
+      title: data.title,
+    },
+  });
+}
+
+async function deleteModule(moduleId) {
+  const id = Number(moduleId);
+
+  await prisma.lesson.deleteMany({
+    where: {
+      moduleId: id,
+    },
+  });
+
+  return await prisma.module.delete({
+    where: {
+      id,
+    },
+  });
+}
+
+async function updateLesson(lessonId, data) {
+  return await prisma.lesson.update({
+    where: {
+      id: Number(lessonId),
+    },
+    data: {
+      title: data.title,
+      content: data.content,
+    },
+  });
+}
+
+async function deleteLesson(lessonId) {
+  return await prisma.lesson.delete({
     where: {
       id: Number(lessonId),
     },
@@ -173,15 +271,21 @@ module.exports = {
   createCourse,
   getAllCourses,
   getCourseById,
+  updateCourse,
   deleteCourse,
   createModule,
   getModulesByCourse,
+  updateModule,
+  deleteModule,
   enrollInCourse,
   getMyCourses,
   getCourseStudents,
   getTutorStats,
   getTutorCourses,
+  publishCourse,
   createLesson,
   getLessonsByModule,
   getLessonById,
+  updateLesson,
+  deleteLesson,
 };

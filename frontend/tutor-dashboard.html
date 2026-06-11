@@ -17,79 +17,79 @@
 
         <ul>
 
-    <li>
-        <a href="tutor-dashboard.html" class="active">
-            Dashboard
-        </a>
-    </li>
+            <li>
+                <a href="tutor-dashboard.html" class="active">
+                    Dashboard
+                </a>
+            </li>
 
-    <li>
-        <a href="my-courses.html">
-            My Courses
-        </a>
-    </li>
+            <li>
+                <a href="my-courses.html">
+                    My Courses
+                </a>
+            </li>
 
-    <li>
-        <a href="create-course.html">
-            Create Course
-        </a>
-    </li>
+            <li>
+                <a href="create-course.html">
+                    Create Course
+                </a>
+            </li>
 
-    <li>
-        <a href="analytics.html">
-            Analytics
-        </a>
-    </li>
+            <li>
+                <a href="analytics.html">
+                    Analytics
+                </a>
+            </li>
 
-    <li>
-        <a href="tutor-profile.html">
-            Profile
-        </a>
-    </li>
+            <li>
+                <a href="tutor-profile.html">
+                    Profile
+                </a>
+            </li>
 
-    <li>
-        <a href="index.html">
-            Logout
-        </a>
-    </li>
+            <li>
+                <a href="index.html">
+                    Logout
+                </a>
+            </li>
 
-</ul>
+        </ul>
     </div>
 
     <div class="main">
 
         <div class="top-header">
-    <div>
-        <h1>Tutor Dashboard</h1>
-        <p>Manage your courses, track learner progress and view course performance</p>
-    </div>
-</div>
+            <div>
+                <h1>Tutor Dashboard</h1>
+                <p>Manage your courses, track learner progress and view course performance</p>
+            </div>
+        </div>
 
         <div class="cards">
 
             <div class="card admin-card">
-    <h3>Total Courses</h3>
-    <h1 id="totalCoursesValue">12</h1>
-    <p>Courses created by you</p>
-</div>
+                <h3>Total Courses</h3>
+                <h1 id="totalCoursesValue">0</h1>
+                <p>Courses created by you</p>
+            </div>
 
             <div class="card admin-card">
-    <h3>Published</h3>
-    <h1 id="publishedCoursesValue">0</h1>
-    <p>Courses live for learners</p>
-</div>
+                <h3>Published</h3>
+                <h1 id="publishedCoursesValue">0</h1>
+                <p>Courses live for learners</p>
+            </div>
 
-<div class="card admin-card">
-    <h3>Drafts</h3>
-    <h1 id="draftCoursesValue">0</h1>
-    <p>Courses still being edited</p>
-</div>
+            <div class="card admin-card">
+                <h3>Drafts</h3>
+                <h1 id="draftCoursesValue">0</h1>
+                <p>Courses still being edited</p>
+            </div>
 
-<div class="card admin-card">
-    <h3>Enrollments</h3>
-    <h1 id="totalEnrollmentsValue">340</h1>
-    <p>Total learner enrollments</p>
-</div>
+            <div class="card admin-card">
+                <h3>Enrollments</h3>
+                <h1 id="totalEnrollmentsValue">0</h1>
+                <p>Total learner enrollments</p>
+            </div>
 
         </div>
 
@@ -100,39 +100,26 @@
                 <h2>Recent Courses</h2>
 
                 <a href="create-course.html" class="btn small-btn">
-    Create Course
-</a>
+                    Create Course
+                </a>
             </div>
 
             <table>
 
-                <tr>
-                    <th>Course</th>
-                    <th>Status</th>
-                    <th>Students</th>
-                    <th>Action</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Course</th>
+                        <th>Status</th>
+                        <th>Students</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
 
-                <tr>
-                    <td>Registry Procedures</td>
-                    <td>Published</td>
-                    <td>120</td>
-                    <td><button class="action-btn">Edit</button></td>
-                </tr>
-
-                <tr>
-                    <td>Civil Filing Process</td>
-                    <td>Published</td>
-                    <td>85</td>
-                    <td><button class="action-btn">Edit</button></td>
-                </tr>
-
-                <tr>
-                    <td>Documentation Basics</td>
-                    <td>Draft</td>
-                    <td>0</td>
-                    <td><button class="action-btn">Edit</button></td>
-                </tr>
+                <tbody id="recentCoursesBody">
+                    <tr>
+                        <td colspan="4">Loading courses...</td>
+                    </tr>
+                </tbody>
 
             </table>
 
@@ -140,7 +127,7 @@
 
     </div>
 
-<script src="js/api.js"></script>
-<script src="js/tutor-dashboard.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/tutor-dashboard.js"></script>
 </body>
 </html>

@@ -206,14 +206,114 @@ async function getLessonById(req, res) {
     });
   }
 }
+async function updateCourse(req, res) {
+  try {
+    const course = await courseService.getCourseById(req.params.id);
 
+    if (!course) {
+      return res.status(404).json({
+        message: "Course not found",
+      });
+    }
+
+    if (
+      req.user.role !== "ADMIN" &&
+      Number(course.userId) !== Number(req.user.id)
+    ) {
+      return res.status(403).json({
+        message: "Not authorized to update this course",
+      });
+    }
+
+    const updatedCourse = await courseService.updateCourse(
+      req.params.id,
+      req.body
+    );
+
+    res.json({
+      message: "Course updated successfully",
+      course: updatedCourse,
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
+async function updateModule(req, res) {
+  try {
+    const updatedModule = await courseService.updateModule(
+      req.params.id,
+      req.body
+    );
+
+    res.json({
+      message: "Module updated successfully",
+      module: updatedModule,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
+
+async function deleteModule(req, res) {
+  try {
+    await courseService.deleteModule(req.params.id);
+
+    res.json({
+      message: "Module deleted successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
+
+async function updateLesson(req, res) {
+  try {
+    const updatedLesson = await courseService.updateLesson(
+      req.params.id,
+      req.body
+    );
+
+    res.json({
+      message: "Lesson updated successfully",
+      lesson: updatedLesson,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
+
+async function deleteLesson(req, res) {
+  try {
+    await courseService.deleteLesson(req.params.id);
+
+    res.json({
+      message: "Lesson deleted successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
 module.exports = {
   createCourse,
   getAllCourses,
   getCourseById,
+  updateCourse,
   deleteCourse,
   createModule,
   getModulesByCourse,
+  updateModule,
+  deleteModule,
   getCourseStudents,
   enrollInCourse,
   getMyCourses,
@@ -223,4 +323,6 @@ module.exports = {
   createLesson,
   getLessonsByModule,
   getLessonById,
+  updateLesson,
+  deleteLesson,
 };

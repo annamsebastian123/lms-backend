@@ -38,10 +38,33 @@ router.post(
   authorizeRoles("TUTOR"),
   courseController.publishCourse
 );
+router.put("/:id", authMiddleware, courseController.updateCourse);
 
 router.get("/", courseController.getAllCourses);
 router.get("/:id", courseController.getCourseById);
 router.delete("/:id", authMiddleware, courseController.deleteCourse);
 router.post("/:id/enroll", authMiddleware, courseController.enrollInCourse);
+router.put(
+  "/modules/:id",
+  authMiddleware,
+  courseController.updateModule
+);
 
+router.delete(
+  "/modules/:id",
+  authMiddleware,
+  courseController.deleteModule
+);
+
+router.put(
+  "/lessons/:id",
+  authMiddleware,
+  courseController.updateLesson
+);
+
+router.delete(
+  "/lessons/:id",
+  authMiddleware,
+  courseController.deleteLesson
+);
 module.exports = router;

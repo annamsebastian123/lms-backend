@@ -53,6 +53,7 @@ viewLink.textContent = 'View Details';
      
 actions.appendChild(viewLink);
 
+
       // Publish button for draft courses (only for tutors)
       const user = JSON.parse(localStorage.getItem('user') || '{}');
       if (course.status === 'DRAFT' && user && user.role === 'TUTOR') {

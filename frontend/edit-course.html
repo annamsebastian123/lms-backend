@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Course</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="main">
+
+    <h1>Edit Course</h1>
+
+    <div class="form-group">
+        <label>Course Title</label>
+        <input type="text" id="title">
+    </div>
+
+    <div class="form-group">
+        <label>Description</label>
+        <textarea id="description" rows="8"></textarea>
+    </div>
+
+    <button id="saveBtn" class="publish-btn">
+        Save Changes
+    </button>
+
+    <hr>
+
+    <h2>Modules & Lessons</h2>
+
+    <div id="modulesContainer">
+        <p>Loading modules and lessons...</p>
+    </div>
+
+</div>
+
+<script src="js/edit-course.js"></script>
+
+</body>
+</html>
