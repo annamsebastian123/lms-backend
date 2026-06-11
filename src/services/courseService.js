@@ -197,10 +197,19 @@ async function getModulesByCourse(courseId) {
 }
 
 async function createLesson(moduleId, data) {
+  if (Number(data.orderIndex) < 1) {
+  throw new Error("Order Index must be 1 or greater");
+}
   return await prisma.lesson.create({
     data: {
       title: data.title,
-      content: data.content,
+      content: data.content || null,
+
+      videoSource: data.videoSource || "YOUTUBE",
+      videoUrl: data.videoUrl || null,
+      duration: Number(data.duration || 0),
+      orderIndex: Number(data.orderIndex || 1),
+
       moduleId: Number(moduleId),
     },
   });
@@ -210,6 +219,9 @@ async function getLessonsByModule(moduleId) {
   return await prisma.lesson.findMany({
     where: {
       moduleId: Number(moduleId),
+    },
+    orderBy: {
+      orderIndex: "asc",
     },
   });
 }

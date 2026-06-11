@@ -115,11 +115,54 @@ if (!detailContainer || !courseId) {
           <div class="module-card">
             <h3>${escapeHtml(module.displayTitle)}</h3>
             ${lessonsHtml}
-            <div class="form-group">
-              <input type="text" id="lessonTitle-${module.id}" placeholder="Lesson title">
-              <input type="text" id="lessonContent-${module.id}" placeholder="Lesson content">
-              <button class="action-btn addLessonBtn" data-module-id="${module.id}">Add Lesson</button>
-            </div>
+            <div>
+  <button
+    class="action-btn showLessonFormBtn"
+    data-module-id="${module.id}">
+    + Add Lesson
+  </button>
+
+  <div
+    id="lessonForm-${module.id}"
+    style="display:none; margin-top:10px;">
+
+    <input
+  type="text"
+  id="lessonTitle-${module.id}"
+  placeholder="Lesson title">
+
+<select id="videoSource-${module.id}">
+  <option value="YOUTUBE">YouTube</option>
+  <option value="SELF_HOSTED">Self Hosted</option>
+</select>
+
+<input
+  type="text"
+  id="videoUrl-${module.id}"
+  placeholder="Video URL">
+
+<input
+  type="number"
+  id="duration-${module.id}"
+  placeholder="Duration (seconds)">
+
+<input
+  type="number"
+  id="orderIndex-${module.id}"
+  placeholder="Lesson Order">
+
+<textarea
+  id="lessonContent-${module.id}"
+  placeholder="Lesson notes/content (optional)">
+</textarea>
+
+    <button
+      class="action-btn addLessonBtn"
+      data-module-id="${module.id}">
+      Save Lesson
+    </button>
+  </div>
+</div>
           </div>
         `;
       });
@@ -152,14 +195,39 @@ if (!detailContainer || !courseId) {
         }
       });
     }
+    document.querySelectorAll('.showLessonFormBtn').forEach((button) => {
+  button.addEventListener('click', () => {
+    const moduleId = button.dataset.moduleId;
 
+    document.getElementById(
+      `lessonForm-${moduleId}`
+    ).style.display = 'block';
+
+    button.style.display = 'none';
+  });
+});
     document.querySelectorAll('.addLessonBtn').forEach((button) => {
       button.addEventListener('click', async () => {
         const moduleId = button.dataset.moduleId;
         const titleInput = document.getElementById(`lessonTitle-${moduleId}`);
         const contentInput = document.getElementById(`lessonContent-${moduleId}`);
-        const title = titleInput && titleInput.value.trim();
-        const content = contentInput && contentInput.value.trim();
+        const videoSourceInput = document.getElementById(`videoSource-${moduleId}`);
+        const videoUrlInput = document.getElementById(`videoUrl-${moduleId}`);
+        const durationInput = document.getElementById(`duration-${moduleId}`);
+        const orderIndexInput = document.getElementById(`orderIndex-${moduleId}`);
+
+        const title = titleInput?.value.trim();
+        const content = contentInput?.value.trim();
+
+        const videoSource = videoSourceInput?.value;
+        const videoUrl = videoUrlInput?.value.trim();
+
+        const duration = Number(durationInput?.value || 0);
+        const orderIndex = Number(orderIndexInput?.value || 1);
+        if (orderIndex < 1) {
+  alert('Order Index must be 1 or greater');
+  return;
+}
 
         if (!title) {
           alert('Lesson title is required');
@@ -169,10 +237,19 @@ if (!detailContainer || !courseId) {
         try {
           await apiRequest(`/courses/modules/${moduleId}/lessons`, {
             method: 'POST',
-            body: { title, content },
+            body: {title,
+              content,
+              videoSource,
+              videoUrl,
+              duration,
+              orderIndex,
+              },
           });
           if (titleInput) titleInput.value = '';
           if (contentInput) contentInput.value = '';
+          if (videoUrlInput) videoUrlInput.value = '';
+          if (durationInput) durationInput.value = '';
+          if (orderIndexInput) orderIndexInput.value = '';
           await renderModules(courseId);
         } catch (err) {
           alert(err.message || 'Failed to add lesson');

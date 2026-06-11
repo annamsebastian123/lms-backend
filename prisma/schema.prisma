@@ -15,15 +15,17 @@ enum Role {
 
 enum CourseStatus {
   DRAFT
+  PENDING_REVIEW
   PUBLISHED
+  ARCHIVED
 }
 
 model User {
-  id           Int          @id @default(autoincrement())
-  email        String       @unique
+  id           Int     @id @default(autoincrement())
+  email        String  @unique
   name         String?
   passwordHash String
-  role         Role         @default(LEARNER)
+  role         Role    @default(LEARNER)
 
   courses      Course[]
   enrollments  Enrollment[]
@@ -31,30 +33,30 @@ model User {
 }
 
 model Course {
-  id          Int          @id @default(autoincrement())
+  id          Int     @id @default(autoincrement())
   title       String
   description String?
 
-  userId      Int
-  user        User         @relation(fields: [userId], references: [id])
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
 
-  enrollments Enrollment[]
-  modules     Module[]
+  enrollments  Enrollment[]
+  modules      Module[]
   certificates Certificate[]
 
-  status      CourseStatus @default(DRAFT)
+  status CourseStatus @default(DRAFT)
 
-  createdAt   DateTime     @default(now())
+  createdAt DateTime @default(now())
 }
 
 model Enrollment {
-  id         Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-  userId     Int
-  courseId   Int
+  userId   Int
+  courseId Int
 
-  user       User     @relation(fields: [userId], references: [id])
-  course     Course   @relation(fields: [courseId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
 
   enrolledAt DateTime @default(now())
 
@@ -62,38 +64,52 @@ model Enrollment {
 }
 
 model Module {
-  id        Int      @id @default(autoincrement())
-  title     String
+  id    Int    @id @default(autoincrement())
+  title String
 
-  courseId  Int
-  course    Course   @relation(fields: [courseId], references: [id])
+  courseId Int
+  course   Course @relation(fields: [courseId], references: [id])
 
-  lessons   Lesson[]
+  lessons Lesson[]
 
   createdAt DateTime @default(now())
+}
+
+enum VideoSource {
+  YOUTUBE
+  SELF_HOSTED
 }
 
 model Lesson {
-  id        Int      @id @default(autoincrement())
-  title     String
-  content   String?
+  id    Int    @id @default(autoincrement())
+  title String
 
-  moduleId  Int
-  module    Module   @relation(fields: [moduleId], references: [id])
+  content String?
+
+  videoSource VideoSource @default(YOUTUBE)
+  videoUrl    String?
+  duration    Int         @default(0)
+
+  orderIndex Int @default(1)
+
+  moduleId Int
+  module   Module @relation(fields: [moduleId], references: [id])
 
   createdAt DateTime @default(now())
+
+  @@unique([moduleId, orderIndex])
 }
 
 model Certificate {
-  id        Int      @id @default(autoincrement())
+  id Int @id @default(autoincrement())
 
-  userId    Int
-  courseId  Int
+  userId   Int
+  courseId Int
 
-  user      User     @relation(fields: [userId], references: [id])
-  course    Course   @relation(fields: [courseId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+  course Course @relation(fields: [courseId], references: [id])
 
-  issuedAt  DateTime @default(now())
+  issuedAt DateTime @default(now())
 
   @@unique([userId, courseId])
 }
