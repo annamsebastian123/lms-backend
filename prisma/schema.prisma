@@ -96,6 +96,8 @@ model Lesson {
   module   Module @relation(fields: [moduleId], references: [id])
 
   createdAt DateTime @default(now())
+
+  @@unique([moduleId, orderIndex])
 }
 
 model Certificate {
