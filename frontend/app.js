@@ -250,7 +250,7 @@ if (detailContainer) {
                .map((lesson, index) => `
   <div class="lesson-item">
     <a class="lesson-link"
-       href="lesson-details.html?id=${lesson.id}">
+       href="lesson-details?id=${lesson.id}"
        Lesson ${index + 1}: ${escapeHtml(lesson.title || 'Lesson')}
     </a>
   </div>

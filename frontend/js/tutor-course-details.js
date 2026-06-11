@@ -102,8 +102,9 @@ if (!detailContainer || !courseId) {
           ? `<ul>${module.lessons
               .map((lesson, index) => `
   <div class="lesson-item">
-    <a class="lesson-link"
-       href="lesson-details.html?id=${lesson.id}">
+    <a
+     class="lesson-link"
+      href="lesson-details?id=${lesson.id}">
        Lesson ${index + 1}: ${escapeHtml(lesson.title || 'Lesson')}
     </a>
   </div>
