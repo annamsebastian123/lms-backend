@@ -8,7 +8,9 @@ const recentCoursesBody = document.getElementById("recentCoursesBody");
 
 async function loadTutorDashboard() {
     try {
-        const response = await fetch(COURSES_API_URL);
+        const response = await fetch(COURSES_API_URL, {
+    cache: "no-store"
+});
         const courses = await response.json();
 
         if (!response.ok) {
@@ -54,14 +56,16 @@ async function loadTutorDashboard() {
         });
 
     } catch (error) {
-        console.error(error);
+    console.error(error);
 
-        recentCoursesBody.innerHTML = `
-            <tr>
-                <td colspan="4">Failed to load courses.</td>
-            </tr>
-        `;
-    }
+    recentCoursesBody.innerHTML = `
+        <tr>
+            <td colspan="4">
+                Failed to load courses. Please refresh after a few seconds.
+            </td>
+        </tr>
+    `;
+}
 }
 
 function openEditCourse(courseId) {
