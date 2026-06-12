@@ -1,87 +1,140 @@
 const params = new URLSearchParams(window.location.search);
 const lessonId = params.get("id");
 
-console.log("URL:", window.location.href);
-console.log("Search:", window.location.search);
-console.log("Lesson ID:", lessonId);
-
 const titleEl = document.getElementById("lessonTitle");
 const contentEl = document.getElementById("lessonContent");
 const completeBtn = document.getElementById("markCompleteBtn");
 
+let currentLesson = null;
+let progressTimer = null;
+
+async function saveProgress() {
+  const video = document.getElementById("lessonVideo");
+
+  if (!video || !currentLesson) return;
+  if (!video.duration || Number.isNaN(video.duration)) return;
+
+  try {
+    await apiRequest(`/progress/${lessonId}`, {
+      method: "POST",
+      body: JSON.stringify({
+        currentPosition: Math.floor(video.currentTime),
+        totalDuration: Math.floor(video.duration || currentLesson.duration || 0),
+      }),
+    });
+  } catch (error) {
+    console.error("Failed to save progress:", error);
+  }
+}
+
+async function loadProgress(video) {
+  try {
+    const progress = await apiRequest(`/progress/${lessonId}`);
+
+    if (progress && progress.lastPosition > 0) {
+      video.currentTime = progress.lastPosition;
+    }
+  } catch (error) {
+    console.error("Failed to load progress:", error);
+  }
+}
 
 async function loadLesson() {
-if (!lessonId) {
-titleEl.textContent = "Lesson not found";
-contentEl.innerHTML = "<p>Invalid lesson ID.</p>";
-return;
-}
-
-try {
-const lesson = await apiRequest(`/courses/lessons/${lessonId}`);
-  console.log("Lesson response:", lesson);
-  console.log("Video URL:", lesson.videoUrl);
-  console.log("Video Source:", lesson.videoSource);
-
-
-titleEl.textContent = lesson.title || "Untitled Lesson";
-
-let videoHtml = "";
-
-if (lesson.videoSource === "YOUTUBE" && lesson.videoUrl) {
-  let embedUrl = lesson.videoUrl;
-
-  if (embedUrl.includes("watch?v=")) {
-    embedUrl = embedUrl.replace("watch?v=", "embed/");
+  if (!lessonId) {
+    titleEl.textContent = "Lesson not found";
+    contentEl.innerHTML = "<p>Invalid lesson ID.</p>";
+    return;
   }
 
-  videoHtml = `
-    <iframe
-      width="100%"
-      height="450"
-      src="${embedUrl}"
-      frameborder="0"
-      allowfullscreen>
-    </iframe>
-  `;
-}
+  try {
+    const lesson = await apiRequest(`/courses/lessons/${lessonId}`);
+    currentLesson = lesson;
 
-if (lesson.videoSource === "SELF_HOSTED" && lesson.videoUrl) {
-  videoHtml = `
-    <video width="100%" controls>
-      <source src="${lesson.videoUrl}" type="video/mp4">
-      Your browser does not support video playback.
-    </video>
-  `;
-}
+    titleEl.textContent = lesson.title || "Untitled Lesson";
 
-contentEl.innerHTML = `
-  <div class="lesson-body">
-    ${videoHtml}
+    let videoHtml = "";
 
-    <div style="margin-top:20px;">
-      <p>${lesson.content || "No lesson content available."}</p>
-    </div>
-  </div>
-`;
+    if (lesson.videoSource === "YOUTUBE" && lesson.videoUrl) {
+      let embedUrl = lesson.videoUrl;
 
-} catch (error) {
-console.error("Failed to load lesson:", error);
+      if (embedUrl.includes("watch?v=")) {
+        embedUrl = embedUrl.replace("watch?v=", "embed/");
+      }
 
+      videoHtml = `
+        <iframe
+          width="100%"
+          height="450"
+          src="${embedUrl}"
+          frameborder="0"
+          allowfullscreen>
+        </iframe>
+        <p style="margin-top:10px;color:#666;">
+          YouTube progress tracking will be added separately.
+        </p>
+      `;
+    }
 
-titleEl.textContent = "Lesson not found";
-contentEl.innerHTML = `
-  <p>Unable to load lesson content.</p>
-`;
+    if (lesson.videoSource === "SELF_HOSTED" && lesson.videoUrl) {
+      videoHtml = `
+        <video id="lessonVideo" width="100%" controls>
+          <source src="${lesson.videoUrl}" type="video/mp4">
+          Your browser does not support video playback.
+        </video>
+      `;
+    }
 
+    contentEl.innerHTML = `
+      <div class="lesson-body">
+        ${videoHtml}
 
-}
+        <div style="margin-top:20px;">
+          <p>${lesson.content || "No lesson content available."}</p>
+        </div>
+      </div>
+    `;
+
+    const video = document.getElementById("lessonVideo");
+
+    if (video) {
+      video.addEventListener("canplay", async () => {
+  const progress = await apiRequest(`/progress/${lessonId}`);
+
+  console.log("Progress response:", progress);
+
+  if (progress && progress.lastPosition > 0) {
+    video.currentTime = progress.lastPosition;
+  }
+}, { once: true });
+
+      video.addEventListener("play", () => {
+        if (progressTimer) clearInterval(progressTimer);
+
+        progressTimer = setInterval(() => {
+          saveProgress();
+        }, 30000);
+      });
+
+      video.addEventListener("pause", saveProgress);
+      video.addEventListener("ended", saveProgress);
+    }
+  } catch (error) {
+    console.error("Failed to load lesson:", error);
+
+    titleEl.textContent = "Lesson not found";
+    contentEl.innerHTML = "<p>Unable to load lesson content.</p>";
+  }
 }
 
 if (completeBtn) {
-completeBtn.addEventListener("click", () => {
-alert("Lesson completed! Progress tracking will be added next.");
-});
+  completeBtn.addEventListener("click", async () => {
+    await saveProgress();
+    alert("Progress saved.");
+  });
 }
+
+window.addEventListener("beforeunload", () => {
+  saveProgress();
+});
 
 loadLesson();

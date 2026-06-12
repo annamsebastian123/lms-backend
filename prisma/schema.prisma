@@ -30,6 +30,8 @@ model User {
   courses      Course[]
   enrollments  Enrollment[]
   certificates Certificate[]
+
+  videoProgress VideoProgress[]
 }
 
 model Course {
@@ -94,12 +96,31 @@ model Lesson {
 
   moduleId Int
   module   Module @relation(fields: [moduleId], references: [id])
-
+  progressRecords VideoProgress[]
   createdAt DateTime @default(now())
 
   @@unique([moduleId, orderIndex])
 }
 
+model VideoProgress {
+  id Int @id @default(autoincrement())
+
+  userId   Int
+  lessonId Int
+
+  user   User   @relation(fields: [userId], references: [id])
+  lesson Lesson @relation(fields: [lessonId], references: [id])
+
+  watchedSeconds Int @default(0)
+  totalSeconds   Int @default(0)
+  lastPosition   Int @default(0)
+
+  isComplete Boolean @default(false)
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, lessonId])
+}
 model Certificate {
   id Int @id @default(autoincrement())
 

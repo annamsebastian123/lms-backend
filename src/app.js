@@ -15,15 +15,24 @@ const profileRoutes = require("./routes/profileRoutes");
 const tutorProfileRoutes = require("./routes/tutorProfileRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const authMiddleware = require("./middlewares/authMiddleware");
+<<<<<<< HEAD
 const certificateRoutes = require("./routes/certificateRoutes");
+=======
+const progressRoutes = require("./routes/progressRoutes");
+>>>>>>> f1cce55a8006df1adc69fd06fe749dda2b7273d5
 
 
 const app = express();
 app.use(cors({
-  origin: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: [
+    "https://refactored-space-telegram-g4964j7p9prghp747-3000.app.github.dev"
+  ],
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+
 
 app.use(express.json());
 
@@ -46,6 +55,7 @@ app.use("/api/profile", profileRoutes);
 app.use("/api/tutor-profile", tutorProfileRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/certificates", certificateRoutes);
+app.use("/api/progress", progressRoutes);
 app.get("/test", (req, res) => {
   res.send("Test route works");
 });
