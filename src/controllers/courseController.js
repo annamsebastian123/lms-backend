@@ -304,6 +304,17 @@ async function deleteLesson(req, res) {
     });
   }
 }
+async function getPublicStats(req, res) {
+  try {
+    const stats = await courseService.getPublicStats();
+
+    res.json(stats);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
 module.exports = {
   createCourse,
   getAllCourses,
@@ -325,4 +336,5 @@ module.exports = {
   getLessonById,
   updateLesson,
   deleteLesson,
+  getPublicStats,
 };

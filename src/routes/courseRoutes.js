@@ -39,7 +39,10 @@ router.post(
   courseController.publishCourse
 );
 router.put("/:id", authMiddleware, courseController.updateCourse);
-
+router.get(
+  "/public-stats",
+  courseController.getPublicStats
+);
 router.get("/", courseController.getAllCourses);
 router.get("/:id", courseController.getCourseById);
 router.delete("/:id", authMiddleware, courseController.deleteCourse);
