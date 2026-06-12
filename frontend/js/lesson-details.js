@@ -20,6 +20,9 @@ return;
 try {
 const lesson = await apiRequest(`/courses/lessons/${lessonId}`);
   console.log("Lesson response:", lesson);
+  console.log("Video URL:", lesson.videoUrl);
+  console.log("Video Source:", lesson.videoSource);
+
 
 titleEl.textContent = lesson.title || "Untitled Lesson";
 

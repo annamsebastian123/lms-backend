@@ -227,11 +227,22 @@ async function getLessonsByModule(moduleId) {
 }
 
 async function getLessonById(lessonId) {
-  return await prisma.lesson.findUnique({
+  const lesson = await prisma.lesson.findUnique({
     where: {
       id: Number(lessonId),
     },
   });
+
+  if (
+    lesson &&
+    lesson.videoSource === "SELF_HOSTED" &&
+    lesson.videoUrl
+  ) {
+    lesson.videoUrl =
+  `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/${process.env.MINIO_BUCKET}/${lesson.videoUrl}`;
+  }
+
+  return lesson;
 }
 async function updateModule(moduleId, data) {
   return await prisma.module.update({
