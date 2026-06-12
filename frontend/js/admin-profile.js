@@ -1,4 +1,8 @@
-const API_URL = "http://localhost:5000/api/profile/admin";
+const API_BASE_URL = window.location.hostname.includes("app.github.dev")
+  ? window.location.origin.replace("-3000.", "-5000.") + "/api"
+  : "http://localhost:5000/api";
+
+const API_URL = `${API_BASE_URL}/profile/admin`;
 
 const profileAvatar = document.getElementById("profileAvatar");
 const profileName = document.getElementById("profileName");

@@ -3,6 +3,7 @@ const loginBtn = document.getElementById("loginBtn");
 
 if (loginBtn) {
   loginBtn.addEventListener("click", async () => {
+  console.log("Login button clicked");
     const email = document.getElementById("loginEmail").value;
     const password = document.getElementById("loginPassword").value;
     const message = document.getElementById("loginMessage");
