@@ -63,7 +63,7 @@ function viewCourse(event) {
 
     if (!token) {
         alert("Please login first to view course details.");
-        return false;
+        return;
     }
 
     window.location.href = "courses.html";
