@@ -38,7 +38,7 @@ if (!detailContainer || !courseId) {
       if (metaParts.length) metaHtml = `<div class="course-meta">${metaParts.join('')}</div>`;
 
       detailContainer.innerHTML = `
-        <div class="course-banner"></div>
+        
         <h1>${escapeHtml(title)}</h1>
         ${metaHtml}
         <p class="course-description">${escapeHtml(description)}</p>
@@ -143,6 +143,12 @@ if (!detailContainer || !courseId) {
   placeholder="Video URL">
 
 <input
+  type="file"
+  id="videoFile-${module.id}"
+  accept="video/*"
+  style="display:none;">
+
+<input
   type="number"
   id="duration-${module.id}"
   placeholder="Duration (seconds)">
@@ -170,6 +176,25 @@ if (!detailContainer || !courseId) {
     }
 
     modulesSection.innerHTML = html;
+    document.querySelectorAll('select[id^="videoSource-"]').forEach(select => {
+  const moduleId = select.id.replace('videoSource-', '');
+  const videoUrlInput = document.getElementById(`videoUrl-${moduleId}`);
+
+  const videoFileInput = document.getElementById(`videoFile-${moduleId}`);
+
+  function updateUI() {
+  if (select.value === "SELF_HOSTED") {
+    videoUrlInput.style.display = "none";
+    videoFileInput.style.display = "block";
+  } else {
+    videoUrlInput.style.display = "block";
+    videoFileInput.style.display = "none";
+  }
+}
+
+  select.addEventListener('change', updateUI);
+  updateUI();
+});
     attachModuleFormHandlers(courseId);
   }
 
@@ -214,6 +239,7 @@ if (!detailContainer || !courseId) {
         const contentInput = document.getElementById(`lessonContent-${moduleId}`);
         const videoSourceInput = document.getElementById(`videoSource-${moduleId}`);
         const videoUrlInput = document.getElementById(`videoUrl-${moduleId}`);
+        const videoFileInput = document.getElementById(`videoFile-${moduleId}`);
         const durationInput = document.getElementById(`duration-${moduleId}`);
         const orderIndexInput = document.getElementById(`orderIndex-${moduleId}`);
 
@@ -221,7 +247,7 @@ if (!detailContainer || !courseId) {
         const content = contentInput?.value.trim();
 
         const videoSource = videoSourceInput?.value;
-        const videoUrl = videoUrlInput?.value.trim();
+        let videoUrl = videoUrlInput?.value.trim();
 
         const duration = Number(durationInput?.value || 0);
         const orderIndex = Number(orderIndexInput?.value || 1);
@@ -236,6 +262,38 @@ if (!detailContainer || !courseId) {
         }
 
         try {
+          if (videoSource === 'SELF_HOSTED') {
+  const file = videoFileInput?.files?.[0];
+
+  if (!file) {
+    alert('Please select a video file');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('video', file);
+
+  const token = localStorage.getItem('token');
+
+  const response = await fetch(
+    `${API_BASE_URL}/upload/video`,
+    {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    }
+  );
+
+  const uploadResult = await response.json();
+
+  if (!response.ok) {
+    throw new Error(uploadResult.message || 'Video upload failed');
+  }
+
+  videoUrl = uploadResult.videoKey;
+}
           await apiRequest(`/courses/modules/${moduleId}/lessons`, {
             method: 'POST',
             body: {title,

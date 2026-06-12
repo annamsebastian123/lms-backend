@@ -1,6 +1,8 @@
 const { uploadVideo } = require("../services/storageService");
-
 async function uploadLessonVideo(req, res) {
+  console.log("UPLOAD ROUTE HIT");
+  console.log("FILE:", req.file);
+
   try {
     if (!req.file) {
       return res.status(400).json({
@@ -23,6 +25,7 @@ async function uploadLessonVideo(req, res) {
     });
   }
 }
+
 
 module.exports = {
   uploadLessonVideo,

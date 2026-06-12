@@ -1,4 +1,4 @@
-const COURSES_API_URL = "http://localhost:5000/api/courses";
+
 
 const totalCoursesValue = document.getElementById("totalCoursesValue");
 const publishedCoursesValue = document.getElementById("publishedCoursesValue");
@@ -8,28 +8,20 @@ const recentCoursesBody = document.getElementById("recentCoursesBody");
 
 async function loadTutorDashboard() {
     try {
-        const response = await fetch(COURSES_API_URL, {
-    cache: "no-store"
-});
-        const courses = await response.json();
+const stats = await apiRequest("/courses/tutor-stats");
+const courses = await apiRequest("/courses/tutor-courses");
 
-        if (!response.ok) {
-            throw new Error("Failed to load courses");
-        }
+        console.log("Tutor stats:", stats);
+        console.log("Tutor courses:", courses);
 
-        totalCoursesValue.textContent = courses.length;
-
-        publishedCoursesValue.textContent =
-            courses.filter(course => course.status === "PUBLISHED").length;
-
-        draftCoursesValue.textContent =
-            courses.filter(course => course.status === "DRAFT").length;
-
-        totalEnrollmentsValue.textContent = "0";
+        totalCoursesValue.textContent = stats.totalCourses;
+        publishedCoursesValue.textContent = stats.totalPublished;
+        draftCoursesValue.textContent = stats.totalDrafts;
+        totalEnrollmentsValue.textContent = stats.totalEnrollments;
 
         recentCoursesBody.innerHTML = "";
 
-        if (courses.length === 0) {
+        if (!courses.length) {
             recentCoursesBody.innerHTML = `
                 <tr>
                     <td colspan="4">No courses found.</td>
@@ -43,7 +35,7 @@ async function loadTutorDashboard() {
                 <tr>
                     <td>${course.title}</td>
                     <td>${course.status}</td>
-                    <td>0</td>
+                    <td>${course.enrollments?.length || 0}</td>
                     <td>
                         <button
                             class="action-btn"
@@ -67,7 +59,6 @@ async function loadTutorDashboard() {
     `;
 }
 }
-
 function openEditCourse(courseId) {
     localStorage.setItem("selectedCourseId", courseId);
 

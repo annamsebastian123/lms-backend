@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:5000/api/tutor-profile";
+
 
 const profileAvatar = document.getElementById("profileAvatar");
 const profileName = document.getElementById("profileName");
@@ -22,22 +22,28 @@ function makeAvatar(name) {
 
 async function loadTutorProfile() {
     try {
-        const response = await fetch(API_URL);
-        const profile = await response.json();
+        const profile = await apiRequest("/tutor-profile");
 
-        if (!response.ok) {
-            alert(profile.message || "Failed to load tutor profile");
-            return;
-        }
+        profileAvatar.textContent =
+            profile.avatar || makeAvatar(profile.fullName || profile.name);
 
-        profileAvatar.textContent = profile.avatar || makeAvatar(profile.fullName);
-        profileName.textContent = profile.fullName;
-        profileRole.textContent = profile.role;
+        profileName.textContent =
+            profile.fullName || profile.name;
 
-        fullName.value = profile.fullName;
-        email.value = profile.email;
-        department.value = profile.department;
-        phone.value = profile.phone || "";
+        profileRole.textContent =
+            profile.role || "TUTOR";
+
+        fullName.value =
+            profile.fullName || profile.name || "";
+
+        email.value =
+            profile.email || "";
+
+        department.value =
+            profile.department || "";
+
+        phone.value =
+            profile.phone || "";
 
     } catch (error) {
         console.error(error);
@@ -55,23 +61,15 @@ async function updateTutorProfile() {
     }
 
     try {
-        const response = await fetch(API_URL, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                fullName: newName,
-                email: newEmail
-            })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            alert(data.message || "Update failed");
-            return;
+    const data = await apiRequest("/tutor-profile", {
+        method: "PUT",
+        body: {
+            fullName: newName,
+            email: newEmail
         }
+    });
+
+        
 
         profileName.textContent = newName;
         profileRole.textContent = "TUTOR";
