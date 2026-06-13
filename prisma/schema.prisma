@@ -32,6 +32,7 @@ model User {
   certificates Certificate[]
 
   videoProgress VideoProgress[]
+  quizAttempts  QuizAttempt[]
 }
 
 model Course {
@@ -72,7 +73,9 @@ model Module {
   courseId Int
   course   Course @relation(fields: [courseId], references: [id])
 
-  lessons Lesson[]
+  lessons      Lesson[]
+  questions    Question[]
+  quizAttempts QuizAttempt[]
 
   createdAt DateTime @default(now())
 }
@@ -94,10 +97,10 @@ model Lesson {
 
   orderIndex Int @default(1)
 
-  moduleId Int
-  module   Module @relation(fields: [moduleId], references: [id])
+  moduleId        Int
+  module          Module          @relation(fields: [moduleId], references: [id])
   progressRecords VideoProgress[]
-  createdAt DateTime @default(now())
+  createdAt       DateTime        @default(now())
 
   @@unique([moduleId, orderIndex])
 }
@@ -121,6 +124,64 @@ model VideoProgress {
 
   @@unique([userId, lessonId])
 }
+
+model Question {
+  id Int @id @default(autoincrement())
+
+  text String
+
+  moduleId Int
+  module   Module @relation(fields: [moduleId], references: [id])
+
+  options QuestionOption[]
+
+  correctOptionId Int?
+
+  createdAt DateTime @default(now())
+}
+
+model QuestionOption {
+  id Int @id @default(autoincrement())
+
+  questionId Int
+  question   Question @relation(fields: [questionId], references: [id])
+
+  text String
+}
+
+model QuizAttempt {
+  id Int @id @default(autoincrement())
+
+  userId   Int
+  moduleId Int
+
+  user   User   @relation(fields: [userId], references: [id])
+  module Module @relation(fields: [moduleId], references: [id])
+
+  score          Int
+  totalQuestions Int
+  percentage     Int
+  passed         Boolean
+
+  answers AttemptAnswer[]
+
+  startedAt   DateTime @default(now())
+  completedAt DateTime @default(now())
+}
+
+model AttemptAnswer {
+  id Int @id @default(autoincrement())
+
+  attemptId Int
+  attempt   QuizAttempt @relation(fields: [attemptId], references: [id])
+
+  questionId Int
+
+  selectedOptionId Int
+
+  isCorrect Boolean
+}
+
 model Certificate {
   id Int @id @default(autoincrement())
 
