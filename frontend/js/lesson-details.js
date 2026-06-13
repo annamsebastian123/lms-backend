@@ -6,7 +6,7 @@ const contentEl = document.getElementById("lessonContent");
 const completeBtn = document.getElementById("markCompleteBtn");
 const progressBar = document.getElementById("progressBar");
 const progressText = document.getElementById("progressText");
-const progressDetails = document.getElementById("progressDetails");
+
 const completionBadge = document.getElementById("completionBadge");
 
 let currentLesson = null;
@@ -66,8 +66,7 @@ function updateProgressUI(progress) {
   progressText.textContent =
     `Progress: ${percentage}%`;
 
-  progressDetails.textContent =
-    `${progress.watchedSeconds}s / ${progress.totalSeconds}s watched`;
+  
 
   if (progress.isComplete) {
     completionBadge.style.display = "block";
