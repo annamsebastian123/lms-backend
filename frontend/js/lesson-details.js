@@ -4,6 +4,10 @@ const lessonId = params.get("id");
 const titleEl = document.getElementById("lessonTitle");
 const contentEl = document.getElementById("lessonContent");
 const completeBtn = document.getElementById("markCompleteBtn");
+const progressBar = document.getElementById("progressBar");
+const progressText = document.getElementById("progressText");
+
+const completionBadge = document.getElementById("completionBadge");
 
 let currentLesson = null;
 let progressTimer = null;
@@ -15,30 +19,61 @@ async function saveProgress() {
   if (!video.duration || Number.isNaN(video.duration)) return;
 
   try {
-    await apiRequest(`/progress/${lessonId}`, {
+    const progress = await apiRequest(`/progress/${lessonId}`, {
       method: "POST",
       body: JSON.stringify({
         currentPosition: Math.floor(video.currentTime),
-        totalDuration: Math.floor(video.duration || currentLesson.duration || 0),
+        totalDuration: Math.floor(
+          video.duration || currentLesson.duration || 0
+        ),
       }),
     });
+
+    updateProgressUI(progress);
+
   } catch (error) {
     console.error("Failed to save progress:", error);
   }
-}
+} 
 
 async function loadProgress(video) {
   try {
     const progress = await apiRequest(`/progress/${lessonId}`);
 
-    if (progress && progress.lastPosition > 0) {
-      video.currentTime = progress.lastPosition;
-    }
+    if (progress) {
+  updateProgressUI(progress);
+
+  if (progress.lastPosition > 0) {
+    video.currentTime = progress.lastPosition;
+  }
+}
   } catch (error) {
     console.error("Failed to load progress:", error);
   }
 }
+function updateProgressUI(progress) {
+  if (!progress) return;
 
+  const percentage =
+    progress.totalSeconds > 0
+      ? Math.round(
+          (progress.watchedSeconds / progress.totalSeconds) * 100
+        )
+      : 0;
+
+  progressBar.style.width = `${percentage}%`;
+
+  progressText.textContent =
+    `Progress: ${percentage}%`;
+
+  
+
+  if (progress.isComplete) {
+    completionBadge.style.display = "block";
+  } else {
+    completionBadge.style.display = "none";
+  }
+}
 async function loadLesson() {
   if (!lessonId) {
     titleEl.textContent = "Lesson not found";

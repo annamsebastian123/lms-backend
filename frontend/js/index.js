@@ -1,4 +1,6 @@
-const COURSES_API_URL = "http://localhost:5000/api/courses";
+
+
+const COURSES_API_URL = `${API_BASE_URL}/courses`;
 
 const searchInput = document.getElementById("searchInput");
 const exploreBtn = document.getElementById("exploreBtn");
@@ -71,7 +73,7 @@ function viewCourse(event) {
 
 async function updateStats() {
     try {
-        const response = await fetch("http://localhost:5000/api/courses/public-stats", {
+        const response = await fetch(`${API_BASE_URL}/courses/public-stats`, {
             cache: "no-store"
         });
 

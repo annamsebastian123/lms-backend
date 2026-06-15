@@ -17,6 +17,7 @@ const certificateRoutes = require("./routes/certificateRoutes");
 const progressRoutes = require("./routes/progressRoutes");
 
 const authMiddleware = require("./middlewares/authMiddleware");
+const quizRoutes = require("./routes/quizRoutes");
 
 const app = express();
 
@@ -51,7 +52,7 @@ app.use("/api/tutor-profile", tutorProfileRoutes);
 app.use("/api/upload", uploadRoutes);
 app.use("/api/certificates", certificateRoutes);
 app.use("/api/progress", progressRoutes);
-
+app.use("/api/quiz", quizRoutes);
 app.get("/test", (req, res) => {
   res.send("Test route works");
 });
