@@ -130,6 +130,9 @@ model Certificate {
   user   User   @relation(fields: [userId], references: [id])
   course Course @relation(fields: [courseId], references: [id])
 
+  certificateNumber String @unique
+  pdfUrl            String?
+
   issuedAt DateTime @default(now())
 
   @@unique([userId, courseId])

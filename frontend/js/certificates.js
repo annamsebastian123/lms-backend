@@ -50,9 +50,11 @@ async function loadCertificates() {
                             ${new Date(cert.issuedAt).toLocaleDateString()}
                         </p>
 
-                        <button class="btn">
-                            Download Certificate
-                        </button>
+                        <a href="http://localhost:5000/api/certificates/${cert.id}/download" target="_blank">
+    <button class="btn">
+        Download Certificate
+    </button>
+</a>
 
                     </div>
 

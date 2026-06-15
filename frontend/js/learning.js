@@ -34,9 +34,16 @@ document.addEventListener("DOMContentLoaded", async () => {
           <h3>${course.title || "Untitled Course"}</h3>
           <p>${course.description || "No description available."}</p>
 
-          <a href="course-details.html?id=${course.id}" class="take-quiz-btn">
-            Continue Learning
-          </a>
+          <div class="course-actions">
+    <a href="course-details.html?id=${course.id}" class="take-quiz-btn action-btn">
+        Continue Learning
+    </a>
+
+    <button class="take-quiz-btn action-btn"
+            onclick="generateCertificate(${course.id})">
+        Generate Certificate
+    </button>
+</div>
         </div>
       `;
     });
@@ -71,3 +78,34 @@ document.addEventListener("DOMContentLoaded", async () => {
     showNoCoursesMessage();
   }
 });
+
+async function generateCertificate(courseId) {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await fetch(
+      `http://localhost:5000/api/certificates/generate/${courseId}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      alert(data.message || "Failed to generate certificate");
+      return;
+    }
+
+    alert("Certificate generated successfully");
+
+    window.location.href = "certificates.html";
+
+  } catch (error) {
+    console.error("Certificate generation failed", error);
+    alert("Certificate generation failed");
+  }
+}

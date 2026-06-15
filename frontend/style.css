@@ -1354,3 +1354,19 @@ textarea{
 .delete-btn:hover {
     background: #b91c1c;
 }
+.course-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.action-btn {
+    width: 220px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-decoration: none;
+}
