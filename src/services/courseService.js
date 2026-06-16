@@ -237,9 +237,12 @@ async function getLessonById(lessonId) {
     lesson &&
     lesson.videoSource === "SELF_HOSTED" &&
     lesson.videoUrl
-  ) {
+  ) {console.log(
+  `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/${process.env.MINIO_BUCKET}/${lesson.videoUrl}`
+);
     lesson.videoUrl =
   `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/${process.env.MINIO_BUCKET}/${lesson.videoUrl}`;
+  console.log("VIDEO URL:", lesson.videoUrl);
   }
 
   return lesson;
