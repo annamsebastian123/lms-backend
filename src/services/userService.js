@@ -1,15 +1,15 @@
 const prisma = require("../prisma");
 
-const ALLOWED_ROLE_UPDATES = ["TUTOR", "LEARNER"];
-
+const ALLOWED_ROLE_UPDATES = ["ADMIN", "TUTOR", "LEARNER"];
 async function getAllUsers() {
   return prisma.user.findMany({
-    select: {
-      id: true,
-      email: true,
-      name: true,
-      role: true,
-    },
+   select: {
+  id: true,
+  email: true,
+  name: true,
+  role: true,
+  isActive: true,
+},
   });
 }
 
@@ -43,8 +43,56 @@ async function updateUserRole(userId, role) {
     },
   });
 }
+async function deactivateUser(userId) {
+  const existingUser = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!existingUser) {
+    const error = new Error("User not found");
+    error.status = 404;
+    throw error;
+  }
+
+  return prisma.user.update({
+    where: { id: userId },
+    data: { isActive: false },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      isActive: true,
+    },
+  });
+}
+async function activateUser(userId) {
+  const existingUser = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!existingUser) {
+    const error = new Error("User not found");
+    error.status = 404;
+    throw error;
+  }
+
+  return prisma.user.update({
+    where: { id: userId },
+    data: { isActive: true },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      isActive: true,
+    },
+  });
+}
 
 module.exports = {
   getAllUsers,
   updateUserRole,
+  deactivateUser,
+  activateUser,
 };

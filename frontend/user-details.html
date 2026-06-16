@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>HCK LMS</h2>
+
+    <ul>
+        <li><a href="admin-dashboard.html">Dashboard</a></li>
+        <li><a href="users.html" class="active">Users</a></li>
+        <li><a href="admin-courses.html">Courses</a></li>
+        <li><a href="reports.html">Reports</a></li>
+        <li><a href="admin-certificates.html">Certificates</a></li>
+        <li><a href="admin-settings.html">Settings</a></li>
+        <li><a href="admin-profile.html">Profile</a></li>
+        <li><a href="index.html">Logout</a></li>
+    </ul>
+</div>
+
+<div class="main">
+
+    <div class="top-header">
+        <div>
+            <h1>User Details</h1>
+            <p>View selected user information</p>
+        </div>
+    </div>
+
+    <div class="profile-container">
+
+        <div class="profile-card">
+            <div class="profile-avatar" id="userAvatar">U</div>
+            <h2 id="userName">Loading...</h2>
+            <p id="userRole">Role</p>
+        </div>
+
+        <div class="profile-details">
+
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" id="name" readonly>
+            </div>
+
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="email" readonly>
+            </div>
+
+            <div class="form-group">
+    <label>Role</label>
+    <select id="role">
+        <option value="LEARNER">Learner</option>
+        <option value="TUTOR">Tutor</option>
+        <option value="ADMIN">Admin</option>
+    </select>
+</div>
+
+<div class="user-action-buttons">
+
+    <button class="publish-btn" id="updateRoleBtn">
+        Update Role
+    </button>
+
+    <button class="delete-btn" id="deactivateUserBtn">
+        Deactivate User
+    </button>
+
+    <a href="users.html" class="action-link">
+        <button type="button" class="back-btn">
+            Back to Users
+        </button>
+    </a>
+
+</div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/user-details.js"></script>
+
+</body>
+
+</html>

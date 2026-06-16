@@ -42,13 +42,13 @@
             </li>
 
             <li>
-                <a href="#">
+                <a href="admin-certificates.html">
                     Certificates
                 </a>
             </li>
 
             <li>
-                <a href="#">
+                <a href="admin-settings.html">
                     Settings
                 </a>
             </li>
@@ -75,24 +75,23 @@
 
             <h1>User Management</h1>
 
-            <button class="btn add-user-btn">
-                + Add User
-            </button>
+           <button class="btn add-user-btn" id="addUserBtn">
+    + Add User
+</button>
 
         </div>
 
         <div class="user-tools">
-
     <input type="text"
+           id="userSearchInput"
            placeholder="Search users by name or email">
 
-    <select>
-        <option>All Roles</option>
-        <option>Learner</option>
-        <option>Tutor</option>
-        <option>Admin</option>
+    <select id="roleFilter">
+        <option value="ALL">All Roles</option>
+        <option value="LEARNER">Learner</option>
+        <option value="TUTOR">Tutor</option>
+        <option value="ADMIN">Admin</option>
     </select>
-
 </div>
 
         <div class="dashboard-section">

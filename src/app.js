@@ -27,7 +27,7 @@ app.use(cors({
     "https://refactored-space-telegram-g4964j7p9prghp747-3000.app.github.dev"
   ],
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 

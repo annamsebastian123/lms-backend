@@ -22,37 +22,76 @@
 </div>
 
 <div class="main">
-    <h1>Admin Settings</h1>
 
-    <div class="settings-container">
+    <div class="top-header">
+        <div>
+            <h1>Admin Settings</h1>
+            <p>Manage LMS configuration and platform preferences</p>
+        </div>
+    </div>
 
-        <div class="settings-card">
-            <h2>System Settings</h2>
+    <div class="profile-details">
 
-            <div class="form-group">
-                <label>LMS Name</label>
-                <input type="text" value="HCK LMS">
-            </div>
+        <h2>Platform Settings</h2>
 
-            <div class="form-group">
-                <label>Organization</label>
-                <input type="text" value="High Court of Kerala">
-            </div>
-
-            <div class="form-group">
-                <label>Default User Role</label>
-                <select>
-                    <option>Learner</option>
-                    <option>Tutor</option>
-                    <option>Admin</option>
-                </select>
-            </div>
-
-            <button class="publish-btn">Save Settings</button>
+        <div class="form-group">
+            <label>LMS Name</label>
+            <input type="text" id="lmsName" value="High Court of Kerala LMS">
         </div>
 
-    </div>
+        <div class="form-group">
+    <label>Session Timeout</label>
+    <select id="sessionTimeout">
+        <option value="30 minutes">30 minutes</option>
+        <option value="1 hour">1 hour</option>
+        <option value="2 hours">2 hours</option>
+    </select>
 </div>
+
+       <div class="form-group">
+    <label>Default User Role</label>
+    <select id="defaultRole">
+        <option value="LEARNER">Learner</option>
+        <option value="TUTOR">Tutor</option>
+        <option value="ADMIN">Admin</option>
+    </select>
+</div>
+
+        <h2>Certificate Settings</h2>
+
+        <div class="form-group">
+            <label>Certificate Prefix</label>
+            <input type="text" id="certificatePrefix" value="HCK-LMS">
+        </div>
+
+        <div class="form-group">
+            <label>Certificate Format</label>
+            <input type="text" value="HCK-LMS-YYYY-XXXXX" readonly>
+        </div>
+
+        <h2>Storage Settings</h2>
+
+        <div class="form-group">
+            <label>Video Storage</label>
+            <input type="text" value="MinIO / S3 Compatible Storage" readonly>
+        </div>
+
+        <div class="form-group">
+            <label>Allowed Video Type</label>
+            <input type="text" value="MP4" readonly>
+        </div>
+
+        <button class="publish-btn" id="saveSettingsBtn">
+            Save Settings
+        </button>
+
+        <p id="settingsMessage"></p>
+
+    </div>
+
+</div>
+
+<script src="js/admin-settings.js"></script>
 
 </body>
 </html>

@@ -8,7 +8,9 @@ async function login(email, password) {
   if (!user) {
   throw new Error("Invalid credentials");
    }
-
+if (user.isActive === false) {
+  throw new Error("Account is deactivated. Please contact admin.");
+}
   const isMatch = await bcrypt.compare(password, user.passwordHash);
 
   if (!isMatch) {

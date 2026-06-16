@@ -26,6 +26,7 @@ model User {
   name         String?
   passwordHash String
   role         Role    @default(LEARNER)
+  isActive Boolean @default(true)
 
   courses      Course[]
   enrollments  Enrollment[]
