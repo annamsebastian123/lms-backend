@@ -49,7 +49,9 @@ async function getQuestionById(id) {
 }
 
 async function getQuestionsByModule(moduleId) {
-  return await prisma.question.findMany({
+  console.log("SERVICE MODULE ID:", moduleId);
+
+  const questions = await prisma.question.findMany({
     where: {
       moduleId: Number(moduleId),
     },
@@ -63,13 +65,22 @@ async function getQuestionsByModule(moduleId) {
         },
       },
     },
-    orderBy: {
-      id: "asc",
-    },
   });
+
+  return questions.sort(() => Math.random() - 0.5);
 }
 
 async function submitQuiz(userId, moduleId, answers) {
+  const existingAttempt = await prisma.quizAttempt.findFirst({
+  where: {
+    userId: Number(userId),
+    moduleId: Number(moduleId),
+  },
+});
+
+if (existingAttempt) {
+  throw new Error("Quiz already submitted");
+}
   const questions = await prisma.question.findMany({
     where: {
       moduleId: Number(moduleId),
@@ -139,7 +150,15 @@ async function getQuizAttempt(id) {
       id: Number(id),
     },
     include: {
-      answers: true,
+      answers: {
+        include: {
+          question: {
+            include: {
+              options: true,
+            },
+          },
+        },
+      },
     },
   });
 }

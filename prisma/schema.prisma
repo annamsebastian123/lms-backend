@@ -136,6 +136,7 @@ model Question {
   module   Module @relation(fields: [moduleId], references: [id])
 
   options QuestionOption[]
+  attemptAnswers AttemptAnswer[]
 
   correctOptionId Int?
 
@@ -178,6 +179,7 @@ model AttemptAnswer {
   attempt   QuizAttempt @relation(fields: [attemptId], references: [id])
 
   questionId Int
+  question   Question @relation(fields: [questionId], references: [id])
 
   selectedOptionId Int
 

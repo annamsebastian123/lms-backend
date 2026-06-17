@@ -68,40 +68,44 @@
             <h1>Quiz Completed!</h1>
 
 <p class="result-subtitle">
-    Registry Procedures Assessment Results
+    Module Assessment Results
 </p>
 
-           <p class="result-message">
-    Congratulations! You have successfully completed the assessment and are now eligible to receive a course certificate.
+           <p class="result-message" id="resultMessage">
+    Loading...
 </p>
 
             <div class="result-cards">
 
                 <div class="result-card">
                     <h3>Score</h3>
-                    <h2>8 / 10</h2>
+                    <h2 id="scoreValue">-</h2>
                 </div>
 
                 <div class="result-card">
                     <h3>Percentage</h3>
-                    <h2>80%</h2>
+                    <h2 id="percentageValue">-</h2>
                 </div>
 
                 <div class="result-card">
                     <h3>Status</h3>
-                    <h2>PASS</h2>
+                    <h2 id="statusValue">-</h2>
                 </div>
 
             </div>
 
             <div class="result-actions">
 
-                <a href="quiz.html" class="btn">
-    Retake Quiz
+                <a href="learning.html" class="btn">
+    Back to Learning
 </a>
 
-<a href="certificates.html" class="btn">
-    View Certificate
+<a
+  id="certificateBtn"
+  href="certificates.html"
+  class="btn"
+>
+  View Certificate
 </a>
 
             </div>
@@ -109,7 +113,7 @@
         </div>
 
     </div>
-
+<script src="js/quiz-result.js"></script>
 </body>
 
 </html>

@@ -8,6 +8,7 @@ const progressBar = document.getElementById("progressBar");
 const progressText = document.getElementById("progressText");
 
 const completionBadge = document.getElementById("completionBadge");
+const takeQuizBtn = document.getElementById("takeQuizBtn");
 
 let currentLesson = null;
 let progressTimer = null;
@@ -69,10 +70,14 @@ function updateProgressUI(progress) {
   
 
   if (progress.isComplete) {
-    completionBadge.style.display = "block";
-  } else {
-    completionBadge.style.display = "none";
-  }
+  completionBadge.style.display = "block";
+} else {
+  completionBadge.style.display = "none";
+}
+
+if (takeQuizBtn && currentLesson?.moduleId) {
+  takeQuizBtn.style.display = "inline-block";
+}
 }
 async function loadLesson() {
   if (!lessonId) {
@@ -83,7 +88,13 @@ async function loadLesson() {
 
   try {
     const lesson = await apiRequest(`/courses/lessons/${lessonId}`);
-    currentLesson = lesson;
+
+console.log("LESSON OBJECT:", lesson);
+
+currentLesson = lesson;
+if (takeQuizBtn && currentLesson?.moduleId) {
+  takeQuizBtn.style.display = "inline-block";
+}
 
     titleEl.textContent = lesson.title || "Untitled Lesson";
 
@@ -171,5 +182,10 @@ if (completeBtn) {
 window.addEventListener("beforeunload", () => {
   saveProgress();
 });
-
+if (takeQuizBtn) {
+  takeQuizBtn.addEventListener("click", () => {
+    window.location.href =
+      `/quiz?moduleId=${currentLesson.moduleId}`;
+  });
+}
 loadLesson();

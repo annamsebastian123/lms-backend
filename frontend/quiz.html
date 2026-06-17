@@ -63,59 +63,34 @@
 
             <div class="top-header">
     <div>
-        <h1>Registry Procedures Quiz</h1>
+        <h1>Quiz</h1>
         <p>Complete the assessment to qualify for certification</p>
     </div>
 </div>
 
-            <p class="question-count">
-    Question 1 of 10 • Pass mark: 70%
+            <p class="question-count" id="questionCount">
+    Loading...
 </p>
 
-            <div class="question-card">
-
-                <h2>
-                    What is the first step in the registry filing process?
-                </h2>
-
-                <div class="option">
-                    <input type="radio" name="q1">
-                    Verify Documents
-                </div>
-
-                <div class="option">
-                    <input type="radio" name="q1">
-                    Register Case
-                </div>
-
-                <div class="option">
-                    <input type="radio" name="q1">
-                    Submit Application
-                </div>
-
-                <div class="option">
-                    <input type="radio" name="q1">
-                    Approve Filing
-                </div>
-
-            </div>
+            <div id="questionsContainer"></div>
 
             <div class="quiz-buttons">
 
-    <a href="learning.html" class="btn">
-        Previous
-    </a>
+    <button class="btn" onclick="history.back()">
+    Back
+</button>
 
-    <a href="quiz-result.html" class="btn">
-        Submit Quiz
-    </a>
+    <button id="submitQuizBtn" class="btn">
+    Submit Quiz
+</button>
 
 </div>
 
         </div>
 
     </div>
-
+<script src="js/api.js"></script>
+<script src="js/quiz.js"></script>
 </body>
 
 </html>
