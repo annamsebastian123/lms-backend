@@ -44,5 +44,42 @@ async function login(req, res) {
     res.status(401).json({ message: err.message });
   }
 }
+async function forgotPassword(req, res) {
+  try {
+    const { email } = req.body;
 
-module.exports = { login, register };
+    await authService.forgotPassword(email);
+
+    res.json({
+      message: "OTP sent successfully",
+    });
+
+  } catch (err) {
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+}
+
+async function resetPassword(req, res) {
+  try {
+    const { email, otp, newPassword } = req.body;
+
+    await authService.resetPassword(email, otp, newPassword);
+
+    res.json({
+      message: "Password reset successful",
+    });
+
+  } catch (err) {
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+}
+module.exports = {
+  login,
+  register,
+  forgotPassword,
+  resetPassword,
+};

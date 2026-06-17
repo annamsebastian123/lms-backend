@@ -27,7 +27,8 @@ model User {
   passwordHash String
   role         Role    @default(LEARNER)
   isActive Boolean @default(true)
-
+resetOtp       String?
+resetOtpExpiry DateTime?
   courses      Course[]
   enrollments  Enrollment[]
   certificates Certificate[]

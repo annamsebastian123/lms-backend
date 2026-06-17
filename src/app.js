@@ -15,6 +15,8 @@ const tutorProfileRoutes = require("./routes/tutorProfileRoutes");
 const uploadRoutes = require("./routes/uploadRoutes");
 const certificateRoutes = require("./routes/certificateRoutes");
 const progressRoutes = require("./routes/progressRoutes");
+const session = require("express-session");
+const passport = require("./config/passport");
 
 const authMiddleware = require("./middlewares/authMiddleware");
 const quizRoutes = require("./routes/quizRoutes");
@@ -32,7 +34,16 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use(
+  session({
+    secret: process.env.JWT_SECRET || "google-login-secret",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
+app.use(passport.initialize());
+app.use(passport.session());
 app.get("/", (req, res) => {
   res.send("LMS Backend Running");
 });

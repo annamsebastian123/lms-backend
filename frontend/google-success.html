@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Google Login</title>
+</head>
+<body>
+
+<h2>Signing you in...</h2>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+
+const token = params.get("token");
+const role = params.get("role");
+
+if (token) {
+    localStorage.setItem("token", token);
+
+    if (role === "ADMIN") {
+        window.location.href = "admin-dashboard.html";
+    } else if (role === "TUTOR") {
+        window.location.href = "tutor-dashboard.html";
+    } else {
+        window.location.href = "dashboard.html";
+    }
+} else {
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

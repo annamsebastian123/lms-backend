@@ -1389,3 +1389,54 @@ textarea{
     background: #16a34a;
     color: #fff;
 }
+.social-btn {
+    width: 100%;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    background: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+
+    margin-bottom: 10px;
+
+    cursor: pointer;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    transition: all 0.3s ease;
+}
+
+.social-btn img {
+    width: 24px;
+    height: 24px;
+}
+
+.social-btn:hover {
+    background: #f9fafb;
+}
+.social-divider {
+    display: flex;
+    align-items: center;
+    margin: 25px 0 20px;
+}
+
+.social-divider::before,
+.social-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #d1d5db;
+}
+
+.social-divider span {
+    padding: 0 20px;
+    color: #6b7280;
+    font-size: 14px;
+    font-weight: 500;
+}

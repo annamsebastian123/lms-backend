@@ -30,7 +30,7 @@
 
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input id="register-email" type="email" placeholder="Enter your email">
+                    <input id="register-email" type="email" placeholder="example@gmail.com">
                 </div>
 
                 <div class="form-group">
@@ -60,9 +60,26 @@
                 <button id="register-button" type="submit" class="register-submit-btn">
                     Register
                 </button>
-
+                
             </form>
+<div class="social-login-section">
 
+    <div class="social-divider">
+        <span>Or register with</span>
+    </div>
+
+    <button
+    type="button"
+    class="social-btn"
+    onclick="window.location.href='http://localhost:5000/api/auth/google'">
+        <img
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
+            alt="Google">
+
+        <span>Continue with Google</span>
+    </button>
+
+</div>
             <p class="login-link">
 
                 Already have an account?
