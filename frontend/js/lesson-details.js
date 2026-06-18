@@ -11,6 +11,9 @@ const completionBadge = document.getElementById("completionBadge");
 const takeQuizBtn = document.getElementById("takeQuizBtn");
 
 let currentLesson = null;
+const user = JSON.parse(localStorage.getItem("user"));
+const role = user?.role?.toUpperCase();
+const isLearner = role === "LEARNER";
 let progressTimer = null;
 
 async function saveProgress() {
@@ -38,21 +41,31 @@ async function saveProgress() {
 } 
 
 async function loadProgress(video) {
+  if (!isLearner) return;
+
   try {
     const progress = await apiRequest(`/progress/${lessonId}`);
 
     if (progress) {
-  updateProgressUI(progress);
+      updateProgressUI(progress);
 
-  if (progress.lastPosition > 0) {
-    video.currentTime = progress.lastPosition;
-  }
-}
+      if (progress.lastPosition > 0) {
+        video.currentTime = progress.lastPosition;
+      }
+    }
   } catch (error) {
     console.error("Failed to load progress:", error);
   }
 }
+
 function updateProgressUI(progress) {
+  if (!isLearner) {
+    if (progressBar) progressBar.parentElement.style.display = "none";
+    if (progressText) progressText.style.display = "none";
+    if (completionBadge) completionBadge.style.display = "none";
+    return;
+  }
+
   if (!progress) return;
 
   const percentage =
@@ -64,20 +77,17 @@ function updateProgressUI(progress) {
 
   progressBar.style.width = `${percentage}%`;
 
-  progressText.textContent =
-    `Progress: ${percentage}%`;
-
-  
+  progressText.textContent = `Progress: ${percentage}%`;
 
   if (progress.isComplete) {
-  completionBadge.style.display = "block";
-} else {
-  completionBadge.style.display = "none";
-}
+    completionBadge.style.display = "block";
+  } else {
+    completionBadge.style.display = "none";
+  }
 
-if (takeQuizBtn && currentLesson?.moduleId) {
-  takeQuizBtn.style.display = "inline-block";
-}
+  if (takeQuizBtn && currentLesson?.moduleId) {
+    takeQuizBtn.style.display = "inline-block";
+  }
 }
 async function loadLesson() {
   if (!lessonId) {
@@ -92,8 +102,17 @@ async function loadLesson() {
 console.log("LESSON OBJECT:", lesson);
 
 currentLesson = lesson;
-if (takeQuizBtn && currentLesson?.moduleId) {
+const user = JSON.parse(localStorage.getItem("user"));
+const role = user?.role?.toUpperCase();
+
+if (
+  takeQuizBtn &&
+  currentLesson?.moduleId &&
+  role === "LEARNER"
+) {
   takeQuizBtn.style.display = "inline-block";
+} else if (takeQuizBtn) {
+  takeQuizBtn.style.display = "none";
 }
 
     titleEl.textContent = lesson.title || "Untitled Lesson";
@@ -139,8 +158,9 @@ if (takeQuizBtn && currentLesson?.moduleId) {
         </div>
       </div>
     `;
+if (!isLearner) return;
 
-    const video = document.getElementById("lessonVideo");
+const progress = await apiRequest(`/progress/${lessonId}`);
 
     if (video) {
       video.addEventListener("canplay", async () => {

@@ -26,7 +26,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:3000",
-    "https://refactored-space-telegram-g4964j7p9prghp747-3000.app.github.dev"
+    "https://silver-yodel-5gx4q9rpqvvp3vwqp-3000.app.github.dev"
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
