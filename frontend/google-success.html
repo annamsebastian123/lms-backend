@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Google Login</title>
 </head>
 <body>
@@ -9,13 +8,22 @@
 <h2>Signing you in...</h2>
 
 <script>
-const params = new URLSearchParams(window.location.search);
+const url = new URL(window.location.href);
+const token = url.searchParams.get("token");
+const role = url.searchParams.get("role");
 
-const token = params.get("token");
-const role = params.get("role");
-
-if (token) {
+if (!token || !role) {
+    document.body.innerHTML = `
+        <h2>Google login failed</h2>
+        <p>Token or role missing.</p>
+        <p>${window.location.href}</p>
+        <a href="index.html">Back to Login</a>
+    `;
+} else {
     localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify({
+        role: role
+    }));
 
     if (role === "ADMIN") {
         window.location.href = "admin-dashboard.html";
@@ -24,8 +32,6 @@ if (token) {
     } else {
         window.location.href = "dashboard.html";
     }
-} else {
-    window.location.href = "index.html";
 }
 </script>
 

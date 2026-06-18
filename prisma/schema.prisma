@@ -1,10 +1,149 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model User {
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
+  name           String?
+  passwordHash   String
+  role           Role            @default(LEARNER)
+  isActive       Boolean         @default(true)
+  isEmailVerified Boolean @default(false)
+emailOtp        String?
+emailOtpExpiry  DateTime?
+  resetOtp       String?
+  resetOtpExpiry DateTime?
+  certificates   Certificate[]
+  courses        Course[]
+  enrollments    Enrollment[]
+  quizAttempts   QuizAttempt[]
+  videoProgress  VideoProgress[]
+}
+
+model Course {
+  id           Int           @id @default(autoincrement())
+  title        String
+  description  String?
+  userId       Int
+  createdAt    DateTime      @default(now())
+  status       CourseStatus  @default(DRAFT)
+  certificates Certificate[]
+  user         User          @relation(fields: [userId], references: [id])
+  enrollments  Enrollment[]
+  modules      Module[]
+}
+
+model Enrollment {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  courseId   Int
+  enrolledAt DateTime @default(now())
+  course     Course   @relation(fields: [courseId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, courseId])
+}
+
+model Module {
+  id           Int           @id @default(autoincrement())
+  title        String
+  courseId     Int
+  createdAt    DateTime      @default(now())
+  lessons      Lesson[]
+  course       Course        @relation(fields: [courseId], references: [id])
+  questions    Question[]
+  quizAttempts QuizAttempt[]
+}
+
+model Lesson {
+  id              Int             @id @default(autoincrement())
+  title           String
+  content         String?
+  moduleId        Int
+  createdAt       DateTime        @default(now())
+  duration        Int             @default(0)
+  orderIndex      Int             @default(1)
+  videoSource     VideoSource     @default(YOUTUBE)
+  videoUrl        String?
+  module          Module          @relation(fields: [moduleId], references: [id])
+  progressRecords VideoProgress[]
+
+  @@unique([moduleId, orderIndex])
+}
+
+model VideoProgress {
+  id             Int      @id @default(autoincrement())
+  userId         Int
+  lessonId       Int
+  watchedSeconds Int      @default(0)
+  totalSeconds   Int      @default(0)
+  lastPosition   Int      @default(0)
+  isComplete     Boolean  @default(false)
+  updatedAt      DateTime @updatedAt
+  lesson         Lesson   @relation(fields: [lessonId], references: [id])
+  user           User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, lessonId])
+}
+
+model Question {
+  id              Int              @id @default(autoincrement())
+  text            String
+  moduleId        Int
+  correctOptionId Int?
+  createdAt       DateTime         @default(now())
+  module          Module           @relation(fields: [moduleId], references: [id])
+  options         QuestionOption[]
+}
+
+model QuestionOption {
+  id         Int      @id @default(autoincrement())
+  questionId Int
+  text       String
+  question   Question @relation(fields: [questionId], references: [id])
+}
+
+model QuizAttempt {
+  id             Int             @id @default(autoincrement())
+  userId         Int
+  moduleId       Int
+  score          Int
+  totalQuestions Int
+  percentage     Int
+  passed         Boolean
+  startedAt      DateTime        @default(now())
+  completedAt    DateTime        @default(now())
+  answers        AttemptAnswer[]
+  module         Module          @relation(fields: [moduleId], references: [id])
+  user           User            @relation(fields: [userId], references: [id])
+}
+
+model AttemptAnswer {
+  id               Int         @id @default(autoincrement())
+  attemptId        Int
+  questionId       Int
+  selectedOptionId Int
+  isCorrect        Boolean
+  attempt          QuizAttempt @relation(fields: [attemptId], references: [id])
+}
+
+model Certificate {
+  id                Int      @id @default(autoincrement())
+  userId            Int
+  courseId          Int
+  issuedAt          DateTime @default(now())
+  certificateNumber String   @unique
+  pdfUrl            String?
+  course            Course   @relation(fields: [courseId], references: [id])
+  user              User     @relation(fields: [userId], references: [id])
+
+  @@unique([userId, courseId])
 }
 
 enum Role {
@@ -15,190 +154,12 @@ enum Role {
 
 enum CourseStatus {
   DRAFT
-  PENDING_REVIEW
   PUBLISHED
+  PENDING_REVIEW
   ARCHIVED
-}
-
-model User {
-  id           Int     @id @default(autoincrement())
-  email        String  @unique
-  name         String?
-  passwordHash String
-  role         Role    @default(LEARNER)
-  isActive Boolean @default(true)
-resetOtp       String?
-resetOtpExpiry DateTime?
-  courses      Course[]
-  enrollments  Enrollment[]
-  certificates Certificate[]
-
-  videoProgress VideoProgress[]
-  quizAttempts  QuizAttempt[]
-}
-
-model Course {
-  id          Int     @id @default(autoincrement())
-  title       String
-  description String?
-
-  userId Int
-  user   User @relation(fields: [userId], references: [id])
-
-  enrollments  Enrollment[]
-  modules      Module[]
-  certificates Certificate[]
-
-  status CourseStatus @default(DRAFT)
-
-  createdAt DateTime @default(now())
-}
-
-model Enrollment {
-  id Int @id @default(autoincrement())
-
-  userId   Int
-  courseId Int
-
-  user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
-
-  enrolledAt DateTime @default(now())
-
-  @@unique([userId, courseId])
-}
-
-model Module {
-  id    Int    @id @default(autoincrement())
-  title String
-
-  courseId Int
-  course   Course @relation(fields: [courseId], references: [id])
-
-  lessons      Lesson[]
-  questions    Question[]
-  quizAttempts QuizAttempt[]
-
-  createdAt DateTime @default(now())
 }
 
 enum VideoSource {
   YOUTUBE
   SELF_HOSTED
-}
-
-model Lesson {
-  id    Int    @id @default(autoincrement())
-  title String
-
-  content String?
-
-  videoSource VideoSource @default(YOUTUBE)
-  videoUrl    String?
-  duration    Int         @default(0)
-
-  orderIndex Int @default(1)
-
-  moduleId        Int
-  module          Module          @relation(fields: [moduleId], references: [id])
-  progressRecords VideoProgress[]
-  createdAt       DateTime        @default(now())
-
-  @@unique([moduleId, orderIndex])
-}
-
-model VideoProgress {
-  id Int @id @default(autoincrement())
-
-  userId   Int
-  lessonId Int
-
-  user   User   @relation(fields: [userId], references: [id])
-  lesson Lesson @relation(fields: [lessonId], references: [id])
-
-  watchedSeconds Int @default(0)
-  totalSeconds   Int @default(0)
-  lastPosition   Int @default(0)
-
-  isComplete Boolean @default(false)
-
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, lessonId])
-}
-
-model Question {
-  id Int @id @default(autoincrement())
-
-  text String
-
-  moduleId Int
-  module   Module @relation(fields: [moduleId], references: [id])
-
-  options QuestionOption[]
-  attemptAnswers AttemptAnswer[]
-
-  correctOptionId Int?
-
-  createdAt DateTime @default(now())
-}
-
-model QuestionOption {
-  id Int @id @default(autoincrement())
-
-  questionId Int
-  question   Question @relation(fields: [questionId], references: [id])
-
-  text String
-}
-
-model QuizAttempt {
-  id Int @id @default(autoincrement())
-
-  userId   Int
-  moduleId Int
-
-  user   User   @relation(fields: [userId], references: [id])
-  module Module @relation(fields: [moduleId], references: [id])
-
-  score          Int
-  totalQuestions Int
-  percentage     Int
-  passed         Boolean
-
-  answers AttemptAnswer[]
-
-  startedAt   DateTime @default(now())
-  completedAt DateTime @default(now())
-}
-
-model AttemptAnswer {
-  id Int @id @default(autoincrement())
-
-  attemptId Int
-  attempt   QuizAttempt @relation(fields: [attemptId], references: [id])
-
-  questionId Int
-  question   Question @relation(fields: [questionId], references: [id])
-
-  selectedOptionId Int
-
-  isCorrect Boolean
-}
-
-model Certificate {
-  id Int @id @default(autoincrement())
-
-  userId   Int
-  courseId Int
-
-  user   User   @relation(fields: [userId], references: [id])
-  course Course @relation(fields: [courseId], references: [id])
-
-  certificateNumber String @unique
-  pdfUrl            String?
-
-  issuedAt DateTime @default(now())
-
-  @@unique([userId, courseId])
 }

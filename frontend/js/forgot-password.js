@@ -8,19 +8,18 @@ document.addEventListener("DOMContentLoaded", () => {
         message.style.color = type === "success" ? "green" : "red";
     }
 
-    function isValidGmail(email) {
-        return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
-    }
-
+    
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
 
         const email = emailInput.value.trim().toLowerCase();
 
-        if (!isValidGmail(email)) {
-            setMessage("Please enter a valid Gmail address.");
-            return;
-        }
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!emailPattern.test(email)) {
+    setMessage("Please enter a valid email address.");
+    return;
+}
 
         try {
             const response = await fetch("http://localhost:5000/api/auth/forgot-password", {

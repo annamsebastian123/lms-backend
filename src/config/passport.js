@@ -1,9 +1,8 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const { PrismaClient } = require("@prisma/client");
+const prisma = require("../prisma");
 const { generateToken } = require("../utils/jwt");
 
-const prisma = new PrismaClient();
 
 passport.use(
   new GoogleStrategy(
@@ -20,7 +19,8 @@ passport.use(
         if (!email) {
           return done(null, false);
         }
-
+console.log("Google Email:", email);
+console.log("Google Name:", name);
         let user = await prisma.user.findUnique({
           where: { email },
         });
@@ -49,7 +49,9 @@ passport.use(
         });
 
       } catch (error) {
+        console.error("Google Auth Error:", error);
         return done(error, null);
+        
       }
     }
   )

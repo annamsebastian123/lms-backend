@@ -12,9 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
     messageEl.style.color = type === "success" ? "green" : "red";
   }
 
-  function isValidGmail(email) {
-    return /^[a-zA-Z0-9._%+-]+@gmail\.com$/.test(email);
-  }
+  
 
   async function handleRegister(event) {
     event.preventDefault();
@@ -29,11 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
       setMessage("Please fill in all required fields.");
       return;
     }
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!isValidGmail(email)) {
-      setMessage("Please enter a valid Gmail address, like example@gmail.com.");
-      return;
-    }
+if (!emailPattern.test(email)) {
+  setMessage("Please enter a valid email address.");
+  return;
+}
 
     if (password.length < 6) {
       setMessage("Password must contain at least 6 characters.");
@@ -57,8 +56,9 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       setTimeout(() => {
-        window.location.href = "index.html";
-      }, 1000);
+  window.location.href =
+    `verify-email.html?email=${encodeURIComponent(email)}`;
+}, 1000);
 
     } catch (error) {
       setMessage(error?.message || "An error occurred during registration.");

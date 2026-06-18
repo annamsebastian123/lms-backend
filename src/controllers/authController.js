@@ -77,9 +77,26 @@ async function resetPassword(req, res) {
     });
   }
 }
+async function verifyEmail(req, res) {
+  try {
+    const { email, otp } = req.body;
+
+    await authService.verifyEmail(email, otp);
+
+    res.json({
+      message: "Email verified successfully",
+    });
+
+  } catch (err) {
+    res.status(400).json({
+      message: err.message,
+    });
+  }
+}
 module.exports = {
   login,
   register,
   forgotPassword,
   resetPassword,
+  verifyEmail,
 };
