@@ -14,6 +14,11 @@ let currentLesson = null;
 const user = JSON.parse(localStorage.getItem("user"));
 const role = user?.role?.toUpperCase();
 const isLearner = role === "LEARNER";
+if (!isLearner) {
+  progressBar?.parentElement?.style.setProperty("display", "none");
+  progressText?.style.setProperty("display", "none");
+  completionBadge?.style.setProperty("display", "none");
+}
 let progressTimer = null;
 
 async function saveProgress() {
