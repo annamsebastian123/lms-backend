@@ -25,6 +25,15 @@ async function getAllCourses(req, res) {
 }
 
 const jwt = require('jsonwebtoken');
+async function getAllCoursesForAdmin(req, res) {
+  try {
+    const courses = await courseService.getAllCoursesForAdmin();
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
 
 async function getCourseById(req, res) {
   try {
@@ -58,10 +67,13 @@ async function publishCourse(req, res) {
     const courseId = req.params.id;
     const course = await courseService.getCourseById(courseId);
     if (!course) return res.status(404).json({ message: 'Course not found' });
-    if (Number(course.userId) !== Number(req.user.id)) {
-      return res.status(403).json({ message: 'Not authorized to publish' });
-    }
-    const updated = await courseService.publishCourse(courseId, req.user.id);
+    if (req.user.role !== "ADMIN") {
+  return res.status(403).json({
+    message: "Only admins can approve courses"
+  });
+}
+
+const updated = await courseService.publishCourse(courseId);
     res.json(updated);
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -337,4 +349,5 @@ module.exports = {
   updateLesson,
   deleteLesson,
   getPublicStats,
+  getAllCoursesForAdmin,
 };

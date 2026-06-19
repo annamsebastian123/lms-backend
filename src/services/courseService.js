@@ -14,10 +14,29 @@ async function createCourse(data, userId) {
 
 async function getAllCourses() {
   return await prisma.course.findMany({
+    where: {
+      status: "PUBLISHED",
+    },
     include: {
       user: {
         select: { id: true, name: true, email: true },
       },
+    },
+  });
+}
+async function getAllCoursesForAdmin() {
+  return await prisma.course.findMany({
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 }
@@ -109,11 +128,10 @@ async function getTutorCourses(userId) {
   });
 }
 
-async function publishCourse(courseId, userId) {
+async function publishCourse(courseId) {
   const updated = await prisma.course.updateMany({
     where: {
       id: Number(courseId),
-      userId,
     },
     data: {
       status: "PUBLISHED",
@@ -334,4 +352,5 @@ module.exports = {
   updateLesson,
   deleteLesson,
   getPublicStats,
+  getAllCoursesForAdmin,
 };

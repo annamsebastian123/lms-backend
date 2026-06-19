@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!coursesList || coursesList.length === 0) {
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="4">No courses found.</td>
+                    <td colspan="5">No courses found.</td>
                 </tr>
             `;
             return;
@@ -19,21 +19,41 @@ document.addEventListener("DOMContentLoaded", async () => {
         tableBody.innerHTML = "";
 
         coursesList.forEach((course) => {
+            let approveButton = "";
+
+if (course.status === "PENDING_REVIEW") {
+    approveButton = `
+        <button
+            class="action-btn"
+            onclick="approveCourse(${course.id})">
+            Approve
+        </button>
+    `;
+}
             tableBody.innerHTML += `
                 <tr>
                     <td>${course.title || "Untitled Course"}</td>
                     <td>${course.description || "No description"}</td>
                     <td>${course.user?.name || course.user?.email || "N/A"}</td>
-                    <td>
+<td>${course.status || "DRAFT"}</td>
+<td>
     <div class="action-buttons">
-        <button class="action-btn">
-            View
-        </button>
 
-        <button class="action-btn delete-btn" onclick="deleteCourse(${course.id})">
-            Delete
-        </button>
-    </div>
+    <button
+      class="action-btn"
+      onclick="window.location.href='course-details.html?id=${course.id}'">
+      View
+    </button>
+
+    ${approveButton}
+
+    <button
+      class="action-btn delete-btn"
+      onclick="deleteCourse(${course.id})">
+      Delete
+    </button>
+
+</div>
 </td>
                 </tr>
             `;
@@ -41,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     try {
-        const courses = await apiRequest("/courses");
+        const courses = await apiRequest("/courses/admin/all");
         allCourses = Array.isArray(courses) ? courses : [];
 
         renderCourses(allCourses);
@@ -69,7 +89,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         tableBody.innerHTML = `
             <tr>
-                <td colspan="4">Unable to load courses.</td>
+                <td colspan="5">Unable to load courses.</td>
             </tr>
         `;
     }
@@ -92,3 +112,18 @@ async function deleteCourse(courseId) {
         console.error(error);
     }
 }
+
+async function approveCourse(courseId) {
+    try {
+        await apiRequest(`/courses/${courseId}/publish`, {
+            method: "POST"
+        });
+
+        alert("Course approved successfully");
+        window.location.reload();
+    } catch (error) {
+        alert(error.message || "Failed to approve course");
+    }
+}
+
+

@@ -31,7 +31,13 @@ document.addEventListener("DOMContentLoaded", async () => {
       if (course.status) {
         const badge = document.createElement('span');
         badge.className = `badge ${course.status === 'DRAFT' ? 'badge-draft' : 'badge-published'}`;
-        badge.textContent = course.status === 'DRAFT' ? 'Draft' : 'Published';
+        if (course.status === "DRAFT") {
+  badge.textContent = "Draft";
+} else if (course.status === "PENDING_REVIEW") {
+  badge.textContent = "Pending Review";
+} else {
+  badge.textContent = "Published";
+}
         title.appendChild(badge);
       }
 
@@ -56,26 +62,7 @@ actions.appendChild(viewLink);
 
       // Publish button for draft courses (only for tutors)
       const user = JSON.parse(localStorage.getItem('user') || '{}');
-      if (course.status === 'DRAFT' && user && user.role === 'TUTOR') {
-        const pubBtn = document.createElement('button');
-        pubBtn.className = 'action-btn';
-        pubBtn.textContent = 'Publish';
-        pubBtn.addEventListener('click', async () => {
-          try {
-            await apiRequest(`/courses/${course.id}/publish`, { method: 'POST' });
-            // update badge
-            const b = title.querySelector('.badge');
-            if (b) {
-              b.className = 'badge badge-published';
-              b.textContent = 'Published';
-            }
-            pubBtn.remove();
-          } catch (err) {
-            alert(err.message || 'Failed to publish course');
-          }
-        });
-        actions.appendChild(pubBtn);
-      }
+      
 
       content.appendChild(title);
       content.appendChild(description);
