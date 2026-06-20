@@ -3,10 +3,11 @@ const router = express.Router();
 
 const quizController = require("../controllers/quizController");
 const authMiddleware = require("../middlewares/authMiddleware");
-
+const authorizeRoles =require("../middlewares/roleMiddleware");
 router.post(
   "/modules/:id/questions",
   authMiddleware,
+  authorizeRoles("ADMIN", "TUTOR"),
   quizController.createQuestion
 );
 

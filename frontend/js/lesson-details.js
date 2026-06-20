@@ -127,24 +127,29 @@ if (
     if (lesson.videoSource === "YOUTUBE" && lesson.videoUrl) {
       let embedUrl = lesson.videoUrl;
 
-      if (embedUrl.includes("watch?v=")) {
-        embedUrl = embedUrl.replace("watch?v=", "embed/");
-      }
+if (embedUrl.includes("watch?v=")) {
+  embedUrl = embedUrl.replace("watch?v=", "embed/");
+}
 
+if (embedUrl.includes("youtu.be/")) {
+  const videoId = embedUrl.split("youtu.be/")[1].split("?")[0];
+  embedUrl = `https://www.youtube.com/embed/${videoId}`;
+}
+
+console.log("EMBED URL:", embedUrl);
       videoHtml = `
-        <iframe
-          width="100%"
-          height="450"
-          src="${embedUrl}"
-          frameborder="0"
-          allowfullscreen>
-        </iframe>
-        <p style="margin-top:10px;color:#666;">
-          YouTube progress tracking will be added separately.
-        </p>
-      `;
-    }
-
+  <iframe
+    width="100%"
+    height="450"
+    src="${embedUrl}"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+`;
+  }
     if (lesson.videoSource === "SELF_HOSTED" && lesson.videoUrl) {
       videoHtml = `
         <video id="lessonVideo" width="100%" controls>

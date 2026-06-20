@@ -169,7 +169,7 @@ if (detailContainer) {
 
         const enrolled = await isCourseEnrolled(course.id);
         const shouldShowEnrollButton =
-          !enrolled && user.role !== "LEARNER";
+          !enrolled && user.role === "LEARNER";
 
         // Render main course details
         const title = course.title || 'Untitled Course';

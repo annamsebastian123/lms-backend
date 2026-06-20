@@ -122,7 +122,11 @@ if (!detailContainer || !courseId) {
     data-module-id="${module.id}">
     + Add Lesson
   </button>
-
+  <button
+  class="action-btn addQuizBtn"
+  data-module-id="${module.id}">
+  + Add Quiz Question
+</button>
   <div
     id="lessonForm-${module.id}"
     style="display:none; margin-top:10px;">
@@ -148,10 +152,7 @@ if (!detailContainer || !courseId) {
   accept="video/*"
   style="display:none;">
 
-<input
-  type="number"
-  id="duration-${module.id}"
-  placeholder="Duration (seconds)">
+
 
 <input
   type="number"
@@ -162,14 +163,11 @@ if (!detailContainer || !courseId) {
   id="lessonContent-${module.id}"
   placeholder="Lesson notes/content (optional)">
 </textarea>
-
-    <button
-      class="action-btn addLessonBtn"
-      data-module-id="${module.id}">
-      Save Lesson
-    </button>
-  </div>
-</div>
+ <button
+    class="action-btn addLessonBtn"
+    data-module-id="${module.id}">
+    Save Lesson
+  </button>
           </div>
         `;
       });
@@ -196,8 +194,48 @@ if (!detailContainer || !courseId) {
   updateUI();
 });
     attachModuleFormHandlers(courseId);
-  }
+    document.querySelectorAll(".addQuizBtn").forEach((btn) => {
+  btn.addEventListener("click", async () => {
+    const moduleId = btn.dataset.moduleId;
 
+    const question = prompt("Question");
+
+    if (!question) return;
+
+    const option1 = prompt("Option 1");
+    const option2 = prompt("Option 2");
+    const option3 = prompt("Option 3");
+    const option4 = prompt("Option 4");
+
+    const correctOption =
+      Number(prompt("Correct Option (1-4)")) - 1;
+
+    try {
+      await apiRequest(
+        `/quiz/modules/${moduleId}/questions`,
+        {
+          method: "POST",
+          body: {
+            text: question,
+            options: [
+              option1,
+              option2,
+              option3,
+              option4,
+            ],
+            correctOptionIndex: correctOption,
+          },
+        }
+      );
+
+      alert("Question created successfully");
+    } catch (err) {
+      alert(err.message);
+    }
+  });
+
+  
+});}
   function attachModuleFormHandlers(courseId) {
     const addModuleBtn = document.getElementById('addModuleBtn');
     if (addModuleBtn) {
