@@ -1,5 +1,8 @@
-const API_URL = "http://localhost:5000/api/profile/learner";
+const API_URL = window.location.hostname.includes("app.github.dev")
+  ? window.location.origin.replace("-3000.", "-5000.") + "/api/profile/learner"
+  : "http://localhost:5000/api/profile/learner";
 
+  
 const fullName = document.getElementById("fullName");
 const email = document.getElementById("email");
 const section = document.getElementById("section");

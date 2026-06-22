@@ -83,8 +83,11 @@ async function generateCertificate(courseId) {
   try {
     const token = localStorage.getItem("token");
 
-    const response = await fetch(
-      `http://localhost:5000/api/certificates/generate/${courseId}`,
+    const API_URL =
+  window.location.origin.replace("-3000.", "-5000.") + "/api";
+
+const response = await fetch(
+  `${API_URL}/certificates/generate/${courseId}`,
       {
         method: "POST",
         headers: {

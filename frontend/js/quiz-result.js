@@ -16,13 +16,18 @@ document.getElementById("statusValue").textContent =
   result.passed ? "PASS" : "FAIL";
 
 document.getElementById("resultMessage").textContent =
-  result.passed
-    ? "Congratulations! You passed the quiz and are eligible for certification."
+ result.passed
+  ? "Congratulations! You passed this module quiz."
     : "You did not reach the passing score.";
 
 const certificateBtn =
   document.getElementById("certificateBtn");
 
-if (!result.passed && certificateBtn) {
+if (certificateBtn) {
   certificateBtn.style.display = "none";
-}    
+}
+if (certificateBtn) {
+  certificateBtn.addEventListener("click", () => {
+    window.location.href = "certificates.html";
+  });
+}

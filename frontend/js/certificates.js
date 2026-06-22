@@ -4,8 +4,11 @@ async function loadCertificates() {
     try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch(
-            "http://localhost:5000/api/certificates/my-certificates",
+const API_URL =
+  window.location.origin.replace("-3000.", "-5000.") + "/api";
+
+const response = await fetch(
+    `${API_URL}/certificates/my-certificates`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`
@@ -49,8 +52,13 @@ async function loadCertificates() {
                             Issued:
                             ${new Date(cert.issuedAt).toLocaleDateString()}
                         </p>
+<a href="${API_URL}/certificates/${cert.id}/download" target="_blank">
+    <button class="btn">
+        View Certificate
+    </button>
+</a>
 
-                        <a href="http://localhost:5000/api/certificates/${cert.id}/download" target="_blank">
+<a href="${API_URL}/certificates/${cert.id}/download" download>
     <button class="btn">
         Download Certificate
     </button>

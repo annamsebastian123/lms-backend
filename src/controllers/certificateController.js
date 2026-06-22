@@ -59,7 +59,32 @@ exports.generateCertificate = async (req, res) => {
                 message: "You are not enrolled in this course"
             });
         }
+        const modules = await prisma.module.findMany({
+    where: {
+        courseId
+    },
+    include: {
+        quizAttempts: {
+            where: {
+                userId,
+                passed: true
+            }
+        }
+    }
+});
 
+const allModulesPassed =
+    modules.length > 0 &&
+    modules.every(
+        module => module.quizAttempts.length > 0
+    );
+
+if (!allModulesPassed) {
+    return res.status(400).json({
+        message:
+            "Complete and pass all module quizzes before generating a certificate"
+    });
+}
         const existingCertificate = await prisma.certificate.findUnique({
             where: {
                 userId_courseId: {

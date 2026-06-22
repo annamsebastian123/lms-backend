@@ -14,6 +14,11 @@ let currentLesson = null;
 const user = JSON.parse(localStorage.getItem("user"));
 const role = user?.role?.toUpperCase();
 const isLearner = role === "LEARNER";
+if (!isLearner) {
+  progressBar?.parentElement?.style.setProperty("display", "none");
+  progressText?.style.setProperty("display", "none");
+  completionBadge?.style.setProperty("display", "none");
+}
 let progressTimer = null;
 
 async function saveProgress() {
@@ -104,7 +109,7 @@ console.log("LESSON OBJECT:", lesson);
 currentLesson = lesson;
 const user = JSON.parse(localStorage.getItem("user"));
 const role = user?.role?.toUpperCase();
-
+const isLearner = role === "LEARNER";
 if (
   takeQuizBtn &&
   currentLesson?.moduleId &&
@@ -114,33 +119,40 @@ if (
 } else if (takeQuizBtn) {
   takeQuizBtn.style.display = "none";
 }
-
+    console.log("SETTING TITLE");
     titleEl.textContent = lesson.title || "Untitled Lesson";
 
     let videoHtml = "";
 
     if (lesson.videoSource === "YOUTUBE" && lesson.videoUrl) {
+      document.getElementById("progressSection").style.display = "none";
       let embedUrl = lesson.videoUrl;
 
-      if (embedUrl.includes("watch?v=")) {
-        embedUrl = embedUrl.replace("watch?v=", "embed/");
-      }
+if (embedUrl.includes("watch?v=")) {
+  embedUrl = embedUrl.replace("watch?v=", "embed/");
+}
 
+if (embedUrl.includes("youtu.be/")) {
+  const videoId = embedUrl.split("youtu.be/")[1].split("?")[0];
+  embedUrl = `https://www.youtube.com/embed/${videoId}`;
+}
+
+console.log("EMBED URL:", embedUrl);
       videoHtml = `
-        <iframe
-          width="100%"
-          height="450"
-          src="${embedUrl}"
-          frameborder="0"
-          allowfullscreen>
-        </iframe>
-        <p style="margin-top:10px;color:#666;">
-          YouTube progress tracking will be added separately.
-        </p>
-      `;
-    }
-
+  <iframe
+    width="100%"
+    height="450"
+    src="${embedUrl}"
+    title="YouTube video player"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+  </iframe>
+`;
+  }
     if (lesson.videoSource === "SELF_HOSTED" && lesson.videoUrl) {
+      document.getElementById("progressSection").style.display = "block";
       videoHtml = `
         <video id="lessonVideo" width="100%" controls>
           <source src="${lesson.videoUrl}" type="video/mp4">
@@ -148,7 +160,7 @@ if (
         </video>
       `;
     }
-
+    console.log("SETTING CONTENT");
     contentEl.innerHTML = `
       <div class="lesson-body">
         ${videoHtml}
@@ -160,9 +172,11 @@ if (
     `;
 if (!isLearner) return;
 
-const progress = await apiRequest(`/progress/${lessonId}`);
+const video = document.getElementById("lessonVideo");
 
-    if (video) {
+if (!video) {
+  return; // YouTube lesson, no progress tracking
+}
       video.addEventListener("canplay", async () => {
   const progress = await apiRequest(`/progress/${lessonId}`);
 
@@ -183,7 +197,7 @@ const progress = await apiRequest(`/progress/${lessonId}`);
 
       video.addEventListener("pause", saveProgress);
       video.addEventListener("ended", saveProgress);
-    }
+    
   } catch (error) {
     console.error("Failed to load lesson:", error);
 

@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <td>${cert.course?.title || "N/A"}</td>
                     <td>${new Date(cert.issuedAt).toLocaleDateString()}</td>
                     <td>
-                        <a href="http://localhost:5000/api/certificates/${cert.id}/download" target="_blank">
+                        <a href="${API_URL}/certificates/${cert.id}/download" target="_blank">
                             <button class="action-btn">Download</button>
                         </a>
                     </td>

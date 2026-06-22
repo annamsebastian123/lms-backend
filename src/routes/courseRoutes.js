@@ -35,7 +35,7 @@ router.get("/tutor-stats", authMiddleware, courseController.getTutorStats);
 router.post(
   "/:id/publish",
   authMiddleware,
-  authorizeRoles("TUTOR"),
+  authorizeRoles("ADMIN"),
   courseController.publishCourse
 );
 router.put("/:id", authMiddleware, courseController.updateCourse);
@@ -44,6 +44,12 @@ router.get(
   courseController.getPublicStats
 );
 router.get("/", courseController.getAllCourses);
+router.get(
+  "/admin/all",
+  authMiddleware,
+  authorizeRoles("ADMIN"),
+  courseController.getAllCoursesForAdmin
+);
 router.get("/:id", courseController.getCourseById);
 router.delete("/:id", authMiddleware, courseController.deleteCourse);
 router.post("/:id/enroll", authMiddleware, courseController.enrollInCourse);

@@ -75,7 +75,12 @@
     <button
     type="button"
     class="social-btn"
-    onclick="window.location.href='http://localhost:5000/api/auth/google'">
+    onclick="
+window.location.href =
+window.location.hostname.includes('app.github.dev')
+? window.location.origin.replace('-3000.','-5000.') + '/api/auth/google'
+: 'http://localhost:5000/api/auth/google'
+" 
         <img
             src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg"
             alt="Google">

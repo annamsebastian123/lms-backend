@@ -14,10 +14,29 @@ async function createCourse(data, userId) {
 
 async function getAllCourses() {
   return await prisma.course.findMany({
+    where: {
+      status: "PUBLISHED",
+    },
     include: {
       user: {
         select: { id: true, name: true, email: true },
       },
+    },
+  });
+}
+async function getAllCoursesForAdmin() {
+  return await prisma.course.findMany({
+    include: {
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
     },
   });
 }
@@ -109,11 +128,10 @@ async function getTutorCourses(userId) {
   });
 }
 
-async function publishCourse(courseId, userId) {
+async function publishCourse(courseId) {
   const updated = await prisma.course.updateMany({
     where: {
       id: Number(courseId),
-      userId,
     },
     data: {
       status: "PUBLISHED",
@@ -197,19 +215,22 @@ async function getModulesByCourse(courseId) {
 }
 
 async function createLesson(moduleId, data) {
-  if (Number(data.orderIndex) < 1) {
-  throw new Error("Order Index must be 1 or greater");
-}
+  const lessonCount = await prisma.lesson.count({
+    where: {
+      moduleId: Number(moduleId),
+    },
+  });
+
+  const nextOrder = lessonCount + 1;
+
   return await prisma.lesson.create({
     data: {
       title: data.title,
       content: data.content || null,
-
       videoSource: data.videoSource || "YOUTUBE",
       videoUrl: data.videoUrl || null,
-      duration: Number(data.duration || 0),
-      orderIndex: Number(data.orderIndex || 1),
-
+      duration: 0,
+      orderIndex: nextOrder,
       moduleId: Number(moduleId),
     },
   });
@@ -334,4 +355,5 @@ module.exports = {
   updateLesson,
   deleteLesson,
   getPublicStats,
+  getAllCoursesForAdmin,
 };
