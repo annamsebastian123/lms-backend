@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Profile</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -26,36 +28,55 @@
     <h1>Admin Profile</h1>
 
     <div class="profile-container">
+
         <div class="profile-card">
-            <div class="profile-avatar" id="profileAvatar">A</div>
+            <div class="profile-image-wrapper">
+                <div class="profile-avatar" id="profileAvatar">A</div>
+
+                <img id="profileImage" class="profile-image" style="display:none;" alt="Profile Photo">
+
+                <label for="profileImageInput" class="edit-photo-btn">
+                    <i class="fas fa-pen"></i>
+                </label>
+
+                <input type="file" id="profileImageInput" accept="image/*" hidden>
+            </div>
+
             <h2 id="profileName">Loading...</h2>
             <p id="profileRole">ADMIN</p>
         </div>
 
         <div class="profile-details">
+
             <div class="form-group">
                 <label>Full Name</label>
-                <input type="text" id="fullName" placeholder="Enter full name">
+                <input type="text" id="fullName">
             </div>
 
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" id="email" placeholder="Enter email">
+                <input type="email" id="email">
             </div>
 
             <div class="form-group">
-                <label>Department</label>
-                <input type="text" id="department" placeholder="Department" readonly>
+                <label>Section</label>
+                <input type="text" id="section">
             </div>
 
             <div class="form-group">
                 <label>Phone Number</label>
-                <input type="text" id="phone" placeholder="Phone number">
+                <input type="text" id="phone" maxlength="10">
+            </div>
+
+            <div class="form-group">
+                <label>Designation</label>
+                <input type="text" id="designation">
             </div>
 
             <button type="button" class="publish-btn" id="updateProfileBtn">
                 Update Profile
             </button>
+
         </div>
     </div>
 </div>

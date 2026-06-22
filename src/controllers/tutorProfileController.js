@@ -1,17 +1,26 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../prisma");
 
 exports.getTutorProfile = async (req, res) => {
     try {
-        const tutor = await prisma.user.findFirst({
-            where: {
-                role: "TUTOR"
-            },
+        const userId = req.user?.id;
+
+        if (!userId) {
+            return res.status(401).json({
+                message: "Unauthorized: user not found in token"
+            });
+        }
+
+        const tutor = await prisma.user.findUnique({
+            where: { id: userId },
             select: {
                 id: true,
                 name: true,
                 email: true,
-                role: true
+                role: true,
+                section: true,
+                phone: true,
+                designation: true,
+                profileImage: true
             }
         });
 
@@ -22,50 +31,46 @@ exports.getTutorProfile = async (req, res) => {
         const tutorName = tutor.name || "Tutor";
 
         res.json({
+            id: tutor.id,
             fullName: tutorName,
             email: tutor.email,
-            department: "High Court of Kerala",
-            phone: "",
+            section: tutor.section || "",
+            phone: tutor.phone || "",
+            designation: tutor.designation || "",
             role: tutor.role,
-            avatar: tutorName
-                .split(" ")
-                .map(word => word[0])
-                .join("")
-                .toUpperCase()
-                .slice(0, 2)
+            profileImage: tutor.profileImage,
+            avatar: tutorName.split(" ").map(w => w[0]).join("").toUpperCase().slice(0, 2)
         });
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error fetching tutor profile" });
+        console.error("GET TUTOR PROFILE ERROR:", error);
+        res.status(500).json({
+            message: "Error fetching tutor profile",
+            error: error.message
+        });
     }
 };
 
 exports.updateTutorProfile = async (req, res) => {
     try {
-        const { fullName, email } = req.body;
+        const userId = req.user?.id;
 
-        if (!fullName || !email) {
-            return res.status(400).json({ message: "Name and email are required" });
+        if (!userId) {
+            return res.status(401).json({
+                message: "Unauthorized: user not found in token"
+            });
         }
 
-        const tutor = await prisma.user.findFirst({
-            where: {
-                role: "TUTOR"
-            }
-        });
-
-        if (!tutor) {
-            return res.status(404).json({ message: "Tutor not found" });
-        }
+        const { fullName, email, phone, section, designation } = req.body;
 
         const updatedTutor = await prisma.user.update({
-            where: {
-                id: tutor.id
-            },
+            where: { id: userId },
             data: {
                 name: fullName,
-                email: email
+                email,
+                phone,
+                section,
+                designation
             }
         });
 

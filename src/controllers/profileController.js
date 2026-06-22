@@ -1,31 +1,37 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+const prisma = require("../prisma");
 
 exports.getAdminProfile = async (req, res) => {
     try {
-        const admin = await prisma.user.findFirst({
-            where: {
-                role: "ADMIN"
-            },
+        const admin = await prisma.user.findUnique({
+            where: { id: req.user.id },
             select: {
                 id: true,
                 name: true,
                 email: true,
-                role: true
+                role: true,
+                section: true,
+                phone: true,
+                designation: true,
+                profileImage: true
             }
         });
 
-        if (!admin) {
+        if (!admin || admin.role !== "ADMIN") {
             return res.status(404).json({ message: "Admin not found" });
         }
 
+        const adminName = admin.name || "Admin";
+
         res.json({
-            fullName: admin.name,
+            id: admin.id,
+            fullName: adminName,
             email: admin.email,
-            department: "High Court of Kerala",
-            phone: "",
+            section: admin.section || "",
+            phone: admin.phone || "",
+            designation: admin.designation || "",
             role: admin.role,
-            avatar: admin.name
+            profileImage: admin.profileImage,
+            avatar: adminName
                 .split(" ")
                 .map(word => word[0])
                 .join("")
@@ -34,30 +40,26 @@ exports.getAdminProfile = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({ message: "Error fetching admin profile" });
+        console.error("GET ADMIN PROFILE ERROR:", error);
+        res.status(500).json({
+            message: "Error fetching admin profile",
+            error: error.message
+        });
     }
 };
+
 exports.updateAdminProfile = async (req, res) => {
     try {
-        const { fullName, email } = req.body;
-
-        const admin = await prisma.user.findFirst({
-            where: {
-                role: "ADMIN"
-            }
-        });
-
-        if (!admin) {
-            return res.status(404).json({ message: "Admin not found" });
-        }
+        const { fullName, email, phone, section, designation } = req.body;
 
         const updatedAdmin = await prisma.user.update({
-            where: {
-                id: admin.id
-            },
+            where: { id: req.user.id },
             data: {
                 name: fullName,
-                email: email
+                email,
+                phone,
+                section,
+                designation
             }
         });
 
@@ -66,25 +68,28 @@ exports.updateAdminProfile = async (req, res) => {
             profile: updatedAdmin
         });
 
-     } catch (error) {
-    console.error("UPDATE PROFILE ERROR:", error);
-    res.status(500).json({
-        message: "Error updating admin profile",
-        error: error.message
-    });
-}
+    } catch (error) {
+        console.error("UPDATE ADMIN PROFILE ERROR:", error);
+        res.status(500).json({
+            message: "Error updating admin profile",
+            error: error.message
+        });
+    }
 };
+
 exports.getLearnerProfile = async (req, res) => {
     try {
         const learner = await prisma.user.findUnique({
-            where: {
-                id: req.user.id
-            },
+            where: { id: req.user.id },
             select: {
                 id: true,
                 name: true,
                 email: true,
-                role: true
+                role: true,
+                section: true,
+                phone: true,
+                designation: true,
+                profileImage: true
             }
         });
 
@@ -95,11 +100,14 @@ exports.getLearnerProfile = async (req, res) => {
         const learnerName = learner.name || "Learner";
 
         res.json({
+            id: learner.id,
             fullName: learnerName,
             email: learner.email,
-            department: "Registry Department",
-            phone: "",
+            section: learner.section || "",
+            phone: learner.phone || "",
+            designation: learner.designation || "",
             role: learner.role,
+            profileImage: learner.profileImage,
             avatar: learnerName
                 .split(" ")
                 .map(word => word[0])
@@ -119,15 +127,16 @@ exports.getLearnerProfile = async (req, res) => {
 
 exports.updateLearnerProfile = async (req, res) => {
     try {
-        const { fullName, email } = req.body;
+        const { fullName, email, phone, section, designation } = req.body;
 
         const updatedLearner = await prisma.user.update({
-            where: {
-                id: req.user.id
-            },
+            where: { id: req.user.id },
             data: {
                 name: fullName,
-                email: email
+                email,
+                phone,
+                section,
+                designation
             }
         });
 

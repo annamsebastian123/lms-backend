@@ -3,9 +3,17 @@ const { generateToken } = require("../utils/jwt");
 
 async function register(req, res) {
   try {
-    const { email, name, password } = req.body;
+    const { email, name, password, phone, section, role, designation } = req.body;
 
-    const user = await authService.register(email, name, password);
+const user = await authService.register(
+  email,
+  name,
+  password,
+  phone,
+  section,
+  role,
+  designation
+);
 
     const token = generateToken(user);
 

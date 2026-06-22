@@ -6,7 +6,7 @@ console.log("JWT:", process.env.JWT_SECRET);
 
 const express = require("express");
 const cors = require("cors");
-
+const path = require("path");
 const userRoutes = require("./routes/userRoutes");
 const authRoutes = require("./routes/authRoutes");
 const courseRoutes = require("./routes/courseRoutes");
@@ -67,6 +67,11 @@ app.use("/api/quiz", quizRoutes);
 app.get("/test", (req, res) => {
   res.send("Test route works");
 });
+
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "../uploads"))
+);
 
 app.listen(5000, "0.0.0.0", () => {
   console.log("Server running on port 5000");

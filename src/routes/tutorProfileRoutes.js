@@ -1,12 +1,14 @@
+
+
 const express = require("express");
 const router = express.Router();
 
-const {
-    getTutorProfile,
-    updateTutorProfile
-} = require("../controllers/tutorProfileController");
+const authMiddleware = require("../middlewares/authMiddleware");
+const tutorProfileController = require("../controllers/tutorProfileController");
 
-router.get("/", getTutorProfile);
-router.put("/", updateTutorProfile);
+router.get("/", authMiddleware, tutorProfileController.getTutorProfile);
+router.put("/", authMiddleware, tutorProfileController.updateTutorProfile);
+
+module.exports = router;
 
 module.exports = router;

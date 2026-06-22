@@ -8,22 +8,26 @@ datasource db {
 }
 
 model User {
-  id             Int             @id @default(autoincrement())
-  email          String          @unique
-  name           String?
-  passwordHash   String
-  role           Role            @default(LEARNER)
-  isActive       Boolean         @default(true)
-  isEmailVerified Boolean @default(false)
-emailOtp        String?
-emailOtpExpiry  DateTime?
-  resetOtp       String?
-  resetOtpExpiry DateTime?
-  certificates   Certificate[]
-  courses        Course[]
-  enrollments    Enrollment[]
-  quizAttempts   QuizAttempt[]
-  videoProgress  VideoProgress[]
+  id              Int             @id @default(autoincrement())
+  email           String          @unique
+  name            String?
+  passwordHash    String
+  role            Role            @default(LEARNER)
+  isActive        Boolean         @default(true)
+  resetOtp        String?
+  resetOtpExpiry  DateTime?
+  emailOtp        String?
+  emailOtpExpiry  DateTime?
+  isEmailVerified Boolean         @default(false)
+  profileImage    String?
+  phone           String?
+  section         String?
+  designation     String?
+  certificates    Certificate[]
+  courses         Course[]
+  enrollments     Enrollment[]
+  quizAttempts    QuizAttempt[]
+  videoProgress   VideoProgress[]
 }
 
 model Course {

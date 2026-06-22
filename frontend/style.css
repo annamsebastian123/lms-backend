@@ -1440,3 +1440,61 @@ textarea{
     font-size: 14px;
     font-weight: 500;
 }
+.profile-image-wrapper {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 15px;
+}
+
+.profile-image-wrapper .profile-avatar,
+.profile-image-wrapper .profile-image {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+}
+
+.profile-image-wrapper .profile-avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-image {
+    object-fit: cover;
+}
+
+.edit-photo-btn {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+
+    width: 34px;
+    height: 34px;
+
+    border-radius: 50%;
+
+    background: #000;
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 3px solid #fff;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+
+    transition: all 0.2s ease;
+}
+
+.edit-photo-btn:hover {
+    transform: scale(1.08);
+    background: #111;
+}
+
+.edit-photo-btn i {
+    font-size: 12px;
+}

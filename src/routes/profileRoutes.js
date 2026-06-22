@@ -10,9 +10,8 @@ const {
     updateLearnerProfile
 } = require("../controllers/profileController");
 
-router.get("/admin", getAdminProfile);
-router.put("/admin", updateAdminProfile);
-
+router.get("/admin", authMiddleware, getAdminProfile);
+router.put("/admin", authMiddleware, updateAdminProfile);
 router.get("/learner", authMiddleware, getLearnerProfile);
 router.put("/learner", authMiddleware, updateLearnerProfile);
 

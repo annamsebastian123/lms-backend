@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tutor Profile</title>
+    <link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -59,7 +61,20 @@
 
     <div class="profile-container">
         <div class="profile-card">
-            <div class="profile-avatar" id="profileAvatar">T</div>
+           
+<div class="profile-image-wrapper">
+
+    <div class="profile-avatar" id="profileAvatar">T</div>
+
+    <img id="profileImage" class="profile-image" alt="Profile Photo" style="display:none;">
+
+    <label for="profileImageInput" class="edit-photo-btn">
+        <i class="fas fa-pen"></i>
+    </label>
+
+    <input type="file" id="profileImageInput" accept="image/*" hidden>
+
+</div>
             <h2 id="profileName">Loading...</h2>
             <p id="profileRole">TUTOR</p>
         </div>
@@ -75,15 +90,22 @@
                 <input type="email" id="email" placeholder="Enter email">
             </div>
 
-            <div class="form-group">
-                <label>Department</label>
-                <input type="text" id="department" value="High Court of Kerala" readonly>
-            </div>
+           <div class="form-group">
+    <label>Section</label>
+    <input type="text" id="section">
+</div>
 
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input type="text" id="phone" placeholder="Phone number">
-            </div>
+<div class="form-group">
+    <label>Phone Number</label>
+    <input type="text" id="phone">
+</div>
+
+<div class="form-group">
+    <label>Designation</label>
+    <input type="text" id="designation">
+</div>
+
+
 
             <button type="button" class="publish-btn" id="updateProfileBtn">
                 Update Profile

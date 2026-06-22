@@ -11,5 +11,10 @@ router.post(
   upload.single("video"),
   uploadController.uploadLessonVideo
 );
-
+router.post(
+  "/profile-image",
+  authMiddleware,
+  upload.single("profileImage"),
+  uploadController.uploadProfileImage
+);
 module.exports = router;

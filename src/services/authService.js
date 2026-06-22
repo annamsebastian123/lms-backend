@@ -24,7 +24,7 @@ if (user.isEmailVerified === false) {
 }
 
 // ✅ REGISTER FUNCTION
-async function register(email, name, password) {
+async function register(email, name, password, phone, section, role, designation) {
   if (!name || name.trim().length < 3) {
     throw new Error("Name must contain at least 3 characters");
   }
@@ -53,16 +53,19 @@ async function register(email, name, password) {
   const emailOtpExpiry = new Date(Date.now() + 10 * 60 * 1000);
 
   const user = await prisma.user.create({
-    data: {
-      email,
-      name,
-      passwordHash: hashedPassword,
-      role: "LEARNER",
-      isActive: true,
-      isEmailVerified: false,
-      emailOtp,
-      emailOtpExpiry,
-    },
+   data: {
+  email,
+  name,
+  phone,
+  section,
+  designation,
+  role: role || "LEARNER",
+  passwordHash: hashedPassword,
+  isActive: true,
+  isEmailVerified: false,
+  emailOtp,
+  emailOtpExpiry,
+},
   });
 
   const transporter = nodemailer.createTransport({

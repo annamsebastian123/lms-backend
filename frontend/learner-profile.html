@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Learner Profile</title>
-
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -32,9 +32,24 @@
 
         <div class="profile-card">
 
-            <div class="profile-avatar" id="profileAvatar">
-                L
-            </div>
+            <div class="profile-image-wrapper">
+
+    <div class="profile-avatar" id="profileAvatar">L</div>
+
+    <img id="profileImage" class="profile-image" alt="Profile Photo">
+
+    <label for="profileImageInput" class="edit-photo-btn">
+        <i class="fas fa-pen"></i>
+    </label>
+
+    <input
+        type="file"
+        id="profileImageInput"
+        accept="image/*"
+        hidden
+    >
+
+</div>
 
             <h2 id="profileName">Loading...</h2>
 
@@ -55,14 +70,20 @@
             </div>
 
             <div class="form-group">
-                <label>Department</label>
-                <input type="text" id="department" readonly>
-            </div>
+    <label>Section</label>
+    <input type="text" id="section">
+</div>
 
-            <div class="form-group">
-                <label>Phone Number</label>
-                <input type="text" id="phone">
-            </div>
+<div class="form-group">
+    <label>Phone Number</label>
+    <input type="text" id="phone">
+</div>
+
+<div class="form-group">
+    <label>Designation</label>
+    <input type="text" id="designation">
+</div>
+
 
             <button class="publish-btn" id="updateProfileBtn">
                 Update Profile
