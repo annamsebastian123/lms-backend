@@ -109,7 +109,7 @@ console.log("LESSON OBJECT:", lesson);
 currentLesson = lesson;
 const user = JSON.parse(localStorage.getItem("user"));
 const role = user?.role?.toUpperCase();
-
+const isLearner = role === "LEARNER";
 if (
   takeQuizBtn &&
   currentLesson?.moduleId &&
@@ -119,12 +119,13 @@ if (
 } else if (takeQuizBtn) {
   takeQuizBtn.style.display = "none";
 }
-
+    console.log("SETTING TITLE");
     titleEl.textContent = lesson.title || "Untitled Lesson";
 
     let videoHtml = "";
 
     if (lesson.videoSource === "YOUTUBE" && lesson.videoUrl) {
+      document.getElementById("progressSection").style.display = "none";
       let embedUrl = lesson.videoUrl;
 
 if (embedUrl.includes("watch?v=")) {
@@ -151,6 +152,7 @@ console.log("EMBED URL:", embedUrl);
 `;
   }
     if (lesson.videoSource === "SELF_HOSTED" && lesson.videoUrl) {
+      document.getElementById("progressSection").style.display = "block";
       videoHtml = `
         <video id="lessonVideo" width="100%" controls>
           <source src="${lesson.videoUrl}" type="video/mp4">
@@ -158,7 +160,7 @@ console.log("EMBED URL:", embedUrl);
         </video>
       `;
     }
-
+    console.log("SETTING CONTENT");
     contentEl.innerHTML = `
       <div class="lesson-body">
         ${videoHtml}
@@ -170,9 +172,11 @@ console.log("EMBED URL:", embedUrl);
     `;
 if (!isLearner) return;
 
-const progress = await apiRequest(`/progress/${lessonId}`);
+const video = document.getElementById("lessonVideo");
 
-    if (video) {
+if (!video) {
+  return; // YouTube lesson, no progress tracking
+}
       video.addEventListener("canplay", async () => {
   const progress = await apiRequest(`/progress/${lessonId}`);
 
@@ -193,7 +197,7 @@ const progress = await apiRequest(`/progress/${lessonId}`);
 
       video.addEventListener("pause", saveProgress);
       video.addEventListener("ended", saveProgress);
-    }
+    
   } catch (error) {
     console.error("Failed to load lesson:", error);
 

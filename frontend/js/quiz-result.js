@@ -26,3 +26,24 @@ const certificateBtn =
 if (!result.passed && certificateBtn) {
   certificateBtn.style.display = "none";
 }    
+if (result.passed && result.courseId) {
+  const API_URL =
+    window.location.origin.replace("-3000.", "-5000.") + "/api";
+
+  const token = localStorage.getItem("token");
+
+  fetch(
+    `${API_URL}/certificates/generate/${result.courseId}`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  ).catch(console.error);
+}
+if (certificateBtn) {
+  certificateBtn.addEventListener("click", () => {
+    window.location.href = "certificates.html";
+  });
+}

@@ -141,7 +141,19 @@ if (existingAttempt) {
     },
   });
 
-  return updatedAttempt;
+  const moduleData = await prisma.module.findUnique({
+  where: {
+    id: Number(moduleId),
+  },
+  select: {
+    courseId: true,
+  },
+});
+
+return {
+  ...updatedAttempt,
+  courseId: moduleData?.courseId,
+};
 }
 
 async function getQuizAttempt(id) {
