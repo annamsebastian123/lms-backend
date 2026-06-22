@@ -52,8 +52,13 @@ const response = await fetch(
                             Issued:
                             ${new Date(cert.issuedAt).toLocaleDateString()}
                         </p>
+<a href="${API_URL}/certificates/${cert.id}/download" target="_blank">
+    <button class="btn">
+        View Certificate
+    </button>
+</a>
 
-                        <a href="${API_URL}/certificates/${cert.id}/download" target="_blank">
+<a href="${API_URL}/certificates/${cert.id}/download" download>
     <button class="btn">
         Download Certificate
     </button>
