@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const nameInput = document.getElementById("name");
     const emailInput = document.getElementById("email");
+    const sectionInput = document.getElementById("section");
+const designationInput = document.getElementById("designation");
+const phoneInput = document.getElementById("phone");
     const roleSelect = document.getElementById("role");
     const updateRoleBtn = document.getElementById("updateRoleBtn");
     const deactivateUserBtn = document.getElementById("deactivateUserBtn");
@@ -37,6 +40,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         nameInput.value = name;
         emailInput.value = email;
+        sectionInput.value = user.section || "";
+designationInput.value = user.designation || "";
+phoneInput.value = user.phone || "";
         roleSelect.value = role;
         deactivateUserBtn.dataset.active = user.isActive ? "true" : "false";
 
