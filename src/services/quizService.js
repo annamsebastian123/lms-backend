@@ -79,7 +79,9 @@ async function submitQuiz(userId, moduleId, answers) {
 });
 
 if (existingAttempt) {
-  throw new Error("Quiz already submitted");
+  throw new Error(
+    "Quiz already completed. You can attempt each module quiz only once."
+  );
 }
   const questions = await prisma.question.findMany({
     where: {

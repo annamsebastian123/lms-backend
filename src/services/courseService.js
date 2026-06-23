@@ -122,6 +122,9 @@ async function getTutorCourses(userId) {
     where: {
       userId,
     },
+    include: {
+      enrollments: true,
+    },
     orderBy: {
       createdAt: "desc",
     },
