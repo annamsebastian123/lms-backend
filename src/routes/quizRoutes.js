@@ -27,5 +27,10 @@ router.get(
   authMiddleware,
   quizController.getQuizAttempt
 );
-
+router.delete(
+  "/questions/:id",
+  authMiddleware,
+  authorizeRoles("ADMIN", "TUTOR"),
+  quizController.deleteQuestion
+);
 module.exports = router;

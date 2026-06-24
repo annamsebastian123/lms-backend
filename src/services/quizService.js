@@ -56,15 +56,16 @@ async function getQuestionsByModule(moduleId) {
       moduleId: Number(moduleId),
     },
     select: {
+  id: true,
+  text: true,
+  correctOptionId: true,
+  options: {
+    select: {
       id: true,
       text: true,
-      options: {
-        select: {
-          id: true,
-          text: true,
-        },
-      },
     },
+  },
+},
   });
 
   return questions.sort(() => Math.random() - 0.5);
@@ -176,6 +177,21 @@ async function getQuizAttempt(id) {
     },
   });
 }
+async function deleteQuestion(id) {
+  const questionId = Number(id);
+
+  await prisma.questionOption.deleteMany({
+    where: {
+      questionId,
+    },
+  });
+
+  return await prisma.question.delete({
+    where: {
+      id: questionId,
+    },
+  });
+}
 
 module.exports = {
   createQuestion,
@@ -183,4 +199,5 @@ module.exports = {
   getQuestionsByModule,
   submitQuiz,
   getQuizAttempt,
+  deleteQuestion,
 };
