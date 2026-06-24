@@ -21,6 +21,7 @@
 </div>
 
 <div class="main">
+
     <div class="top-header">
         <div>
             <h1>Analytics</h1>
@@ -28,11 +29,36 @@
         </div>
     </div>
 
-    <div class="dashboard-section">
-        <h2>Analytics will appear here</h2>
-        <p>This page can later be connected to report and enrollment data.</p>
+    <div class="cards" id="analyticsGrid">
+        <p>Loading analytics...</p>
     </div>
+
+    <div class="dashboard-section">
+        <h2>Course Performance</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Course</th>
+                    <th>Status</th>
+                    <th>Enrollments</th>
+                    <th>Completed</th>
+                    <th>Completion Rate</th>
+                    <th>Average Quiz Score</th>
+                </tr>
+            </thead>
+
+            <tbody id="courseAnalyticsTable">
+                <tr>
+                    <td colspan="6">Loading...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
 
+<script src="js/api.js"></script>
+<script src="js/analytics.js"></script>
 </body>
 </html>

@@ -27,10 +27,30 @@ router.get(
 );
 
 router.post("/", authMiddleware, courseController.createCourse);
-router.get("/:id/students", authMiddleware, courseController.getCourseStudents);
-router.get("/my-courses", authMiddleware, courseController.getMyCourses);
-router.get("/tutor-courses", authMiddleware, courseController.getTutorCourses);
-router.get("/tutor-stats", authMiddleware, courseController.getTutorStats);
+
+router.get("/:id/students",
+  authMiddleware,
+  courseController.getCourseStudents
+);
+
+router.get(
+  "/my-courses",
+  authMiddleware,
+  courseController.getMyCourses
+);
+
+router.get(
+  "/tutor-courses",
+  authMiddleware,
+  courseController.getTutorCourses
+);
+
+/* ANALYTICS ROUTE */
+router.get(
+  "/tutor-stats",
+  authMiddleware,
+  courseController.getTutorStats
+);
 
 router.post(
   "/:id/publish",
@@ -38,21 +58,37 @@ router.post(
   authorizeRoles("ADMIN"),
   courseController.publishCourse
 );
+
 router.put("/:id", authMiddleware, courseController.updateCourse);
+
 router.get(
   "/public-stats",
   courseController.getPublicStats
 );
+
 router.get("/", courseController.getAllCourses);
+
 router.get(
   "/admin/all",
   authMiddleware,
   authorizeRoles("ADMIN"),
   courseController.getAllCoursesForAdmin
 );
+
 router.get("/:id", courseController.getCourseById);
-router.delete("/:id", authMiddleware, courseController.deleteCourse);
-router.post("/:id/enroll", authMiddleware, courseController.enrollInCourse);
+
+router.delete(
+  "/:id",
+  authMiddleware,
+  courseController.deleteCourse
+);
+
+router.post(
+  "/:id/enroll",
+  authMiddleware,
+  courseController.enrollInCourse
+);
+
 router.put(
   "/modules/:id",
   authMiddleware,
@@ -76,4 +112,5 @@ router.delete(
   authMiddleware,
   courseController.deleteLesson
 );
+
 module.exports = router;

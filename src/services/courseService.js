@@ -166,40 +166,8 @@ async function getCourseStudents(courseId) {
 }
 
 async function getTutorStats(userId) {
-  const totalCourses = await prisma.course.count({
-    where: { userId },
-  });
-
-  const totalDrafts = await prisma.course.count({
-    where: {
-      userId,
-      status: "DRAFT",
-    },
-  });
-
-  const totalPublished = await prisma.course.count({
-    where: {
-      userId,
-      status: "PUBLISHED",
-    },
-  });
-
-  const totalEnrollments = await prisma.enrollment.count({
-    where: {
-      course: {
-        userId,
-      },
-    },
-  });
-
-  return {
-    totalCourses,
-    totalDrafts,
-    totalPublished,
-    totalEnrollments,
-  };
+  return await getTutorAnalytics(userId);
 }
-
 async function createModule(courseId, data) {
   return await prisma.module.create({
     data: {
@@ -336,6 +304,92 @@ async function getPublicStats() {
     completionRate: 95
   };
 }
+async function getTutorAnalytics(userId) {
+  const courses = await prisma.course.findMany({
+    where: {
+      userId: userId
+    },
+    include: {
+      enrollments: true,
+      certificates: true,
+      modules: {
+        include: {
+          quizAttempts: true
+        }
+      }
+    }
+  });
+
+  const totalCourses = courses.length;
+  const publishedCourses = courses.filter(c => c.status === "PUBLISHED").length;
+  const draftCourses = courses.filter(c => c.status === "DRAFT").length;
+  const pendingCourses = courses.filter(c => c.status === "PENDING_REVIEW").length;
+
+  const totalEnrollments = courses.reduce(
+    (sum, course) => sum + course.enrollments.length,
+    0
+  );
+
+  const totalCertificates = courses.reduce(
+    (sum, course) => sum + course.certificates.length,
+    0
+  );
+
+  const completionRate =
+    totalEnrollments === 0
+      ? 0
+      : Math.round((totalCertificates / totalEnrollments) * 100);
+
+  const allQuizAttempts = courses.flatMap(course =>
+    course.modules.flatMap(module => module.quizAttempts)
+  );
+
+  const averageQuizScore =
+    allQuizAttempts.length === 0
+      ? 0
+      : Math.round(
+          allQuizAttempts.reduce((sum, attempt) => sum + attempt.percentage, 0) /
+            allQuizAttempts.length
+        );
+
+  const courseAnalytics = courses.map(course => {
+    const courseAttempts = course.modules.flatMap(module => module.quizAttempts);
+
+    const avgScore =
+      courseAttempts.length === 0
+        ? 0
+        : Math.round(
+            courseAttempts.reduce((sum, attempt) => sum + attempt.percentage, 0) /
+              courseAttempts.length
+          );
+
+    const courseCompletionRate =
+      course.enrollments.length === 0
+        ? 0
+        : Math.round((course.certificates.length / course.enrollments.length) * 100);
+
+    return {
+      id: course.id,
+      title: course.title,
+      status: course.status,
+      enrollments: course.enrollments.length,
+      completed: course.certificates.length,
+      completionRate: courseCompletionRate,
+      averageQuizScore: avgScore
+    };
+  });
+
+  return {
+    totalCourses,
+    publishedCourses,
+    draftCourses,
+    pendingCourses,
+    totalEnrollments,
+    completionRate,
+    averageQuizScore,
+    courseAnalytics
+  };
+}
 module.exports = {
   createCourse,
   getAllCourses,
@@ -359,4 +413,5 @@ module.exports = {
   deleteLesson,
   getPublicStats,
   getAllCoursesForAdmin,
+  getTutorAnalytics,
 };

@@ -327,6 +327,22 @@ async function getPublicStats(req, res) {
     });
   }
 }
+async function getTutorAnalytics(req, res) {
+  try {
+    const userId = req.user.id;
+
+    const analytics = await courseService.getTutorAnalytics(userId);
+
+    res.json(analytics);
+  } catch (error) {
+    console.error("GET TUTOR ANALYTICS ERROR:", error);
+
+    res.status(500).json({
+      message: "Failed to load tutor analytics",
+      error: error.message
+    });
+  }
+}
 module.exports = {
   createCourse,
   getAllCourses,

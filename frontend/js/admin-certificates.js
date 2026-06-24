@@ -1,3 +1,5 @@
+
+
 document.addEventListener("DOMContentLoaded", async () => {
     const tableBody = document.getElementById("adminCertificatesBody");
 
@@ -22,11 +24,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <td>${cert.certificateNumber || "N/A"}</td>
                     <td>${cert.user?.name || cert.user?.email || "N/A"}</td>
                     <td>${cert.course?.title || "N/A"}</td>
-                    <td>${new Date(cert.issuedAt).toLocaleDateString()}</td>
+                    <td>${cert.issuedAt ? new Date(cert.issuedAt).toLocaleDateString() : "N/A"}</td>
                     <td>
-                        <a href="${API_URL}/certificates/${cert.id}/download" target="_blank">
-                            <button class="action-btn">Download</button>
-                        </a>
+                       <a href="${API_BASE_URL}/certificates/${cert.id}/download" target="_blank">
+    <button class="action-btn">Download</button>
+</a>
                     </td>
                 </tr>
             `;
