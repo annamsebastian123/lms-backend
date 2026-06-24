@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const totalLearnersValue = document.getElementById("totalLearnersValue");
     const courseCompletionsValue = document.getElementById("courseCompletionsValue");
     const certificatesIssuedValue = document.getElementById("certificatesIssuedValue");
+    const completionRateValue = document.getElementById("completionRateValue");
 
     const summaryUsers = document.getElementById("summaryUsers");
     const summaryCourses = document.getElementById("summaryCourses");
@@ -15,14 +16,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         const usersList = Array.isArray(users) ? users : [];
         const learners = usersList.filter(user => user.role === "LEARNER");
 
+        const totalEnrollments = stats.totalEnrollments || 0;
+        const certificatesIssued = stats.certificatesIssued || 0;
+
+        const completionRate =
+            totalEnrollments === 0
+                ? 0
+                : Math.round((certificatesIssued / totalEnrollments) * 100);
+
         totalLearnersValue.textContent = learners.length;
-        courseCompletionsValue.textContent = stats.certificatesIssued || 0;
-        certificatesIssuedValue.textContent = stats.certificatesIssued || 0;
+        courseCompletionsValue.textContent = certificatesIssued;
+        certificatesIssuedValue.textContent = certificatesIssued;
+
+        if (completionRateValue) {
+            completionRateValue.textContent = `${completionRate}%`;
+        }
 
         summaryUsers.textContent = stats.totalUsers || 0;
         summaryCourses.textContent = stats.activeCourses || 0;
-        summaryEnrollments.textContent = stats.totalEnrollments || 0;
-        summaryCertificates.textContent = stats.certificatesIssued || 0;
+        summaryEnrollments.textContent = totalEnrollments;
+        summaryCertificates.textContent = certificatesIssued;
 
     } catch (error) {
         console.error("Failed to load reports", error);
