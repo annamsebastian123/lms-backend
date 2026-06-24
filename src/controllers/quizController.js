@@ -64,9 +64,24 @@ async function getQuizAttempt(req, res) {
   }
 }
 
+async function deleteQuestion(req, res) {
+  try {
+    await quizService.deleteQuestion(req.params.id);
+
+    res.json({
+      message: "Question deleted successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
+
 module.exports = {
   createQuestion,
   getQuestionsByModule,
   submitQuiz,
   getQuizAttempt,
+  deleteQuestion,
 };

@@ -75,16 +75,26 @@ if (!detailContainer || !courseId) {
       return [];
     }
   }
+async function fetchModuleQuestions(moduleId) {
+  try {
+    const data = await apiRequest(
+      `/quiz/modules/${moduleId}/questions`
+    );
 
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
   async function renderModules(courseId) {
     const modules = await fetchCourseModules(courseId);
     const modulesWithLessons = await Promise.all(
-      modules.map(async (module, idx) => ({
-        ...module,
-        lessons: await fetchModuleLessons(module.id),
-        displayTitle: module.title || `Module ${idx + 1}`,
-      }))
-    );
+  modules.map(async (module, idx) => ({
+    ...module,
+    lessons: await fetchModuleLessons(module.id),
+    displayTitle: module.title || `Module ${idx + 1}`,
+  }))
+);
 
     let html = '<h2>Course Modules</h2>';
     html += `
@@ -116,17 +126,76 @@ if (!detailContainer || !courseId) {
           <div class="module-card">
             <h3>${escapeHtml(module.displayTitle)}</h3>
             ${lessonsHtml}
-            <div>
+
+<div
+  style="
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+    flex-wrap:wrap;
+  "
+>
   <button
     class="action-btn showLessonFormBtn"
     data-module-id="${module.id}">
     + Add Lesson
   </button>
+
   <button
-  class="action-btn addQuizBtn"
-  data-module-id="${module.id}">
-  + Add Quiz Question
-</button>
+    class="action-btn showQuizFormBtn"
+    data-module-id="${module.id}">
+    + Add Quiz Question
+  </button>
+
+  <button
+    class="action-btn viewQuizBtn"
+    data-module-id="${module.id}">
+    View Quiz
+  </button>
+</div>
+
+<div
+  id="quizForm-${module.id}"
+  style="display:none; margin-top:10px;">
+
+  <input
+    type="text"
+    id="quizQuestion-${module.id}"
+    placeholder="Question">
+
+  <input
+    type="text"
+    id="option1-${module.id}"
+    placeholder="Option 1">
+
+  <input
+    type="text"
+    id="option2-${module.id}"
+    placeholder="Option 2">
+
+  <input
+    type="text"
+    id="option3-${module.id}"
+    placeholder="Option 3">
+
+  <input
+    type="text"
+    id="option4-${module.id}"
+    placeholder="Option 4">
+
+  <select id="correctOption-${module.id}">
+    <option value="0">Correct Answer: Option 1</option>
+    <option value="1">Correct Answer: Option 2</option>
+    <option value="2">Correct Answer: Option 3</option>
+    <option value="3">Correct Answer: Option 4</option>
+  </select>
+
+  <button
+    class="action-btn saveQuizBtn"
+    data-module-id="${module.id}">
+    Save Question
+  </button>
+</div>
   <div
     id="lessonForm-${module.id}"
     style="display:none; margin-top:10px;">
@@ -164,17 +233,29 @@ if (!detailContainer || !courseId) {
   placeholder="Lesson notes/content (optional)">
 </textarea>
  <button
-    class="action-btn addLessonBtn"
-    data-module-id="${module.id}">
-    Save Lesson
-  </button>
-          </div>
+  class="action-btn addLessonBtn"
+  data-module-id="${module.id}">
+  Save Lesson
+</button>
+
+</div> <!-- lessonForm -->
+
+</div> <!-- module-card -->
         `;
       });
     }
 
     modulesSection.innerHTML = html;
-    document.querySelectorAll('select[id^="videoSource-"]').forEach(select => {
+    document.querySelectorAll(".viewQuizBtn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const moduleId = btn.dataset.moduleId;
+
+    localStorage.setItem("selectedModuleId", moduleId);
+
+    window.location.href = "tutor-quiz-preview.html";
+  });
+});
+  document.querySelectorAll('select[id^="videoSource-"]').forEach(select => {
   const moduleId = select.id.replace('videoSource-', '');
   const videoUrlInput = document.getElementById(`videoUrl-${moduleId}`);
 
@@ -194,47 +275,56 @@ if (!detailContainer || !courseId) {
   updateUI();
 });
     attachModuleFormHandlers(courseId);
-    document.querySelectorAll(".addQuizBtn").forEach((btn) => {
+    document.querySelectorAll(".showQuizFormBtn").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const moduleId = btn.dataset.moduleId;
+    const form = document.getElementById(`quizForm-${moduleId}`);
+
+    if (form) {
+      form.style.display =
+        form.style.display === "none" ? "block" : "none";
+    }
+  });
+});
+
+document.querySelectorAll(".saveQuizBtn").forEach((btn) => {
   btn.addEventListener("click", async () => {
     const moduleId = btn.dataset.moduleId;
 
-    const question = prompt("Question");
+    const question = document
+      .getElementById(`quizQuestion-${moduleId}`)
+      .value.trim();
 
-    if (!question) return;
+    const option1 = document.getElementById(`option1-${moduleId}`).value.trim();
+    const option2 = document.getElementById(`option2-${moduleId}`).value.trim();
+    const option3 = document.getElementById(`option3-${moduleId}`).value.trim();
+    const option4 = document.getElementById(`option4-${moduleId}`).value.trim();
 
-    const option1 = prompt("Option 1");
-    const option2 = prompt("Option 2");
-    const option3 = prompt("Option 3");
-    const option4 = prompt("Option 4");
+    const correctOptionIndex = Number(
+      document.getElementById(`correctOption-${moduleId}`).value
+    );
 
-    const correctOption =
-      Number(prompt("Correct Option (1-4)")) - 1;
+    if (!question || !option1 || !option2 || !option3 || !option4) {
+      alert("Please fill the question and all 4 options.");
+      return;
+    }
 
     try {
-      await apiRequest(
-        `/quiz/modules/${moduleId}/questions`,
-        {
-          method: "POST",
-          body: {
-            text: question,
-            options: [
-              option1,
-              option2,
-              option3,
-              option4,
-            ],
-            correctOptionIndex: correctOption,
-          },
-        }
-      );
+      await apiRequest(`/quiz/modules/${moduleId}/questions`, {
+        method: "POST",
+        body: {
+          text: question,
+          options: [option1, option2, option3, option4],
+          correctOptionIndex,
+        },
+      });
 
       alert("Question created successfully");
+      await renderModules(courseId);
     } catch (err) {
       alert(err.message);
     }
   });
-
-  
 });}
   function attachModuleFormHandlers(courseId) {
     const addModuleBtn = document.getElementById('addModuleBtn');

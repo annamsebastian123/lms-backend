@@ -48,12 +48,13 @@ model Course {
 }
 
 model Enrollment {
-  id         Int      @id @default(autoincrement())
-  userId     Int
-  courseId   Int
-  enrolledAt DateTime @default(now())
-  course     Course   @relation(fields: [courseId], references: [id])
-  user       User     @relation(fields: [userId], references: [id])
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  courseId    Int
+  enrolledAt  DateTime  @default(now())
+
+  course       Course   @relation(fields: [courseId], references: [id])
+  user         User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, courseId])
 }
