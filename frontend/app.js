@@ -113,8 +113,7 @@ const detailContainer = document.querySelector('.course-detail-container');
 const modulesSection = document.querySelector('.modules-section');
 if (detailContainer) {
   const params = new URLSearchParams(window.location.search);
-  const courseId =
-    params.get('id') || localStorage.getItem("selectedCourseId");
+const courseId = params.get('id');
 
   console.log("Course details page:", window.location.href);
   console.log("Course details search:", window.location.search);

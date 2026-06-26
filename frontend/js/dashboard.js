@@ -31,9 +31,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         const completedCoursesValue = document.getElementById("completedCoursesValue");
         const certificatesValue = document.getElementById("certificatesValue");
 
-        const enrolledCount = enrollments.length;
-        const completedCount = 0;
-        const certificatesCount = 0;
+        const certificates = await apiRequest(
+  "/certificates/my-certificates"
+);
+
+const enrolledCount = enrollments.length;
+const certificatesCount = certificates.length;
+const completedCount = certificates.length;
 
         if (enrolledCoursesValue) {
             enrolledCoursesValue.textContent = enrolledCount;
@@ -50,21 +54,27 @@ document.addEventListener("DOMContentLoaded", async () => {
         dashboardCourses.innerHTML = "";
 
         enrollments.forEach((item) => {
-            const course = item.course;
-            if (!course) return;
+    const course = item.course;
+    if (!course) return;
 
-            dashboardCourses.innerHTML += `
-                <tr>
-                    <td>${course.title}</td>
-                    <td>In Progress</td>
-                    <td>
-                        <a href="course-details.html?id=${course.id}" class="action-btn">
-                            Continue
-                        </a>
-                    </td>
-                </tr>
-            `;
-        });
+    const isCompleted = certificates.some(
+        cert => cert.courseId === course.id
+    );
+
+    dashboardCourses.innerHTML += `
+        <tr>
+            <td>${course.title}</td>
+            <td>${isCompleted ? "Completed" : "In Progress"}</td>
+            <td>
+                <a
+                    href="course-details?id=${course.id}"
+                    class="action-btn">
+                    Continue
+                </a>
+            </td>
+        </tr>
+    `;
+});
 
     } catch (error) {
         console.error("Failed to load dashboard courses", error);
