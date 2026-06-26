@@ -6,6 +6,8 @@ async function createCourse(data, userId) {
     data: {
       title: data.title,
       description: data.description,
+      category: data.category || null,
+      thumbnailUrl: data.thumbnailUrl || null,
       status: data.status || "DRAFT",
       userId: userId,
     },
@@ -13,7 +15,7 @@ async function createCourse(data, userId) {
 }
 
 async function getAllCourses() {
-  return await prisma.course.findMany({
+  const courses = await prisma.course.findMany({
     where: {
       status: "PUBLISHED",
     },
@@ -23,6 +25,16 @@ async function getAllCourses() {
       },
     },
   });
+
+  courses.forEach((course) => {
+    if (course.thumbnailUrl) {
+      course.thumbnailUrl =
+        `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/` +
+        `${process.env.MINIO_BUCKET}/${course.thumbnailUrl}`;
+    }
+  });
+
+  return courses;
 }
 async function getAllCoursesForAdmin() {
   return await prisma.course.findMany({
@@ -42,7 +54,7 @@ async function getAllCoursesForAdmin() {
 }
 
 async function getCourseById(id) {
-  return await prisma.course.findUnique({
+  const course = await prisma.course.findUnique({
     where: {
       id: Number(id),
     },
@@ -52,6 +64,13 @@ async function getCourseById(id) {
       },
     },
   });
+    if (course && course.thumbnailUrl) {
+    course.thumbnailUrl =
+      `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/` +
+      `${process.env.MINIO_BUCKET}/${course.thumbnailUrl}`;
+  }
+
+  return course;
 }
 
 async function updateCourse(id, data) {
@@ -62,6 +81,8 @@ async function updateCourse(id, data) {
     data: {
       title: data.title,
       description: data.description,
+      category: data.category,
+      thumbnailUrl: data.thumbnailUrl || null,
     },
   });
 }
@@ -118,7 +139,7 @@ async function getMyCourses(userId) {
 }
 
 async function getTutorCourses(userId) {
-  return await prisma.course.findMany({
+  const courses = await prisma.course.findMany({
     where: {
       userId,
     },
@@ -129,6 +150,16 @@ async function getTutorCourses(userId) {
       createdAt: "desc",
     },
   });
+
+  courses.forEach((course) => {
+    if (course.thumbnailUrl) {
+      course.thumbnailUrl =
+        `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/` +
+        `${process.env.MINIO_BUCKET}/${course.thumbnailUrl}`;
+    }
+  });
+
+  return courses;
 }
 
 async function publishCourse(courseId) {

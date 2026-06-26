@@ -45,6 +45,8 @@ model Course {
   user         User          @relation(fields: [userId], references: [id])
   enrollments  Enrollment[]
   modules      Module[]
+  category    String?
+  thumbnailUrl String?
 }
 
 model Enrollment {

@@ -25,6 +25,24 @@ async function uploadVideo(file) {
   return key;
 }
 
+async function uploadCourseThumbnail(file) {
+  const extension = file.originalname.split(".").pop();
+
+  const key = `thumbnails/${Date.now()}-thumbnail.${extension}`;
+
+  await s3.send(
+    new PutObjectCommand({
+      Bucket: process.env.MINIO_BUCKET,
+      Key: key,
+      Body: file.buffer,
+      ContentType: file.mimetype,
+    })
+  );
+
+  return key;
+}
+
 module.exports = {
   uploadVideo,
+  uploadCourseThumbnail,
 };

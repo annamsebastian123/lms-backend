@@ -11,8 +11,12 @@ async function createCourse(req, res) {
     const course = await courseService.createCourse(req.body, req.user.id);
     res.json(course);
   } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  console.error(err);
+  res.status(500).json({
+    error: err.message,
+    details: err
+  });
+}
 }
 
 async function getAllCourses(req, res) {

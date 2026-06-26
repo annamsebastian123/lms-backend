@@ -12,6 +12,12 @@ router.post(
   uploadController.uploadLessonVideo
 );
 router.post(
+  "/course-thumbnail",
+  authMiddleware,
+  upload.single("thumbnail"),
+  uploadController.uploadCourseThumbnailImage
+);
+router.post(
   "/profile-image",
   authMiddleware,
   upload.single("profileImage"),

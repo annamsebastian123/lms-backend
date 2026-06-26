@@ -1,4 +1,4 @@
-const { uploadVideo } = require("../services/storageService");
+const {uploadVideo, uploadCourseThumbnail,} = require("../services/storageService");
 const fs = require("fs");
 const path = require("path");
 const prisma = require("../prisma");
@@ -28,6 +28,44 @@ async function uploadLessonVideo(req, res) {
     });
   }
 }
+
+async function uploadCourseThumbnailImage(req, res) {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        message: "No thumbnail uploaded",
+      });
+    }
+
+    const allowedTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/jpg",
+      "image/webp",
+    ];
+
+    if (!allowedTypes.includes(req.file.mimetype)) {
+      return res.status(400).json({
+        message: "Only JPG, PNG or WEBP images are allowed",
+      });
+    }
+
+    const key = await uploadCourseThumbnail(req.file);
+
+    res.json({
+      success: true,
+      thumbnailKey: key,
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    res.status(500).json({
+      message: "Thumbnail upload failed",
+      error: err.message,
+    });
+  }
+}
 async function uploadProfileImage(req, res) {
   try {
     if (!req.file) {
@@ -53,7 +91,7 @@ async function uploadProfileImage(req, res) {
     const extension = path.extname(req.file.originalname);
     const fileName = `profile-${req.user.id}-${Date.now()}${extension}`;
     const filePath = path.join(uploadsDir, fileName);
-
+    
     fs.writeFileSync(filePath, req.file.buffer);
 
     const imageUrl = `/uploads/profiles/${fileName}`;
@@ -91,5 +129,6 @@ async function uploadProfileImage(req, res) {
 
 module.exports = {
   uploadLessonVideo,
+  uploadCourseThumbnailImage,
   uploadProfileImage,
 };

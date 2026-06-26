@@ -65,8 +65,10 @@ if (courseGrid) {
       const card = document.createElement('div');
       card.className = 'course-card';
 
-      const img = document.createElement('div');
-      img.className = 'course-image';
+      const img = document.createElement("img");
+img.className = "course-image";
+img.alt = course.title || "Course thumbnail";
+img.src = course.thumbnailUrl || "https://via.placeholder.com/400x220?text=Course";
 
       const content = document.createElement('div');
       content.className = 'course-content';
