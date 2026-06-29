@@ -162,14 +162,22 @@ console.log("EMBED URL:", embedUrl);
     }
     console.log("SETTING CONTENT");
     contentEl.innerHTML = `
-      <div class="lesson-body">
-        ${videoHtml}
+<div class="lesson-body">
 
-        <div style="margin-top:20px;">
-          <p>${lesson.content || "No lesson content available."}</p>
+    ${videoHtml}
+
+    <div class="lesson-notes-card">
+
+        <h3> Lesson Notes</h3>
+
+        <div class="lesson-notes-text">
+            ${lesson.content || "No lesson content available."}
         </div>
-      </div>
-    `;
+
+    </div>
+
+</div>
+`;
 if (!isLearner) return;
 
 const video = document.getElementById("lessonVideo");

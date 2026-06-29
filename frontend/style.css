@@ -1503,3 +1503,35 @@ textarea{
 .edit-photo-btn i {
     font-size: 12px;
 }
+.lesson-content{
+    margin-top:30px;
+}
+
+.lesson-content iframe{
+    width:100%;
+    height:560px;
+    border-radius:0;
+    margin-bottom:30px;
+}
+
+.lesson-notes-card{
+    background:#ffffff;
+    border-radius:16px;
+    padding:28px 32px;
+    margin-top:25px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.08);
+    border-left:6px solid #000;
+}
+
+.lesson-notes-card h3{
+    font-size:24px;
+    margin-bottom:16px;
+    color:#111827;
+}
+
+.lesson-notes-text{
+    font-size:18px;
+    line-height:1.8;
+    color:#374151;
+    text-align:justify;
+}

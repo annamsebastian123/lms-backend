@@ -8,32 +8,28 @@ datasource db {
 }
 
 model User {
-  id           Int     @id @default(autoincrement())
-  email        String  @unique
-  name         String?
-  passwordHash String
-  role         Role    @default(LEARNER)
-  isActive     Boolean @default(true)
-
-  phone        String?
-  section      String?
-  designation  String?
-  profileImage String?
-
-  isEmailVerified Boolean @default(false)
+  id              Int             @id @default(autoincrement())
+  email           String          @unique
+  name            String?
+  passwordHash    String
+  role            Role            @default(LEARNER)
+  isActive        Boolean         @default(true)
+  resetOtp        String?
+  resetOtpExpiry  DateTime?
   emailOtp        String?
   emailOtpExpiry  DateTime?
-
-  resetOtp       String?
-  resetOtpExpiry DateTime?
-
-  courses      Course[]
-  enrollments  Enrollment[]
-  certificates Certificate[]
-
-  videoProgress VideoProgress[]
-  quizAttempts  QuizAttempt[]
+  isEmailVerified Boolean         @default(false)
+  profileImage    String?
+  phone           String?
+  section         String?
+  designation     String?
+  certificates    Certificate[]
+  courses         Course[]
+  enrollments     Enrollment[]
+  quizAttempts    QuizAttempt[]
+  videoProgress   VideoProgress[]
 }
+
 model Course {
   id           Int           @id @default(autoincrement())
   title        String
@@ -41,22 +37,21 @@ model Course {
   userId       Int
   createdAt    DateTime      @default(now())
   status       CourseStatus  @default(DRAFT)
+  category     String?
+  thumbnailUrl String?
   certificates Certificate[]
   user         User          @relation(fields: [userId], references: [id])
   enrollments  Enrollment[]
   modules      Module[]
-  category    String?
-  thumbnailUrl String?
 }
 
 model Enrollment {
-  id          Int       @id @default(autoincrement())
-  userId      Int
-  courseId    Int
-  enrolledAt  DateTime  @default(now())
-
-  course       Course   @relation(fields: [courseId], references: [id])
-  user         User     @relation(fields: [userId], references: [id])
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  courseId   Int
+  enrolledAt DateTime @default(now())
+  course     Course   @relation(fields: [courseId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
 
   @@unique([userId, courseId])
 }

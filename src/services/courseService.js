@@ -329,10 +329,19 @@ async function getPublicStats() {
     },
   });
 
+  const totalEnrollments = await prisma.enrollment.count();
+
+  const certificatesIssued = await prisma.certificate.count();
+
+  const completionRate =
+    totalEnrollments === 0
+      ? 0
+      : Math.round((certificatesIssued / totalEnrollments) * 100);
+
   return {
     totalCourses,
     totalLearners,
-    completionRate: 95
+    completionRate,
   };
 }
 async function getTutorAnalytics(userId) {

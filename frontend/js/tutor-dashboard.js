@@ -15,8 +15,8 @@ const courses = await apiRequest("/courses/tutor-courses");
         console.log("Tutor courses:", courses);
 
         totalCoursesValue.textContent = stats.totalCourses;
-        publishedCoursesValue.textContent = stats.totalPublished;
-        draftCoursesValue.textContent = stats.totalDrafts;
+        publishedCoursesValue.textContent = stats.publishedCourses ?? 0;
+draftCoursesValue.textContent = stats.draftCourses ?? 0;
         totalEnrollmentsValue.textContent = stats.totalEnrollments;
 
         recentCoursesBody.innerHTML = "";
