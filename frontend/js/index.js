@@ -48,7 +48,10 @@ function renderCourses(courses) {
                     <h3>${course.title}</h3>
                     <p>${course.description || "No description available."}</p>
 
-                    <button type="button" class="enroll-btn" onclick="viewCourse(event)">
+                    <button
+    type="button"
+    class="enroll-btn"
+    onclick="viewCourse(event, ${course.id})">
     View Details
 </button>
                 </div>
@@ -57,7 +60,7 @@ function renderCourses(courses) {
     });
 }
 
-function viewCourse(event) {
+function viewCourse(event, courseId) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -68,9 +71,11 @@ function viewCourse(event) {
         return;
     }
 
-    window.location.href = "courses.html";
-}
+    const url = window.location.href = `/course-details?id=${courseId}`;
+    console.log("Navigating to:", url);
 
+    window.location.href = url;
+}
 async function updateStats() {
     try {
         const response = await fetch(`${API_BASE_URL}/courses/public-stats`, {

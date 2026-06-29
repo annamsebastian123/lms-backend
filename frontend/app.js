@@ -41,7 +41,7 @@ if (role === "ADMIN") {
 }
 
 // Courses page renderer: uses global apiRequest from js/api.js
-const courseGrid = document.querySelector('.course-grid');
+const courseGrid = document.getElementById("courseGrid");
 if (courseGrid) {
   async function loadAndRenderCourses() {
     try {
@@ -86,7 +86,7 @@ img.src = course.thumbnailUrl || "https://via.placeholder.com/400x220?text=Cours
       meta.textContent = parts.join(' • ');
 
       const link = document.createElement('a');
-      link.href = `course-details.html?id=${course.id}`;
+      link.href = `course-details?id=${course.id}`;
       link.addEventListener("click", () => {
         localStorage.setItem("selectedCourseId", course.id);
       });

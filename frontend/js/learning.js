@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           <p>${course.description || "No description available."}</p>
 
           <div class="course-actions">
-    <a href="course-details.html?id=${course.id}" class="take-quiz-btn action-btn">
+    <a href="course-details?id=${course.id}" class="take-quiz-btn action-btn">
         Continue Learning
     </a>
 
