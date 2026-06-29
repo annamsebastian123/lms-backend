@@ -41,7 +41,7 @@ if (course.status === "PENDING_REVIEW") {
 
     <button
       class="action-btn"
-      onclick="window.location.href='course-details.html?id=${course.id}'">
+      onclick="window.location.href='course-details?id=${course.id}'">
       View
     </button>
 
