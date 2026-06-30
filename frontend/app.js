@@ -185,12 +185,26 @@ const courseId = params.get('id');
         if (metaParts.length) metaHtml = `<div class="course-meta">${metaParts.join('')}</div>`;
 
         detailContainer.innerHTML = `
-          <div class="course-banner"></div>
-          <h1>${escapeHtml(title)}</h1>
-          ${metaHtml}
-          <p class="course-description">${escapeHtml(description)}</p>
-          ${shouldShowEnrollButton ? '<button class="enroll-btn" id="enrollCourseBtn">Enroll Now</button>' : ''}
-        `;
+  <div class="course-banner">
+    ${
+      course.thumbnailUrl
+        ? `<img
+             src="${course.thumbnailUrl}"
+             alt="${escapeHtml(title)}"
+             class="course-banner-image">`
+        : "Course Banner"
+    }
+  </div>
+
+  <h1>${escapeHtml(title)}</h1>
+  ${metaHtml}
+  <p class="course-description">${escapeHtml(description)}</p>
+  ${
+    shouldShowEnrollButton
+      ? '<button class="enroll-btn" id="enrollCourseBtn">Enroll Now</button>'
+      : ""
+  }
+`;
 
         const enrollBtn = document.getElementById("enrollCourseBtn");
         if (enrollBtn) {

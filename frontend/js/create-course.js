@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const title = courseTitle.value.trim();
     const description = courseDescription.value.trim();
     const category = courseCategory.value.trim();
+    const targetRole = document.getElementById("targetRole").value;
 
     if (!title) {
       alert("Course title is required");
@@ -60,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
           description,
           category,
           thumbnailUrl,
+          targetRole,
           status,
         },
       });

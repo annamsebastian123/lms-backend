@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         if (!coursesList || coursesList.length === 0) {
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="5">No courses found.</td>
+                    <td colspan="6">No courses found.</td>
                 </tr>
             `;
             return;
@@ -36,6 +36,7 @@ if (course.status === "PENDING_REVIEW") {
                     <td>${course.description || "No description"}</td>
                     <td>${course.user?.name || course.user?.email || "N/A"}</td>
 <td>${course.status || "DRAFT"}</td>
+<td>${(course.targetRole || "ALL").replaceAll("_", " ")}</td>
 <td>
     <div class="action-buttons">
 
@@ -89,7 +90,7 @@ if (course.status === "PENDING_REVIEW") {
 
         tableBody.innerHTML = `
             <tr>
-                <td colspan="5">Unable to load courses.</td>
+                <td colspan="6">Unable to load courses.</td>
             </tr>
         `;
     }
