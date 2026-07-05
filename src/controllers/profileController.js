@@ -136,7 +136,7 @@ exports.updateLearnerProfile = async (req, res) => {
                 email,
                 phone,
                 section,
-                designation
+                 designation: designation || null,
             }
         });
 

@@ -22,7 +22,7 @@ model User {
   profileImage    String?
   phone           String?
   section         String?
-  designation     String?
+  designation TargetRole?
   certificates    Certificate[]
   courses         Course[]
   enrollments     Enrollment[]
@@ -43,6 +43,7 @@ model Course {
   user         User          @relation(fields: [userId], references: [id])
   enrollments  Enrollment[]
   modules      Module[]
+  targetRole TargetRole @default(ALL)
 }
 
 model Enrollment {
@@ -168,4 +169,12 @@ enum CourseStatus {
 enum VideoSource {
   YOUTUBE
   SELF_HOSTED
+}
+
+enum TargetRole {
+  ASSISTANT
+  SECTION_OFFICER
+  ASSISTANT_REGISTRAR
+  DEPUTY_REGISTRAR
+  ALL
 }

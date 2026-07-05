@@ -21,10 +21,12 @@ async function createCourse(req, res) {
 
 async function getAllCourses(req, res) {
   try {
-    const courses = await courseService.getAllCourses();
+    const courses = await courseService.getAllCourses(req.user);
     res.json(courses);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({
+      error: err.message,
+    });
   }
 }
 

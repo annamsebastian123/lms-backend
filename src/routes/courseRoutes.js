@@ -66,7 +66,11 @@ router.get(
   courseController.getPublicStats
 );
 
-router.get("/", courseController.getAllCourses);
+router.get(
+  "/",
+  authMiddleware,
+  courseController.getAllCourses
+);
 
 router.get(
   "/admin/all",

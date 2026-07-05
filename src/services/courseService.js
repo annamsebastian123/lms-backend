@@ -8,20 +8,36 @@ async function createCourse(data, userId) {
       description: data.description,
       category: data.category || null,
       thumbnailUrl: data.thumbnailUrl || null,
+       targetRole: data.targetRole || "ALL",
       status: data.status || "DRAFT",
       userId: userId,
     },
   });
 }
 
-async function getAllCourses() {
+async function getAllCourses(user) {
+  const where = {
+    status: "PUBLISHED",
+  };
+
+  if (user.designation) {
+    where.OR = [
+      { targetRole: "ALL" },
+      { targetRole: user.designation },
+    ];
+  } else {
+    where.targetRole = "ALL";
+  }
+
   const courses = await prisma.course.findMany({
-    where: {
-      status: "PUBLISHED",
-    },
+    where,
     include: {
       user: {
-        select: { id: true, name: true, email: true },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
       },
     },
   });
@@ -83,6 +99,7 @@ async function updateCourse(id, data) {
       description: data.description,
       category: data.category,
       thumbnailUrl: data.thumbnailUrl || null,
+      targetRole: data.targetRole || "ALL",
     },
   });
 }
