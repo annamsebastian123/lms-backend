@@ -4,13 +4,85 @@ services:
     container_name: hck_lms_postgres
     restart: always
     environment:
-      POSTGRES_USER: hck_user
-      POSTGRES_PASSWORD: hck_password
-      POSTGRES_DB: hck_lms
+      POSTGRES_USER: ${POSTGRES_USER:-hck_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hck_password}
+      POSTGRES_DB: ${POSTGRES_DB:-hck_lms}
     ports:
       - "5432:5432"
     volumes:
       - hck_lms_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U hck_user -d hck_lms"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - lms-network
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend.Dockerfile
+    container_name: hck_lms_backend
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-hck_user}:${POSTGRES_PASSWORD:-hck_password}@postgres:5432/${POSTGRES_DB:-hck_lms}
+      JWT_SECRET: ${JWT_SECRET:-change-me-in-production}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
+      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-http://localhost:5000/api/auth/google/callback}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      EMAIL_USER: ${EMAIL_USER:-}
+      EMAIL_PASS: ${EMAIL_PASS:-}
+      MINIO_ENDPOINT: ${MINIO_ENDPOINT:-minio}
+      MINIO_PORT: ${MINIO_PORT:-9000}
+      MINIO_ACCESS_KEY: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
+      MINIO_BUCKET: ${MINIO_BUCKET:-lms-videos}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - uploads_data:/app/uploads
+    networks:
+      - lms-network
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend.Dockerfile
+    container_name: hck_lms_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - lms-network
+
+  minio:
+    image: minio/minio
+    container_name: hck_lms_minio
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ACCESS_KEY:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_SECRET_KEY:-minioadmin}
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - lms-network
 
 volumes:
   hck_lms_postgres_data:
+  uploads_data:
+  minio_data:
+
+networks:
+  lms-network:
+    driver: bridge
