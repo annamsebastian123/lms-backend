@@ -85,6 +85,36 @@ const updated = await courseService.publishCourse(courseId);
     res.status(500).json({ error: err.message });
   }
 }
+async function submitForReview(req, res) {
+  try {
+    const courseId = req.params.id;
+
+    const course = await courseService.getCourseById(courseId);
+
+    if (!course) {
+      return res.status(404).json({
+        message: "Course not found",
+      });
+    }
+
+    if (Number(course.userId) !== Number(req.user.id)) {
+      return res.status(403).json({
+        message: "Not authorized",
+      });
+    }
+
+    const updated = await courseService.submitForReview(
+      courseId,
+      req.user.id
+    );
+
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
 
 async function deleteCourse(req, res) {
   try {
@@ -365,6 +395,7 @@ module.exports = {
   getTutorCourses,
   getTutorStats,
   publishCourse,
+  submitForReview,
   createLesson,
   getLessonsByModule,
   getLessonById,

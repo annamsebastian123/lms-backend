@@ -196,6 +196,28 @@ async function publishCourse(courseId) {
   return await getCourseById(courseId);
 }
 
+
+
+async function submitForReview(courseId, userId) {
+  const updated = await prisma.course.updateMany({
+    where: {
+      id: Number(courseId),
+      userId,
+      status: "DRAFT",
+    },
+    data: {
+      status: "PENDING_REVIEW",
+    },
+  });
+
+  if (updated.count === 0) {
+    throw new Error("Course not found or not in draft state");
+  }
+
+  return await getCourseById(courseId);
+}
+
+
 async function getCourseStudents(courseId) {
   return await prisma.enrollment.findMany({
     where: {
@@ -471,4 +493,5 @@ module.exports = {
   getPublicStats,
   getAllCoursesForAdmin,
   getTutorAnalytics,
+  submitForReview,
 };

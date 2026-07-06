@@ -59,6 +59,14 @@ router.post(
   courseController.publishCourse
 );
 
+
+router.post(
+  "/:id/submit-review",
+  authMiddleware,
+  authorizeRoles("TUTOR"),
+  courseController.submitForReview
+);
+
 router.put("/:id", authMiddleware, courseController.updateCourse);
 
 router.get(
