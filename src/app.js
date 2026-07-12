@@ -24,15 +24,18 @@ const quizRoutes = require("./routes/quizRoutes");
 const app = express();
 
 app.use(cors({
-  origin: [
-    "http://localhost:3000",
-    "https://silver-yodel-5gx4q9rpqvvp3vwqp-3000.app.github.dev"
-  ],
+  origin(origin, callback) {
+    if (
+      !origin ||
+      origin === "http://localhost:3000" ||
+      origin.endsWith("-3000.app.github.dev")
+    ) {
+      return callback(null, true);
+    }
+    callback(new Error("Not allowed by CORS"));
+  },
   credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
 }));
-
 app.use(express.json());
 app.use(
   session({
