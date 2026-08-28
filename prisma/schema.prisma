@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -39,6 +40,8 @@ model Course {
   status       CourseStatus  @default(DRAFT)
   category     String?
   thumbnailUrl String?
+  adminComment String?
+  isContinuing Boolean @default(false)
   certificates Certificate[]
   user         User          @relation(fields: [userId], references: [id])
   enrollments  Enrollment[]
@@ -177,4 +180,9 @@ enum TargetRole {
   ASSISTANT_REGISTRAR
   DEPUTY_REGISTRAR
   ALL
+}
+
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String @unique
 }

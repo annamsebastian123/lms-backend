@@ -78,10 +78,22 @@ async function deleteQuestion(req, res) {
   }
 }
 
+async function getMyAttempt(req, res) {
+  try {
+    const attempt = await quizService.getMyAttempt(req.user.id, req.params.id);
+    res.json(attempt);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+}
+
 module.exports = {
   createQuestion,
   getQuestionsByModule,
   submitQuiz,
   getQuizAttempt,
   deleteQuestion,
+  getMyAttempt,
 };

@@ -64,10 +64,10 @@ const completedCount = certificates.length;
     dashboardCourses.innerHTML += `
         <tr>
             <td>${course.title}</td>
-            <td>${isCompleted ? "Completed" : "In Progress"}</td>
+            <td>${isCompleted ? '<span style="color: #10b981; font-weight: bold;">✓ Completed</span>' : "In Progress"}</td>
             <td>
                 <a
-                    href="course-details?id=${course.id}"
+                    href="course-details.html?id=${course.id}"
                     class="action-btn">
                     Continue
                 </a>

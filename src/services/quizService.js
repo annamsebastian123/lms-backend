@@ -193,6 +193,15 @@ async function deleteQuestion(id) {
   });
 }
 
+async function getMyAttempt(userId, moduleId) {
+  return await prisma.quizAttempt.findFirst({
+    where: {
+      userId: Number(userId),
+      moduleId: Number(moduleId),
+    },
+  });
+}
+
 module.exports = {
   createQuestion,
   getQuestionById,
@@ -200,4 +209,5 @@ module.exports = {
   submitQuiz,
   getQuizAttempt,
   deleteQuestion,
+  getMyAttempt,
 };

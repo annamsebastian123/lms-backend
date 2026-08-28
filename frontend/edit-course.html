@@ -8,35 +8,63 @@
 </head>
 <body>
 
-<div class="main">
-
-    <h1>Edit Course</h1>
-
-    <div class="form-group">
-        <label>Course Title</label>
-        <input type="text" id="title">
+    <div class="sidebar">
+        <div class="sidebar-logo-container" style="padding: 10px 0 25px 0; display: flex; justify-content: flex-start; align-items: center;">
+            <img src="assets/logo.svg" alt="High Court LMS Logo" style="height: 75px; width: auto; max-width: 220px; object-fit: contain; display: block;">
+        </div>
+        <ul>
+            <li><a href="tutor-dashboard.html">Dashboard</a></li>
+            <li><a href="my-courses.html" class="active">My Courses</a></li>
+            <li><a href="create-course.html">Create Course</a></li>
+            <li><a href="analytics.html">Analytics</a></li>
+            <li><a href="tutor-profile.html">Profile</a></li>
+        </ul>
+        <div class="sidebar-logout">
+            <a href="index.html" onclick="localStorage.clear()">Logout</a>
+        </div>
     </div>
 
-    <div class="form-group">
-        <label>Description</label>
-        <textarea id="description" rows="8"></textarea>
+    <div class="main">
+
+        <div class="form-container">
+            <h1>Edit Course</h1>
+
+            <div id="feedbackAlert" class="card" style="display:none; background:#fef2f2; border:1px solid #fee2e2; color:#991b1b; padding:15px; border-radius:8px; margin-bottom:20px;">
+                <strong>⚠️ Revision Requested:</strong>
+                <p id="feedbackText" style="margin:5px 0 0 0; font-size:14px;"></p>
+            </div>
+
+            <div class="form-group">
+                <label>Course Title</label>
+                <input type="text" id="title" placeholder="Enter Course Title">
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="description" rows="8" placeholder="Enter Course Description"></textarea>
+            </div>
+
+            <button id="saveBtn" class="publish-btn">
+                Save Changes
+            </button>
+
+            <button id="submitReviewBtn" class="publish-btn" style="background:#10b981; margin-left:10px;">
+                Submit for Review
+            </button>
+
+            <hr style="margin: 30px 0; border: 0; border-top: 1px solid #e2e8f0;">
+
+            <h2>Modules & Lessons</h2>
+
+            <div id="modulesContainer">
+                <p>Loading modules and lessons...</p>
+            </div>
+        </div>
+
     </div>
 
-    <button id="saveBtn" class="publish-btn">
-        Save Changes
-    </button>
-
-    <hr>
-
-    <h2>Modules & Lessons</h2>
-
-    <div id="modulesContainer">
-        <p>Loading modules and lessons...</p>
-    </div>
-
-</div>
-
-<script src="js/edit-course.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/edit-course.js"></script>
 
 </body>
 </html>

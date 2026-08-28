@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const draftBtn = document.getElementById("draftBtn");
   const publishBtn = document.getElementById("publishBtn");
 
+  // Load categories dynamically on page load
+  loadCategoriesIntoSelect(courseCategory);
+
   async function uploadThumbnailIfSelected() {
     const thumbnail = courseThumbnail?.files?.[0];
 
@@ -40,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const description = courseDescription.value.trim();
     const category = courseCategory.value.trim();
     const targetRole = document.getElementById("targetRole").value;
+    const isContinuing = document.getElementById("isContinuing").value === "true";
 
     if (!title) {
       alert("Course title is required");
@@ -63,6 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
           thumbnailUrl,
           targetRole,
           status,
+          isContinuing,
         },
       });
 
@@ -72,7 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
           : "Course submitted for admin approval"
       );
 
-      window.location.href = "courses.html";
+      window.location.href = "my-courses.html";
     } catch (error) {
       alert(`Error: ${error.message}`);
     }

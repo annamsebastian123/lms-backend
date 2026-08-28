@@ -1,6 +1,6 @@
 
 
-const COURSES_API_URL = `${API_BASE_URL}/courses`;
+const COURSES_API_URL = `${API_BASE_URL}/courses/published`;
 
 const searchInput = document.getElementById("searchInput");
 const exploreBtn = document.getElementById("exploreBtn");
@@ -64,17 +64,7 @@ function viewCourse(event, courseId) {
     event.preventDefault();
     event.stopPropagation();
 
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-        alert("Please login first to view course details.");
-        return;
-    }
-
-    const url = window.location.href = `/course-details?id=${courseId}`;
-    console.log("Navigating to:", url);
-
-    window.location.href = url;
+    window.location.href = `course-details.html?id=${courseId}`;
 }
 async function updateStats() {
     try {

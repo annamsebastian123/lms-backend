@@ -1,6 +1,24 @@
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
+function getMinioUrl(key) {
+  if (!key) return null;
+  if (key.startsWith("http://") || key.startsWith("https://")) {
+    return key;
+  }
+  const bucket = process.env.MINIO_BUCKET || "lms-videos";
+
+  if (process.env.MINIO_PUBLIC_URL) {
+    const publicUrl = process.env.MINIO_PUBLIC_URL.replace(/\/$/, "");
+    return `${publicUrl}/${bucket}/${key}`;
+  }
+
+  if (process.env.CODESPACE_NAME) {
+    return `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/${bucket}/${key}`;
+  }
+  return `http://localhost:9000/${bucket}/${key}`;
+}
+
 async function createCourse(data, userId) {
   return await prisma.course.create({
     data: {
@@ -11,6 +29,7 @@ async function createCourse(data, userId) {
        targetRole: data.targetRole || "ALL",
       status: data.status || "DRAFT",
       userId: userId,
+      isContinuing: data.isContinuing === true || data.isContinuing === 'true',
     },
   });
 }
@@ -44,9 +63,7 @@ async function getAllCourses(user) {
 
   courses.forEach((course) => {
     if (course.thumbnailUrl) {
-      course.thumbnailUrl =
-        `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/` +
-        `${process.env.MINIO_BUCKET}/${course.thumbnailUrl}`;
+      course.thumbnailUrl = getMinioUrl(course.thumbnailUrl);
     }
   });
 
@@ -81,26 +98,30 @@ async function getCourseById(id) {
     },
   });
     if (course && course.thumbnailUrl) {
-    course.thumbnailUrl =
-      `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/` +
-      `${process.env.MINIO_BUCKET}/${course.thumbnailUrl}`;
+    course.thumbnailUrl = getMinioUrl(course.thumbnailUrl);
   }
 
   return course;
 }
 
 async function updateCourse(id, data) {
+  const updateData = {
+    title: data.title,
+    description: data.description,
+    category: data.category,
+    thumbnailUrl: data.thumbnailUrl || null,
+    targetRole: data.targetRole || "ALL",
+  };
+
+  if (data.isContinuing !== undefined) {
+    updateData.isContinuing = data.isContinuing === true || data.isContinuing === 'true';
+  }
+
   return await prisma.course.update({
     where: {
       id: Number(id),
     },
-    data: {
-      title: data.title,
-      description: data.description,
-      category: data.category,
-      thumbnailUrl: data.thumbnailUrl || null,
-      targetRole: data.targetRole || "ALL",
-    },
+    data: updateData,
   });
 }
 
@@ -170,9 +191,7 @@ async function getTutorCourses(userId) {
 
   courses.forEach((course) => {
     if (course.thumbnailUrl) {
-      course.thumbnailUrl =
-        `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/` +
-        `${process.env.MINIO_BUCKET}/${course.thumbnailUrl}`;
+      course.thumbnailUrl = getMinioUrl(course.thumbnailUrl);
     }
   });
 
@@ -186,11 +205,48 @@ async function publishCourse(courseId) {
     },
     data: {
       status: "PUBLISHED",
+      adminComment: null, // Clear review comments on publish
     },
   });
 
   if (updated.count === 0) {
     throw new Error("Course not found or not authorized");
+  }
+
+  return await getCourseById(courseId);
+}
+
+async function rejectCourse(courseId, comment) {
+  const updated = await prisma.course.updateMany({
+    where: {
+      id: Number(courseId),
+    },
+    data: {
+      status: "DRAFT",
+      adminComment: comment || null,
+    },
+  });
+
+  if (updated.count === 0) {
+    throw new Error("Course not found");
+  }
+
+  return await getCourseById(courseId);
+}
+
+async function revertToDraft(courseId, comment = null) {
+  const updated = await prisma.course.updateMany({
+    where: {
+      id: Number(courseId),
+    },
+    data: {
+      status: "DRAFT",
+      adminComment: comment || null,
+    },
+  });
+
+  if (updated.count === 0) {
+    throw new Error("Course not found");
   }
 
   return await getCourseById(courseId);
@@ -278,13 +334,20 @@ async function createLesson(moduleId, data) {
 }
 
 async function getLessonsByModule(moduleId) {
-  return await prisma.lesson.findMany({
+  const lessons = await prisma.lesson.findMany({
     where: {
       moduleId: Number(moduleId),
     },
     orderBy: {
       orderIndex: "asc",
     },
+  });
+
+  return lessons.map((lesson) => {
+    if (lesson.videoSource === "SELF_HOSTED" && lesson.videoUrl) {
+      lesson.videoUrl = getMinioUrl(lesson.videoUrl);
+    }
+    return lesson;
   });
 }
 
@@ -293,18 +356,22 @@ async function getLessonById(lessonId) {
     where: {
       id: Number(lessonId),
     },
+    include: {
+      module: {
+        select: {
+          courseId: true,
+        },
+      },
+    },
   });
 
   if (
     lesson &&
     lesson.videoSource === "SELF_HOSTED" &&
     lesson.videoUrl
-  ) {console.log(
-  `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/${process.env.MINIO_BUCKET}/${lesson.videoUrl}`
-);
-    lesson.videoUrl =
-  `https://${process.env.CODESPACE_NAME}-9000.app.github.dev/${process.env.MINIO_BUCKET}/${lesson.videoUrl}`;
-  console.log("VIDEO URL:", lesson.videoUrl);
+  ) {
+    lesson.videoUrl = getMinioUrl(lesson.videoUrl);
+    console.log("VIDEO URL:", lesson.videoUrl);
   }
 
   return lesson;
@@ -382,6 +449,16 @@ async function getPublicStats() {
     totalLearners,
     completionRate,
   };
+}
+
+async function getPublishedCourses() {
+  return await prisma.course.findMany({
+    where: { status: "PUBLISHED" },
+    include: {
+      user: { select: { id: true, name: true, email: true } },
+    },
+    orderBy: { createdAt: "desc" },
+  });
 }
 async function getTutorAnalytics(userId) {
   const courses = await prisma.course.findMany({
@@ -469,10 +546,28 @@ async function getTutorAnalytics(userId) {
     courseAnalytics
   };
 }
+
+async function getModuleById(moduleId) {
+  return await prisma.module.findUnique({
+    where: {
+      id: Number(moduleId),
+    },
+    include: {
+      course: {
+        select: { id: true, title: true, status: true, isContinuing: true }
+      },
+      lessons: {
+        orderBy: { orderIndex: "asc" }
+      }
+    }
+  });
+}
+
 module.exports = {
   createCourse,
   getAllCourses,
   getCourseById,
+  getModuleById,
   updateCourse,
   deleteCourse,
   createModule,
@@ -491,7 +586,10 @@ module.exports = {
   updateLesson,
   deleteLesson,
   getPublicStats,
+  getPublishedCourses,
   getAllCoursesForAdmin,
   getTutorAnalytics,
   submitForReview,
+  rejectCourse,
+  revertToDraft,
 };

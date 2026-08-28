@@ -27,5 +27,9 @@ router.get(
     authorizeRoles("ADMIN"),
     certificateController.getAllCertificatesForAdmin
 );
+router.get(
+    "/verify/:number",
+    certificateController.verifyCertificate
+);
 
 module.exports = router;

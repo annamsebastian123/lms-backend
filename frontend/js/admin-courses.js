@@ -42,8 +42,9 @@ if (course.status === "PENDING_REVIEW") {
 
     <button
       class="action-btn"
-      onclick="window.location.href='course-details?id=${course.id}'">
-      View
+      style="background: #3b82f6; color: white;"
+      onclick="window.location.href='tutor-course-details.html?id=${course.id}'">
+      Review / Edit
     </button>
 
     ${approveButton}
@@ -97,7 +98,7 @@ if (course.status === "PENDING_REVIEW") {
 });
 
 async function deleteCourse(courseId) {
-    const confirmDelete = confirm("Are you sure you want to delete this course?");
+    const confirmDelete = await showConfirm("Are you sure you want to delete this course?");
 
     if (!confirmDelete) return;
 
@@ -106,10 +107,10 @@ async function deleteCourse(courseId) {
             method: "DELETE"
         });
 
-        alert("Course deleted successfully");
+        await showAlert("Course deleted successfully");
         window.location.reload();
     } catch (error) {
-        alert(error.message || "Failed to delete course");
+        showAlert(error.message || "Failed to delete course", "Error");
         console.error(error);
     }
 }
@@ -120,10 +121,10 @@ async function approveCourse(courseId) {
             method: "POST"
         });
 
-        alert("Course approved successfully");
+        await showAlert("Course approved successfully");
         window.location.reload();
     } catch (error) {
-        alert(error.message || "Failed to approve course");
+        showAlert(error.message || "Failed to approve course", "Error");
     }
 }
 

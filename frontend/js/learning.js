@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
-  function showCourses(courses) {
+  function showCourses(courses, certificates) {
     if (!lessonSection) return;
 
     if (courseTitle) {
@@ -29,20 +29,28 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
 
     courses.forEach((course) => {
+      const hasCertificate = certificates.some(c => c.courseId === course.id);
+
       html += `
         <div class="lesson-card">
-          <h3>${course.title || "Untitled Course"}</h3>
+          <h3>
+            ${course.title || "Untitled Course"}
+            ${hasCertificate ? '<span style="color: #10b981; margin-left: 8px; font-weight: bold;">✓ Completed</span>' : ''}
+          </h3>
           <p>${course.description || "No description available."}</p>
 
           <div class="course-actions">
-    <a href="course-details?id=${course.id}" class="take-quiz-btn action-btn">
+    <a href="course-details.html?id=${course.id}" class="take-quiz-btn action-btn">
         Continue Learning
     </a>
 
-    <button class="take-quiz-btn action-btn"
+    ${hasCertificate
+      ? `<a href="certificates.html" class="take-quiz-btn action-btn" style="background:#10b981;">View Certificate</a>`
+      : `<button class="take-quiz-btn action-btn"
             onclick="generateCertificate(${course.id})">
         Generate Certificate
-    </button>
+    </button>`
+    }
 </div>
         </div>
       `;
@@ -60,7 +68,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     const data = await apiRequest("/courses/my-courses");
-
     const enrollments = Array.isArray(data) ? data : [];
 
     const courses = enrollments
@@ -72,7 +79,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       return;
     }
 
-    showCourses(courses);
+    let certificates = [];
+    try {
+      certificates = await apiRequest("/certificates/my-certificates");
+    } catch (e) {
+      // certificates endpoint may fail, that's ok
+    }
+
+    showCourses(courses, certificates);
   } catch (error) {
     console.error("Failed to load enrolled course data", error);
     showNoCoursesMessage();
@@ -81,34 +95,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 async function generateCertificate(courseId) {
   try {
-    const token = localStorage.getItem("token");
-
-    const API_URL =
-  window.location.origin.replace("-3000.", "-5000.") + "/api";
-
-const response = await fetch(
-  `${API_URL}/certificates/generate/${courseId}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      alert(data.message || "Failed to generate certificate");
-      return;
-    }
+    const data = await apiRequest(`/certificates/generate/${courseId}`, {
+      method: "POST"
+    });
 
     alert("Certificate generated successfully");
-
     window.location.href = "certificates.html";
 
   } catch (error) {
     console.error("Certificate generation failed", error);
-    alert("Certificate generation failed");
+    alert(error.message || "Certificate generation failed");
   }
 }

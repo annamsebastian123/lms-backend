@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Certificate - High Court of Kerala LMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1e38 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: #f8fafc;
+        }
+        .verification-container {
+            width: 100%;
+            max-width: 580px;
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        .verification-logo {
+            height: 80px;
+            width: auto;
+            margin-bottom: 25px;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 30px;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .status-badge.valid {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1.5px solid rgba(16, 185, 129, 0.3);
+        }
+        .status-badge.invalid {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            border: 1.5px solid rgba(239, 68, 68, 0.3);
+        }
+        .status-badge.loading {
+            background: rgba(148, 163, 184, 0.15);
+            color: #cbd5e1;
+            border: 1.5px solid rgba(148, 163, 184, 0.3);
+        }
+        .badge-icon {
+            font-size: 18px;
+        }
+        .cert-details-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1.5px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: left;
+            margin-bottom: 30px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        .cert-field {
+            margin-bottom: 18px;
+        }
+        .cert-field:last-child {
+            margin-bottom: 0;
+        }
+        .field-label {
+            font-size: 12px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        .field-value {
+            font-size: 16px;
+            color: #f1f5f9;
+            font-weight: 500;
+        }
+        .field-value.highlight {
+            color: #d4af37;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .info-msg {
+            font-size: 14px;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        .btn-home {
+            display: inline-block;
+            background: linear-gradient(90deg, #4f46e5 0%, #6366f1 100%);
+            color: white;
+            text-decoration: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+        }
+        .btn-home:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 1s infinite linear;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="verification-container">
+        <img src="assets/logo.svg" alt="High Court of Kerala LMS Logo" class="verification-logo">
+        
+        <h2 style="font-size: 24px; font-weight: 700; margin-bottom: 10px; color: #ffffff;">Certificate Verification</h2>
+        <p class="info-msg" id="statusMessage">Secured verification system for training and program completions.</p>
+
+        <!-- Loading State -->
+        <div id="loadingState">
+            <div class="status-badge loading">
+                <div class="spinner"></div>
+                <span>Checking Certificate Authenticity...</span>
+            </div>
+        </div>
+
+        <!-- Valid State -->
+        <div id="validState" style="display: none;">
+            <div class="status-badge valid">
+                <span class="badge-icon">✓</span>
+                <span>VERIFIED AUTHENTIC</span>
+            </div>
+
+            <div class="cert-details-card">
+                <div class="cert-field">
+                    <div class="field-label">Recipient Name</div>
+                    <div class="field-value highlight" id="recipientName">Name</div>
+                </div>
+                <div class="cert-field">
+                    <div class="field-label">Course Title</div>
+                    <div class="field-value" id="courseTitle">Course Title</div>
+                </div>
+                <div class="cert-field">
+                    <div class="field-label">Certificate ID</div>
+                    <div class="field-value" style="font-family: monospace; letter-spacing: 0.5px;" id="certNumber">Certificate Number</div>
+                </div>
+                <div class="cert-field">
+                    <div class="field-label">Completion Date</div>
+                    <div class="field-value" id="completionDate">Date</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invalid State -->
+        <div id="invalidState" style="display: none;">
+            <div class="status-badge invalid">
+                <span class="badge-icon">⚠</span>
+                <span>INVALID CERTIFICATE</span>
+            </div>
+            <div style="background: rgba(239, 68, 68, 0.08); border: 1.5px solid rgba(239, 68, 68, 0.2); border-radius: 16px; padding: 25px; text-align: center; margin-bottom: 30px;">
+                <p style="color: #f87171; font-weight: 600; font-size: 15px; margin-bottom: 8px;">Record Verification Failed</p>
+                <p style="color: #94a3b8; font-size: 14px; line-height: 1.5;">This certificate number could not be found in our database records. It may be invalid, modified, or revoked.</p>
+            </div>
+        </div>
+
+        <a href="index.html" class="btn-home">Go to LMS Portal</a>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const params = new URLSearchParams(window.location.search);
+            const certNumber = params.get("number");
+
+            const loadingState = document.getElementById("loadingState");
+            const validState = document.getElementById("validState");
+            const invalidState = document.getElementById("invalidState");
+
+            if (!certNumber) {
+                loadingState.style.display = "none";
+                invalidState.style.display = "block";
+                return;
+            }
+
+            try {
+                // Fetch public API validation endpoint
+                const response = await fetch(`/api/certificates/verify/${encodeURIComponent(certNumber)}`);
+                const data = await response.json();
+
+                loadingState.style.display = "none";
+
+                if (response.ok && data.valid) {
+                    // Populating values
+                    document.getElementById("recipientName").textContent = data.recipientName;
+                    document.getElementById("courseTitle").textContent = data.courseTitle;
+                    document.getElementById("certNumber").textContent = data.certificateNumber;
+                    
+                    const issueDate = new Date(data.issuedAt).toLocaleDateString("en-US", {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric"
+                    });
+                    document.getElementById("completionDate").textContent = issueDate;
+
+                    validState.style.display = "block";
+                } else {
+                    invalidState.style.display = "block";
+                }
+            } catch (err) {
+                console.error("Verification error:", err);
+                loadingState.style.display = "none";
+                invalidState.style.display = "block";
+            }
+        });
+    </script>
+</body>
+</html>

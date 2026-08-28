@@ -7,8 +7,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-hck_user}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-hck_password}
       POSTGRES_DB: ${POSTGRES_DB:-hck_lms}
-    ports:
-      - "5432:5432"
+    # No host port exposed — backend connects via internal Docker network
     volumes:
       - hck_lms_postgres_data:/var/lib/postgresql/data
     healthcheck:

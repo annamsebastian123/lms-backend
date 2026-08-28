@@ -20,6 +20,7 @@ const passport = require("./config/passport");
 
 const authMiddleware = require("./middlewares/authMiddleware");
 const quizRoutes = require("./routes/quizRoutes");
+const categoryRoutes = require("./routes/categoryRoutes");
 
 const app = express();
 
@@ -67,6 +68,7 @@ app.use("/api/upload", uploadRoutes);
 app.use("/api/certificates", certificateRoutes);
 app.use("/api/progress", progressRoutes);
 app.use("/api/quiz", quizRoutes);
+app.use("/api/categories", categoryRoutes);
 app.get("/test", (req, res) => {
   res.send("Test route works");
 });

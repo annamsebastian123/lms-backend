@@ -31,13 +31,13 @@ const response = await fetch(
             certificatesContainer.innerHTML += `
                 <div class="certificate-card">
 
-                    <div class="certificate-header">
-                        Certificate of Completion
+                    <div class="certificate-header" style="padding: 18px 20px; font-size: 16px; min-height: 60px; display: flex; align-items: center; justify-content: center;">
+                        ${cert.course.title}
                     </div>
 
                     <div class="certificate-body">
 
-                        <h2>${cert.course.title}</h2>
+                        <h4 style="margin: 0 0 12px 0; color: #4f46e5; font-size: 14px; font-weight: 700;">Certificate of Completion</h4>
 
                         <p>
                             Successfully completed the course.
@@ -52,17 +52,18 @@ const response = await fetch(
                             Issued:
                             ${new Date(cert.issuedAt).toLocaleDateString()}
                         </p>
-<a href="${API_URL}/certificates/${cert.id}/download" target="_blank">
-    <button class="btn">
-        View Certificate
-    </button>
-</a>
-
-<a href="${API_URL}/certificates/${cert.id}/download" download>
-    <button class="btn">
-        Download Certificate
-    </button>
-</a>
+                        <div style="display: flex; gap: 12px; margin-top: 20px;">
+                            <a href="${API_URL}/certificates/${cert.id}/download" target="_blank" style="flex: 1; text-decoration: none; margin: 0;">
+                                <button class="btn" style="width: 100%; margin: 0; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                                    View
+                                </button>
+                            </a>
+                            <a href="${API_URL}/certificates/${cert.id}/download" download style="flex: 1; text-decoration: none; margin: 0;">
+                                <button class="btn" style="background: #10b981; color: white; border: none; width: 100%; margin: 0; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                                    Download
+                                </button>
+                            </a>
+                        </div>
 
                     </div>
 

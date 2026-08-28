@@ -70,12 +70,11 @@ if (!/^\d{10}$/.test(phone)) {
 }
       });
 
-      setMessage("Registration successful. Please verify your email.", "success");
+      setMessage("Registration successful! Redirecting to login...", "success");
 
       setTimeout(() => {
-        window.location.href =
-          `verify-email.html?email=${encodeURIComponent(email)}`;
-      }, 1000);
+        window.location.href = "index.html";
+      }, 1500);
 
     } catch (error) {
       setMessage(error?.message || "An error occurred during registration.");

@@ -67,11 +67,30 @@ router.post(
   courseController.submitForReview
 );
 
+router.post(
+  "/:id/reject",
+  authMiddleware,
+  authorizeRoles("ADMIN"),
+  courseController.rejectCourse
+);
+
+router.post(
+  "/:id/revert-draft",
+  authMiddleware,
+  authorizeRoles("ADMIN"),
+  courseController.revertToDraft
+);
+
 router.put("/:id", authMiddleware, courseController.updateCourse);
 
 router.get(
   "/public-stats",
   courseController.getPublicStats
+);
+
+router.get(
+  "/published",
+  courseController.getPublishedCourses
 );
 
 router.get(
@@ -99,6 +118,12 @@ router.post(
   "/:id/enroll",
   authMiddleware,
   courseController.enrollInCourse
+);
+
+router.get(
+  "/modules/:id",
+  authMiddleware,
+  courseController.getModuleById
 );
 
 router.put(

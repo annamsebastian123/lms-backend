@@ -8,6 +8,8 @@
 </head>
 <body>
 
+    <div class="sidebar"></div>
+
     <div class="main">
         <div class="top-header">
             <div>
@@ -18,64 +20,85 @@
 
         <div class="lesson-container">
 
-            <h2 id="lessonTitle">Loading...</h2>
-            <div id="progressSection" style="margin:15px 0;">
-    <div id="progressText">Progress: 0%</div>
-
-    <div style="
-        width:100%;
-        height:12px;
-        background:#e5e7eb;
-        border-radius:999px;
-        overflow:hidden;
-        margin-top:8px;
-    ">
-        <div
-            id="progressBar"
-            style="
-                width:0%;
-                height:100%;
-                background:#2563eb;
-                transition:width 0.3s ease;
-            "
-        ></div>
-    </div>
-
-    <div
-        id="completionBadge"
-        style="
-            display:none;
-            margin-top:10px;
-            color:green;
-            font-weight:bold;
-        "
-    >
-        ✓ Completed
-    </div>
-</div>
-            <div id="lessonContent" class="lesson-content">
-                Loading lesson content...
+            <h2 id="lessonTitle" style="font-size:26px; color:#1e293b; margin-bottom:8px;">Loading...</h2>
+            
+            <div id="progressSection" style="margin:15px 0; background:white; padding:15px 20px; border-radius:10px; border:1px solid #e2e8f0;">
+                <div id="progressText" style="font-weight:600; color:#475569; font-size:14px;">Progress: 0%</div>
+                <div style="
+                    width:100%;
+                    height:8px;
+                    background:#e5e7eb;
+                    border-radius:999px;
+                    overflow:hidden;
+                    margin-top:8px;
+                ">
+                    <div
+                        id="progressBar"
+                        style="
+                            width:0%;
+                            height:100%;
+                            background:#4f46e5;
+                            transition:width 0.3s ease;
+                        "
+                    ></div>
+                </div>
+                <div
+                    id="completionBadge"
+                    style="
+                        display:none;
+                        margin-top:8px;
+                        color:#16a34a;
+                        font-weight:bold;
+                        font-size:14px;
+                    "
+                >
+                    ✓ Completed
+                </div>
             </div>
 
-            <div class="lesson-actions">
-    <button class="action-btn" onclick="history.back()">
-        Back to Course
-    </button>
+            <div class="lesson-split-layout" style="display: grid; grid-template-columns: 2fr 1fr; gap: 28px; align-items: start; margin-top: 24px;">
+                <!-- Left Pane: Video -->
+                <div id="lessonVideoPane" class="lesson-content" style="margin-top:0;">
+                     <!-- Video player injected here -->
+                </div>
 
-    <button
-        id="takeQuizBtn"
-        class="action-btn"
-        style="display:none;"
-    >
-        Take Quiz
-    </button>
-</div>
+                <!-- Right Pane: Notes and Actions -->
+                <div class="lesson-side-pane" style="display: flex; flex-direction: column; gap: 20px; background: white; border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                    <div class="lesson-notes-section">
+                        <h3 style="margin-top: 0; margin-bottom: 12px; font-size: 18px; color: #1e293b; font-weight:600;">Lesson Notes</h3>
+                        <div id="lessonNotesText" class="lesson-notes-text" style="font-size: 15px; line-height: 1.7; color: #475569; max-height: 320px; overflow-y: auto; padding-right: 8px;">
+                            Loading notes...
+                        </div>
+                    </div>
 
-        </div>
+                    <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 0;" />
+
+                    <div class="lesson-actions-section" style="display: flex; flex-direction: column; gap: 10px;">
+                        <button id="backToCourseBtn" class="action-btn" style="width: 100%; box-sizing: border-box; text-align: center; justify-content: center; padding: 12px 20px; font-weight:600; border-radius:10px; display:block; cursor:pointer;">
+                            Back to Course
+                        </button>
+                        <button id="nextLessonBtn" class="action-btn" style="display: none; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; padding: 12px 20px; font-weight:600; border-radius:10px; background: #4f46e5; color: white; border:none; cursor:pointer; margin: 0;">
+                            Next Lesson
+                        </button>
+                        <button id="takeQuizBtn" class="action-btn" style="display: none; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; padding: 12px 20px; font-weight:600; border-radius:10px; background: #10b981; color: white; border:none; cursor:pointer; margin: 0;">
+                            Take Quiz
+                        </button>
+
+                        <button id="markCompleteBtn" class="action-btn" style="display: none; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; padding: 12px 20px; font-weight:600; border-radius:10px; background: #10b981; color: white; border:none; cursor:pointer;">
+                            Mark as Complete
+                        </button>
+
+                        <button id="enrollPromptBtn" class="action-btn" style="display: none; width: 100%; box-sizing: border-box; text-align: center; justify-content: center; padding: 12px 20px; font-weight:600; border-radius:10px; background: #10b981; color: white; border:none; cursor:pointer;">
+                            Enroll Now
+                        </button>
+                    </div>
+                </div>
+            </div>
     </div>
 
-    <script src="js/api.js"></script>
-    <script src="js/lesson-details.js"></script>
+    <script src="js/api.js?v=1.1"></script>
+    <script src="app.js?v=1.1"></script>
+    <script src="js/lesson-details.js?v=1.1"></script>
 
 </body>
 </html>

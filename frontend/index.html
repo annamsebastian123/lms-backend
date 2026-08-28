@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>High Court LMS</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -15,8 +16,8 @@
 
     <nav class="navbar">
 
-        <div class="logo">
-            HCK LMS
+        <div class="logo" style="display: flex; align-items: center;">
+            <img src="assets/logo.svg" alt="High Court LMS Logo" style="height: 38px; object-fit: contain;">
         </div>
 
         <div class="nav-search">
@@ -69,30 +70,7 @@
         Login
     </button>
 
-    <div class="social-login-section login-social">
-
-        <div class="social-divider">
-            <span>Or sign in with</span>
-        </div>
-
-        <button
-            type="button"
-            class="social-btn"
-            onclick="
-                window.location.href =
-                window.location.hostname.includes('app.github.dev')
-                ? window.location.origin.replace('-3000.','-5000.') + '/api/auth/google'
-                : 'http://localhost:5000/api/auth/google'
-            "
-        >
-            <img
-                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-                alt="Google"
-            >
-
-            <span>Continue with Google</span>
-        </button>
-
+    <div class="social-login-section login-social" style="display:none;">
     </div>
 
     <p id="loginMessage"></p>

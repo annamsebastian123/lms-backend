@@ -85,6 +85,26 @@ const updated = await courseService.publishCourse(courseId);
     res.status(500).json({ error: err.message });
   }
 }
+
+async function rejectCourse(req, res) {
+  try {
+    const courseId = req.params.id;
+    const { comment } = req.body;
+
+    const course = await courseService.getCourseById(courseId);
+    if (!course) return res.status(404).json({ message: 'Course not found' });
+    if (req.user.role !== "ADMIN") {
+      return res.status(403).json({
+        message: "Only admins can reject courses"
+      });
+    }
+
+    const updated = await courseService.rejectCourse(courseId, comment);
+    res.json(updated);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
 async function submitForReview(req, res) {
   try {
     const courseId = req.params.id;
@@ -363,6 +383,15 @@ async function getPublicStats(req, res) {
     });
   }
 }
+
+async function getPublishedCourses(req, res) {
+  try {
+    const courses = await courseService.getPublishedCourses();
+    res.json(courses);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
 async function getTutorAnalytics(req, res) {
   try {
     const userId = req.user.id;
@@ -379,10 +408,35 @@ async function getTutorAnalytics(req, res) {
     });
   }
 }
+
+async function getModuleById(req, res) {
+  try {
+    const moduleData = await courseService.getModuleById(req.params.id);
+    if (!moduleData) {
+      return res.status(404).json({ message: "Module not found" });
+    }
+    res.json(moduleData);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+async function revertToDraft(req, res) {
+  try {
+    const { comment } = req.body;
+    const course = await courseService.revertToDraft(req.params.id, comment);
+    res.json(course);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
 module.exports = {
+  revertToDraft,
   createCourse,
   getAllCourses,
   getCourseById,
+  getModuleById,
   updateCourse,
   deleteCourse,
   createModule,
@@ -395,6 +449,7 @@ module.exports = {
   getTutorCourses,
   getTutorStats,
   publishCourse,
+  rejectCourse,
   submitForReview,
   createLesson,
   getLessonsByModule,
@@ -402,5 +457,6 @@ module.exports = {
   updateLesson,
   deleteLesson,
   getPublicStats,
+  getPublishedCourses,
   getAllCoursesForAdmin,
 };

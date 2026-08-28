@@ -16,6 +16,11 @@ router.get(
   authMiddleware,
   quizController.getQuestionsByModule
 );
+router.get(
+  "/modules/:id/my-attempt",
+  authMiddleware,
+  quizController.getMyAttempt
+);
 router.post(
   "/submit",
   authMiddleware,

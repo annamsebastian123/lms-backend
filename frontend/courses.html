@@ -9,7 +9,9 @@
 
 <div class="sidebar">
 
-    <h2>HCK LMS</h2>
+    <div class="sidebar-logo-container" style="padding: 10px 0 25px 0; display: flex; justify-content: flex-start; align-items: center;">
+            <img src="assets/logo.svg" alt="High Court LMS Logo" style="height: 75px; width: auto; max-width: 220px; object-fit: contain; display: block;">
+        </div>
 
     <ul>
 
@@ -43,13 +45,13 @@
             </a>
         </li>
 
-        <li>
-            <a href="index.html">
-                Logout
-            </a>
-        </li>
+        
 
     </ul>
+
+        <div class="sidebar-logout">
+            <a href="index.html" onclick="localStorage.clear()">Logout</a>
+        </div>
 
 </div>
 
@@ -67,11 +69,13 @@
         <input type="text"
                placeholder="Search Courses">
 
-        <select>
-            <option>All Categories</option>
-            <option>Registry</option>
-            <option>Documentation</option>
-            <option>Legal Procedures</option>
+        <select id="categoryFilter">
+            <option value="ALL">All Categories</option>
+            <option value="Legal Procedures">Legal Procedures</option>
+            <option value="Registry Operations">Registry Operations</option>
+            <option value="Court Technology">Court Technology</option>
+            <option value="Administration">Administration</option>
+            <option value="General">General</option>
         </select>
 
     </div>

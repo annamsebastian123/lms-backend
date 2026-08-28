@@ -5,99 +5,155 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register - HCK LMS</title>
-
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <div class="register-page">
+    <div class="register-split">
 
-        <div class="register-card">
+        <!-- LEFT: Course Catalogue -->
+        <div class="register-left">
+            <div class="register-left-content">
+                <h1>HCK LMS</h1>
+                <p class="register-left-subtitle">High Court of Kerala Learning Management System</p>
 
-            <h1>Create Account</h1>
-
-            <p class="register-subtitle">
-                Join the High Court of Kerala Learning Management System
-            </p>
-
-            <form>
-
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input id="register-name" type="text" placeholder="Enter your full name">
+                <h3>Available Courses</h3>
+                <div class="register-course-list" id="registerCourseList">
+                    <div class="register-course-item">
+                        <span class="register-course-icon">📚</span>
+                        <div>
+                            <strong>Loading courses...</strong>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Email Address</label>
-                   <input id="register-email" type="email">
+                <div class="register-stats">
+                    <div class="register-stat">
+                        <span id="regStatCourses">0</span>
+                        <label>Courses</label>
+                    </div>
+                    <div class="register-stat">
+                        <span id="regStatLearners">0</span>
+                        <label>Learners</label>
+                    </div>
+                    <div class="register-stat">
+                        <span id="regStatRate">0%</span>
+                        <label>Completion</label>
+                    </div>
                 </div>
+            </div>
+        </div>
 
-                <div class="form-group">
-    <label>Phone Number</label>
-    <input id="register-phone" type="text" placeholder="Enter phone number">
-</div>
+        <!-- RIGHT: Register Form -->
+        <div class="register-right">
+            <div class="register-card">
 
-<div class="form-group">
-    <label>Section</label>
-    <input id="register-section" type="text">
-</div>
-<div class="form-group">
-    <label>Designation</label>
-    <input id="register-designation" type="text">
-</div>
+                <h1>Create Account</h1>
 
-                
+                <p class="register-subtitle">
+                    Join the platform and start learning
+                </p>
 
-                <div class="form-group">
-                    <label>Password</label>
-                    <input id="register-password" type="password" placeholder="Create password">
-                </div>
+                <form>
 
-                <div class="form-group">
-                    <label>Confirm Password</label>
-                    <input id="register-confirm-password" type="password" placeholder="Confirm password">
-                </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input id="register-name" type="text" placeholder="Enter your full name">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input id="register-email" type="email" placeholder="Enter email">
+                        </div>
+                    </div>
 
-                <p id="register-message" aria-live="polite"></p>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone Number</label>
+                            <input id="register-phone" type="text" placeholder="10-digit number">
+                        </div>
+                        <div class="form-group">
+                            <label>Section</label>
+                            <input id="register-section" type="text" placeholder="Your section">
+                        </div>
+                    </div>
 
-                <button id="register-button" type="submit" class="register-submit-btn">
-                    Register
-                </button>
-                
-            </form>
-<div class="social-login-section">
+                    <div class="form-group">
+                        <label>Designation</label>
+                        <input id="register-designation" type="text" placeholder="Your designation">
+                    </div>
 
-    <div class="social-divider">
-        <span>Or register with</span>
-    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input id="register-password" type="password" placeholder="Min 6 characters">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input id="register-confirm-password" type="password" placeholder="Re-enter password">
+                        </div>
+                    </div>
 
-    <button
-    type="button"
-    class="social-btn"
-    onclick="window.location.href='http://localhost:5000/api/auth/google'">
-       <img
-   src="https://img.icons8.com/color/48/google-logo.png"
->
+                    <p id="register-message" aria-live="polite"></p>
 
-        <span>Continue with Google</span>
-    </button>
+                    <button id="register-button" type="submit" class="register-submit-btn">
+                        Register
+                    </button>
 
-</div>
-            <p class="login-link">
+                </form>
 
-                Already have an account?
+                <p class="login-link">
+                    Already have an account?
+                    <a href="index.html">Sign In</a>
+                </p>
 
-                <a href="index.html">Sign In</a>
-
-            </p>
-
+            </div>
         </div>
 
     </div>
+
 <script src="js/api.js"></script>
 <script src="js/register.js"></script>
-<script src="app.js"></script>
+<script>
+// Load courses for left panel
+(async function() {
+    try {
+        const res = await fetch(API_BASE_URL + '/courses/published');
+        const courses = await res.json();
+        const list = document.getElementById('registerCourseList');
+        
+        if (courses.length === 0) {
+            list.innerHTML = '<p style="color:rgba(255,255,255,0.6)">No courses available yet.</p>';
+            return;
+        }
+
+        const icons = ['📚', '💻', '⚖️', '📝', '🎓', '📊'];
+        list.innerHTML = courses.slice(0, 5).map((c, i) => `
+            <div class="register-course-item">
+                <span class="register-course-icon">${icons[i % icons.length]}</span>
+                <div>
+                    <strong>${c.title}</strong>
+                    <p>${c.description ? c.description.substring(0, 80) + '...' : ''}</p>
+                </div>
+            </div>
+        `).join('');
+    } catch(e) {
+        console.error(e);
+    }
+
+    // Load stats
+    try {
+        const res = await fetch(API_BASE_URL + '/courses/public-stats');
+        const stats = await res.json();
+        document.getElementById('regStatCourses').textContent = stats.totalCourses || 0;
+        document.getElementById('regStatLearners').textContent = stats.totalLearners || 0;
+        document.getElementById('regStatRate').textContent = (stats.completionRate || 0) + '%';
+    } catch(e) {}
+})();
+</script>
 </body>
 
 </html>

@@ -12,7 +12,9 @@
 <body>
 
 <div class="sidebar">
-    <h2>HCK LMS</h2>
+    <div class="sidebar-logo-container" style="padding: 10px 0 25px 0; display: flex; justify-content: flex-start; align-items: center;">
+            <img src="assets/logo.svg" alt="High Court LMS Logo" style="height: 75px; width: auto; max-width: 220px; object-fit: contain; display: block;">
+        </div>
 
     <ul>
         <li><a href="dashboard.html">Dashboard</a></li>
@@ -20,8 +22,12 @@
         <li><a href="learning.html">My Learning</a></li>
         <li><a href="certificates.html">Certificates</a></li>
         <li><a href="learner-profile.html" class="active">Profile</a></li>
-        <li><a href="index.html">Logout</a></li>
+        
     </ul>
+
+        <div class="sidebar-logout">
+            <a href="index.html" onclick="localStorage.clear()">Logout</a>
+        </div>
 </div>
 
 <div class="main">

@@ -11,9 +11,10 @@ async function login(email, password) {
 if (user.isActive === false) {
   throw new Error("Account is deactivated. Please contact admin.");
 }
-if (user.isEmailVerified === false) {
-  throw new Error("Please verify your email before logging in.");
-}
+// Email verification bypassed for demo
+// if (user.isEmailVerified === false) {
+//   throw new Error("Please verify your email before logging in.");
+// }
   const isMatch = await bcrypt.compare(password, user.passwordHash);
 
   if (!isMatch) {
@@ -62,26 +63,25 @@ async function register(email, name, password, phone, section, role, designation
   role: role || "LEARNER",
   passwordHash: hashedPassword,
   isActive: true,
-  isEmailVerified: false,
-  emailOtp,
-  emailOtpExpiry,
+  isEmailVerified: true,
 },
   });
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+  // Email verification bypassed for demo
+  // const transporter = nodemailer.createTransport({
+  //   service: "gmail",
+  //   auth: {
+  //     user: process.env.EMAIL_USER,
+  //     pass: process.env.EMAIL_PASS,
+  //   },
+  // });
 
-  await transporter.sendMail({
-    from: process.env.EMAIL_USER,
-    to: email,
-    subject: "HCK LMS Email Verification OTP",
-    text: `Your HCK LMS email verification OTP is ${emailOtp}. It is valid for 10 minutes.`,
-  });
+  // await transporter.sendMail({
+  //   from: process.env.EMAIL_USER,
+  //   to: email,
+  //   subject: "HCK LMS Email Verification OTP",
+  //   text: `Your HCK LMS email verification OTP is ${emailOtp}. It is valid for 10 minutes.`,
+  // });
 
   return user;
 }

@@ -63,7 +63,7 @@ function openEditCourse(courseId) {
     localStorage.setItem("selectedCourseId", courseId);
 
     window.location.href =
-        `edit-course.html?id=${courseId}`;
+        `tutor-course-details.html?id=${courseId}`;
 }
 
 loadTutorDashboard();

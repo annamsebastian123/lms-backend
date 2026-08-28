@@ -13,7 +13,9 @@
 
     <div class="sidebar">
 
-        <h2>HCK LMS</h2>
+        <div class="sidebar-logo-container" style="padding: 10px 0 25px 0; display: flex; justify-content: flex-start; align-items: center;">
+            <img src="assets/logo.svg" alt="High Court LMS Logo" style="height: 75px; width: auto; max-width: 220px; object-fit: contain; display: block;">
+        </div>
 
         <ul>
 
@@ -47,13 +49,13 @@
         </a>
     </li>
 
-    <li>
-        <a href="index.html">
-            Logout
-        </a>
-    </li>
+    
 
 </ul>
+
+        <div class="sidebar-logout">
+            <a href="index.html" onclick="localStorage.clear()">Logout</a>
+        </div>
 
     </div>
 
@@ -74,23 +76,17 @@
 
             <div id="questionsContainer"></div>
 
-            <div class="quiz-buttons">
-
-    <button class="btn" onclick="history.back()">
-    Back
-</button>
-
-    <button id="submitQuizBtn" class="btn">
-    Submit Quiz
-</button>
-
-</div>
+            <div class="quiz-buttons" style="display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-top: 25px;">
+                <button id="prevQuestionBtn" class="btn" style="background: #64748b; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; display: none; margin: 0;">Previous</button>
+                <button id="nextQuestionBtn" class="btn" style="background: #4f46e5; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin: 0;">Next</button>
+                <button id="submitQuizBtn" class="btn" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: background 0.2s; display: none; margin: 0;">Submit Quiz</button>
+            </div>
 
         </div>
 
     </div>
-<script src="js/api.js"></script>
-<script src="js/quiz.js"></script>
+<script src="js/api.js?v=1.1"></script>
+<script src="js/quiz.js?v=1.1"></script>
 </body>
 
 </html>
